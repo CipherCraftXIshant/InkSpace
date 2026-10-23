@@ -1,0 +1,311 @@
+export const MOCK_CATEGORIES = [
+  {
+    id: 'technology',
+    name: 'Technology',
+    count: 120,
+    slug: 'technology',
+    icon: 'Laptop',
+    description: 'Frameworks, developer tools, artificial intelligence, and the evolution of digital software.',
+  },
+  {
+    id: 'design',
+    name: 'Design',
+    count: 68,
+    slug: 'design',
+    icon: 'Palette',
+    description: 'Interface design, visual storytelling, design systems, and user experience craftsmanship.',
+  },
+  {
+    id: 'lifestyle',
+    name: 'Lifestyle',
+    count: 64,
+    slug: 'lifestyle',
+    icon: 'Coffee',
+    description: 'Intentional living, daily routines, mindfulness, and the quiet pursuit of work-life balance.',
+  },
+  {
+    id: 'business',
+    name: 'Business',
+    count: 48,
+    slug: 'business',
+    icon: 'Briefcase',
+    description: 'Founder perspectives, sustainable growth strategies, personal branding, and product management.',
+  },
+  {
+    id: 'travel',
+    name: 'Travel',
+    count: 36,
+    slug: 'travel',
+    icon: 'Compass',
+    description: 'Field notes, remote work destinations, slow travels, and cultural discoveries.',
+  },
+  {
+    id: 'culture',
+    name: 'Culture',
+    count: 28,
+    slug: 'culture',
+    icon: 'BookOpen',
+    description: 'Essays on literature, art movements, digital philosophy, and modern human connection.',
+  },
+];
+
+export const MOCK_ARTICLES = [
+  {
+    id: 'art-1',
+    slug: 'the-future-of-web-development',
+    title: 'The Future of Web Development',
+    subtitle: 'Exploring the latest frameworks, tools and trends that are shaping the future of the web.',
+    excerpt: 'Exploring the latest frameworks, tools and trends that are shaping the future of the web, from edge computing to intelligent compilers.',
+    category: 'Technology',
+    categorySlug: 'technology',
+    coverImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1400&q=80',
+    date: 'May 12, 2024',
+    readTime: '6 min read',
+    featured: true,
+    popular: false,
+    author: {
+      name: 'Alex Morgan',
+      role: 'Staff Systems Architect',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    },
+    tableOfContents: [
+      { id: 'rise-of-frameworks', title: '1. The Rise of Modern Frameworks' },
+      { id: 'developer-experience', title: '2. Developer Experience & Tooling' },
+      { id: 'performance-first', title: '3. Performance-First Architectures' },
+      { id: 'role-of-ai', title: '4. The Role of AI in Synthesis' },
+      { id: 'whats-next', title: "5. What's Next for the Open Web" },
+    ],
+    content: `
+Web development is constantly evolving, with new technologies and frameworks emerging every year. In this post, we explore the key trends and tools that are shaping the future of the web.
+
+## 1. The Rise of Modern Frameworks
+Frontend tooling has matured from fragmented script bundlers to unified compilation engines. Modern teams demand zero-config performance, instant hot-module replacement, and strict type safety out of the box.
+
+The migration towards edge runtime execution allows web applications to render dynamic HTML closer to users with negligible time-to-first-byte. This blur between static generation and server-side rendering is the new standard.
+
+> "True craftsmanship in software lies not in how much you can add, but in how gracefully you can eliminate friction for the reader."
+
+## 2. Developer Experience & Tooling
+Toolchains like Vite, Turbopack, and native Rust-based compilers have reduced build times from minutes to milliseconds. Developers no longer wait for compilation loops; feedback is instantaneous.
+
+## 3. Performance-First Architectures
+Core Web Vitals are no longer an afterthought. With modern web capabilities like speculative pre-rendering, responsive image formats, and minimal runtime shipping, web apps can feel as snappy as native desktop software.
+    `,
+  },
+  {
+    id: 'art-2',
+    slug: 'design-principles-that-make-better-products',
+    title: 'Design Principles That Make Better Products',
+    subtitle: 'Learn the core design principles that create meaningful user experiences and withstand the test of time.',
+    excerpt: 'Learn the core design principles that create meaningful user experiences and withstand the test of trends.',
+    category: 'Design',
+    categorySlug: 'design',
+    coverImage: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+    date: 'May 10, 2024',
+    readTime: '5 min read',
+    featured: true,
+    popular: true,
+    author: {
+      name: 'Sarah Johnson',
+      role: 'Principal Design Strategist',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+  {
+    id: 'art-3',
+    slug: 'how-to-build-habits-that-last',
+    title: 'How to Build Habits That Last',
+    subtitle: 'Simple strategies to build better habits and break the ones that hold you back from creative clarity.',
+    excerpt: 'Simple strategies to build better habits and break the ones that hold you back from creative clarity.',
+    category: 'Lifestyle',
+    categorySlug: 'lifestyle',
+    coverImage: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80',
+    date: 'May 8, 2024',
+    readTime: '4 min read',
+    featured: true,
+    popular: false,
+    author: {
+      name: 'James Carter',
+      role: 'Writer & Researcher',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+  {
+    id: 'art-4',
+    slug: 'minimalism-in-life-and-business',
+    title: 'Minimalism in Life and Business',
+    subtitle: 'Why doing less and focusing on essential foundations creates outsized impact for modern creators.',
+    excerpt: 'Why doing less and focusing on essential foundations creates outsized impact for modern creators.',
+    category: 'Business',
+    categorySlug: 'business',
+    coverImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+    date: 'May 6, 2024',
+    readTime: '6 min read',
+    featured: true,
+    popular: false,
+    author: {
+      name: 'Elena Rostova',
+      role: 'Editorial Director',
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+  {
+    id: 'art-5',
+    slug: 'the-art-of-visual-storytelling',
+    title: 'The Art of Visual Storytelling',
+    subtitle: 'How typography, negative space, and evocative imagery evoke deep emotions in digital readers.',
+    excerpt: 'Mastering typography, negative space, and imagery to evoke emotion and guide readers through your ideas.',
+    category: 'Design',
+    categorySlug: 'design',
+    coverImage: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80',
+    date: 'May 5, 2024',
+    readTime: '5 min read',
+    featured: false,
+    popular: true,
+    author: {
+      name: 'Maya Lin',
+      role: 'Creative Director',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+  {
+    id: 'art-6',
+    slug: 'building-a-personal-brand-in-2024',
+    title: 'Building a Personal Brand in 2024',
+    subtitle: 'Step-by-step guide to building a quiet, authentic personal brand that opens doors effortlessly.',
+    excerpt: 'Step-by-step guide to building a quiet, authentic personal brand that opens doors and sparks opportunities.',
+    category: 'Business',
+    categorySlug: 'business',
+    coverImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+    date: 'May 3, 2024',
+    readTime: '6 min read',
+    featured: false,
+    popular: true,
+    author: {
+      name: 'Olivia Bennett',
+      role: 'Venture Partner & Essayist',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+  {
+    id: 'art-7',
+    slug: 'morning-routines-of-successful-people',
+    title: 'Morning Routines of Successful People',
+    subtitle: 'Cultivating silent mornings for deep contemplation, uninterrupted focus, and physical renewal.',
+    excerpt: 'How leading writers and thinkers design friction-free mornings for contemplation and focus.',
+    category: 'Lifestyle',
+    categorySlug: 'lifestyle',
+    coverImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
+    date: 'May 1, 2024',
+    readTime: '4 min read',
+    featured: false,
+    popular: true,
+    author: {
+      name: 'David Vance',
+      role: 'Wellness Columnist',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+  {
+    id: 'art-8',
+    slug: 'ai-tools-that-boost-your-productivity',
+    title: 'AI Tools That Boost Your Productivity',
+    subtitle: 'A practical, hype-free survey of artificial intelligence tools that legitimately accelerate writing and research.',
+    excerpt: 'A pragmatic look at artificial intelligence tools that legitimately enhance research and synthesis.',
+    category: 'Technology',
+    categorySlug: 'technology',
+    coverImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+    date: 'Apr 28, 2024',
+    readTime: '5 min read',
+    featured: false,
+    popular: true,
+    author: {
+      name: 'Marcus Chen',
+      role: 'Engineering Lead',
+      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80',
+    },
+  },
+];
+
+export const MOCK_DASHBOARD_STATS = [
+  {
+    label: 'Total Posts',
+    value: '24',
+    change: '+12%',
+    trend: 'up',
+    subtext: 'this month',
+  },
+  {
+    label: 'Published',
+    value: '18',
+    change: '+10%',
+    trend: 'up',
+    subtext: 'this month',
+  },
+  {
+    label: 'Total Views',
+    value: '12.4K',
+    change: '+28%',
+    trend: 'up',
+    subtext: 'this month',
+  },
+  {
+    label: 'Total Likes',
+    value: '2.1K',
+    change: '+16%',
+    trend: 'up',
+    subtext: 'this month',
+  },
+];
+
+export const MOCK_RECENT_POSTS = [
+  {
+    id: 'post-1',
+    title: 'The Future of Web Development',
+    status: 'Published',
+    views: '2.4K',
+    likes: '320',
+    date: 'May 12, 2024',
+  },
+  {
+    id: 'post-2',
+    title: 'Building Scalable APIs',
+    status: 'Published',
+    views: '1.8K',
+    likes: '210',
+    date: 'May 5, 2024',
+  },
+  {
+    id: 'post-3',
+    title: 'How to Land Your Dream Job',
+    status: 'Draft',
+    views: '—',
+    likes: '—',
+    date: 'Apr 28, 2024',
+  },
+  {
+    id: 'post-4',
+    title: 'UI/UX Design Trends for 2024',
+    status: 'Published',
+    views: '1.2K',
+    likes: '160',
+    date: 'Apr 20, 2024',
+  },
+  {
+    id: 'post-5',
+    title: 'My Morning Routine',
+    status: 'Draft',
+    views: '—',
+    likes: '—',
+    date: 'Apr 15, 2024',
+  },
+];
+
+export const MOCK_ADMIN_USERS = [
+  { id: 'u1', name: 'Alex Morgan', email: 'alex@inkspace.dev', role: 'Author', posts: 14, status: 'Active' },
+  { id: 'u2', name: 'Sarah Johnson', email: 'sarah@inkspace.dev', role: 'Editor', posts: 22, status: 'Active' },
+  { id: 'u3', name: 'Marcus Chen', email: 'marcus@inkspace.dev', role: 'Author', posts: 8, status: 'Active' },
+  { id: 'u4', name: 'Elena Rostova', email: 'elena@inkspace.dev', role: 'Admin', posts: 31, status: 'Active' },
+  { id: 'u5', name: 'James Carter', email: 'james@inkspace.dev', role: 'Author', posts: 5, status: 'Pending' },
+];
