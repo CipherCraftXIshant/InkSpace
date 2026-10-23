@@ -6,7 +6,7 @@ import Phase1DevNav from './components/common/Phase1DevNav.jsx';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <AppRoutes />
       <Phase1DevNav />
