@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Search,
   PenLine,
@@ -17,6 +17,7 @@ import Container from '../common/Container.jsx';
 import Button from '../common/Button.jsx';
 import IconButton from '../common/IconButton.jsx';
 import { MOCK_CATEGORIES, MOCK_ARTICLES } from '../../data/mockData.js';
+import { getMockAuthUser, clearMockAuthUser } from '../../utils/storage.js';
 
 const CATEGORY_ICONS = {
   technology: Laptop,
@@ -38,6 +39,15 @@ export default function Navbar() {
   const pagesRef = useRef(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
+  useLocation(); // Subscribes to route changes so currentUser re-evaluates fresh
+
+  // Read current mock auth user directly on render
+  const currentUser = getMockAuthUser();
+
+  const handleSignOut = () => {
+    clearMockAuthUser();
+    navigate('/');
+  };
 
   // Close dropdowns on click outside
   useEffect(() => {
@@ -292,12 +302,39 @@ export default function Navbar() {
                 Write
               </Button>
 
-              <Link
-                to="/login"
-                className="text-xs font-semibold text-[#4A4A4A] hover:text-[#121212] ml-1 px-2.5 py-1.5 rounded-md hover:bg-black/5 transition-colors"
-              >
-                Sign In
-              </Link>
+              {currentUser ? (
+                <div className="flex items-center gap-1.5 pl-2 border-l border-[#ECECE8]">
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-black/5 transition-colors group"
+                    title={`${currentUser.name} (${currentUser.role})`}
+                  >
+                    <img
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      className="w-5 h-5 rounded-full object-cover border border-[#ECECE8]"
+                    />
+                    <span className="text-xs font-medium text-[#121212] hidden md:inline truncate max-w-[90px]">
+                      {currentUser.name.split(' ')[0]}
+                    </span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="text-xs text-[#737373] hover:text-[#121212] px-2 py-1 rounded-md hover:bg-black/5 transition-colors cursor-pointer"
+                    title="Simulate sign out"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="text-xs font-semibold text-[#4A4A4A] hover:text-[#121212] ml-1 px-2.5 py-1.5 rounded-md hover:bg-black/5 transition-colors"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -401,22 +438,45 @@ export default function Navbar() {
                   Write an Article
                 </Button>
 
-                <div className="flex items-center justify-between pt-1 text-xs">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="font-medium text-[#4A4A4A] hover:text-[#121212]"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-[#737373] hover:text-[#121212]"
-                  >
-                    Author Workspace
-                  </Link>
-                </div>
+                {currentUser ? (
+                  <div className="flex items-center justify-between pt-1 text-xs">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={currentUser.avatar}
+                        alt={currentUser.name}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                      <span className="font-medium text-[#121212]">{currentUser.name}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleSignOut();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="text-[#737373] hover:text-red-600 cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between pt-1 text-xs">
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="font-medium text-[#4A4A4A] hover:text-[#121212]"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="font-semibold text-[#121212]"
+                    >
+                      Create Account
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           )}

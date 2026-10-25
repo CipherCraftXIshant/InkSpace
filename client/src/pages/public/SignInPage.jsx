@@ -1,68 +1,214 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Sparkles, AlertCircle, ArrowLeft } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
+import { setMockAuthUser } from '../../utils/storage.js';
 
 export default function SignInPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/dashboard';
+
+  // Form State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+
+  // Validation & UI State
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [generalError, setGeneralError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [demoSelected, setDemoSelected] = useState('');
+
+  // Validate fields
+  const validate = (fieldValues = { email, password }) => {
+    const newErrors = {};
+
+    if ('email' in fieldValues) {
+      const emailVal = fieldValues.email?.trim() || '';
+      if (!emailVal) {
+        newErrors.email = 'Email address is required.';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        newErrors.email = 'Please enter a valid email address (e.g. name@domain.com).';
+      }
+    }
+
+    if ('password' in fieldValues) {
+      const passVal = fieldValues.password || '';
+      if (!passVal) {
+        newErrors.password = 'Password is required.';
+      }
+    }
+
+    return newErrors;
+  };
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    const fieldErrors = validate({ [field]: field === 'email' ? email : password });
+    setErrors((prev) => ({
+      ...prev,
+      [field]: fieldErrors[field],
+    }));
+  };
+
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setEmail(val);
+    if (touched.email) {
+      const fieldErrors = validate({ email: val });
+      setErrors((prev) => ({ ...prev, email: fieldErrors.email }));
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const val = e.target.value;
+    setPassword(val);
+    if (touched.password) {
+      const fieldErrors = validate({ password: val });
+      setErrors((prev) => ({ ...prev, password: fieldErrors.password }));
+    }
+  };
+
+  // Quick fill demo credentials
+  const handleQuickFill = (role) => {
+    setDemoSelected(role);
+    setGeneralError('');
+    if (role === 'author') {
+      setEmail('alex.morgan@inkspace.dev');
+      setPassword('Editorial2026!');
+    } else {
+      setEmail('clara.reader@inkspace.dev');
+      setPassword('ReadingPass2026!');
+    }
+    setErrors({});
+    setTouched({ email: true, password: true });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setGeneralError('');
+
+    const validationErrors = validate({ email, password });
+    setTouched({ email: true, password: true });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setGeneralError('Please resolve the errors highlighted below.');
+      return;
+    }
+
     setIsLoading(true);
-    // In Phase 1 foundation, simulate successful auth navigation to Author Dashboard
+
+    // Simulate safe authentication delay
     setTimeout(() => {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 600);
+      // Strictly store safe mock profile without password
+      setMockAuthUser({
+        name: email.includes('alex') ? 'Alex Morgan' : 'Clara Oswald',
+        email: email.trim(),
+        role: email.includes('alex') ? 'author' : 'reader',
+      });
+      navigate(redirectPath);
+    }, 650);
   };
 
   return (
     <div className="py-12 sm:py-20 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-2xl border border-[#ECECE8] shadow-sm">
+      <div className="w-full max-w-md bg-white p-7 sm:p-10 rounded-2xl border border-[#ECECE8] shadow-sm">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <Link
             to="/"
-            className="font-serif font-bold text-2xl text-[#121212] inline-block mb-3"
+            className="font-serif font-bold text-2xl tracking-tight text-[#121212] inline-block mb-3"
           >
             InkSpace
           </Link>
-          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] tracking-tight">
             Sign In
           </h1>
           <p className="mt-1.5 text-xs sm:text-sm text-[#737373]">
-            Welcome back! Please sign in to continue.
+            Welcome back. Sign in to your publishing workspace.
           </p>
         </div>
 
+        {/* Demo Mode Banner & Fast-Fill */}
+        <div className="mb-6 p-3.5 rounded-xl bg-[#FAF9F5] border border-[#ECECE8] text-xs">
+          <div className="flex items-center gap-1.5 text-[#121212] font-semibold mb-1">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>Demonstration Mode</span>
+          </div>
+          <p className="text-[#666666] leading-relaxed mb-3">
+            Frontend phase only. Passwords are never saved in storage or transmitted.
+            Click a role to fill mock credentials:
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleQuickFill('author')}
+              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
+                demoSelected === 'author'
+                  ? 'border-[#121212] bg-[#121212] text-white shadow-2xs'
+                  : 'border-[#E5E7EB] bg-white text-[#4A4A4A] hover:border-[#121212] hover:text-[#121212]'
+              }`}
+            >
+              Author Profile
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickFill('reader')}
+              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
+                demoSelected === 'reader'
+                  ? 'border-[#121212] bg-[#121212] text-white shadow-2xs'
+                  : 'border-[#E5E7EB] bg-white text-[#4A4A4A] hover:border-[#121212] hover:text-[#121212]'
+              }`}
+            >
+              Reader Profile
+            </button>
+          </div>
+        </div>
+
+        {/* General Error Alert */}
+        {generalError && (
+          <div
+            className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
+            role="alert"
+          >
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+            <span>{generalError}</span>
+          </div>
+        )}
+
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <FormInput
             label="Email address"
-            id="email"
+            id="login-email"
             name="email"
             type="email"
             autoComplete="username"
-            placeholder="Enter your email"
+            placeholder="e.g. alex.morgan@inkspace.dev"
             required
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
+            onBlur={() => handleBlur('email')}
+            error={touched.email ? errors.email : ''}
           />
 
           <FormInput
             label="Password"
-            id="current-password"
+            id="login-password"
             name="password"
             type="password"
             autoComplete="current-password"
-            placeholder="Enter your password"
+            placeholder="Enter your account password"
             required
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
+            onBlur={() => handleBlur('password')}
+            error={touched.password ? errors.password : ''}
           />
 
           {/* Remember Me & Forgot Password */}
@@ -72,14 +218,14 @@ export default function SignInPage() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded border-[#D1D5DB] text-[#121212] focus:ring-1 focus:ring-[#121212] w-4 h-4"
+                className="rounded border-[#D1D5DB] text-[#121212] focus:ring-1 focus:ring-[#121212] w-4 h-4 cursor-pointer accent-[#121212]"
               />
               <span className="text-xs text-[#525252]">Remember me</span>
             </label>
 
             <Link
               to="/forgot-password"
-              className="text-xs text-[#525252] hover:text-[#121212] transition-colors"
+              className="text-xs text-[#525252] hover:text-[#121212] transition-colors font-medium hover:underline"
             >
               Forgot password?
             </Link>
@@ -90,28 +236,31 @@ export default function SignInPage() {
             variant="primary"
             size="md"
             isLoading={isLoading}
-            className="w-full justify-center mt-2"
+            disabled={isLoading}
+            className="w-full justify-center mt-2 font-medium"
           >
-            Sign In
+            {isLoading ? 'Signing In...' : 'Sign In to InkSpace'}
           </Button>
         </form>
 
-        {/* Social Options */}
-        <div className="mt-8">
+        {/* Social Options (Demo) */}
+        <div className="mt-7">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#ECECE8]" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 text-[#8A8A8A]">or continue with</span>
+              <span className="bg-white px-3 text-[#8A8A8A]">or sign in with</span>
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-center gap-4">
+          <div className="mt-5 flex items-center justify-center gap-3">
             <button
               type="button"
+              onClick={() => handleQuickFill('author')}
               className="p-2.5 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-[#4A4A4A] hover:text-[#121212]"
-              aria-label="Continue with Google"
+              aria-label="Demo login with Google"
+              title="Demo Google Sign In"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
@@ -120,8 +269,10 @@ export default function SignInPage() {
 
             <button
               type="button"
+              onClick={() => handleQuickFill('author')}
               className="p-2.5 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-[#4A4A4A] hover:text-[#121212]"
-              aria-label="Continue with GitHub"
+              aria-label="Demo login with GitHub"
+              title="Demo GitHub Sign In"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -131,29 +282,30 @@ export default function SignInPage() {
                 />
               </svg>
             </button>
-
-            <button
-              type="button"
-              className="p-2.5 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-[#4A4A4A] hover:text-[#121212]"
-              aria-label="Continue with Twitter"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </button>
           </div>
         </div>
 
-        {/* Footer Link */}
-        <p className="mt-8 text-center text-xs text-[#737373]">
-          Don't have an account?{' '}
-          <Link
-            to="/signup"
-            className="font-semibold text-[#121212] hover:underline"
-          >
-            Sign up
-          </Link>
-        </p>
+        {/* Footer Links */}
+        <div className="mt-8 pt-5 border-t border-[#ECECE8] text-center space-y-2">
+          <p className="text-xs text-[#737373]">
+            Don't have an account?{' '}
+            <Link
+              to="/signup"
+              className="font-semibold text-[#121212] hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+          <div>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] hover:text-[#121212] transition-colors"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span>Back to homepage</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

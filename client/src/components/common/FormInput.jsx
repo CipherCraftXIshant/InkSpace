@@ -81,9 +81,9 @@ export default function FormInput({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#9CA3AF] hover:text-[#4B5563] cursor-pointer focus:outline-hidden"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#9CA3AF] hover:text-[#121212] cursor-pointer focus:outline-hidden focus:text-[#121212] focus:ring-1 focus:ring-[#121212] focus:rounded-sm transition-colors"
             aria-label={showPassword ? 'Hide password' : 'Show password'}
-            tabIndex={-1}
+            title={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" aria-hidden="true" />

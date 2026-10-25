@@ -86,3 +86,48 @@ export const addArticleComment = (slug, comment) => {
     return [comment];
   }
 };
+
+// ==========================================
+// Safe Mock Authentication State (Frontend Only)
+// Strictly stores safe profile metadata; NO passwords stored.
+// ==========================================
+const MOCK_USER_KEY = 'inkspace_mock_auth_user';
+
+export const getMockAuthUser = () => {
+  try {
+    const raw = localStorage.getItem(MOCK_USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+export const setMockAuthUser = ({ name, email, role = 'author', avatar } = {}) => {
+  try {
+    const safeUser = {
+      name: name || 'Alex Morgan',
+      email: email || 'alex@inkspace.dev',
+      role,
+      avatar:
+        avatar ||
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+      loginTimestamp: new Date().toISOString(),
+    };
+    localStorage.setItem(MOCK_USER_KEY, JSON.stringify(safeUser));
+    return safeUser;
+  } catch {
+    return null;
+  }
+};
+
+export const clearMockAuthUser = () => {
+  try {
+    localStorage.removeItem(MOCK_USER_KEY);
+  } catch {
+    // ignore
+  }
+};
+
+export const isMockAuthenticated = () => {
+  return Boolean(getMockAuthUser());
+};

@@ -12,7 +12,15 @@ export default function Phase1DevNav() {
 
   const sections = [
     {
-      title: 'Public Pages (Phase 2 Focus)',
+      title: 'Authentication (Phase 3 Focus)',
+      routes: [
+        { label: 'Sign In (/login)', path: '/login' },
+        { label: 'Sign Up (/signup)', path: '/signup' },
+        { label: 'Forgot Password', path: '/forgot-password' },
+      ],
+    },
+    {
+      title: 'Public Pages',
       routes: [
         { label: 'Home (/)', path: '/' },
         { label: 'Explore (/explore)', path: '/explore' },
@@ -21,8 +29,6 @@ export default function Phase1DevNav() {
         { label: 'Article Reader', path: '/blog/the-future-of-web-development' },
         { label: 'About InkSpace', path: '/about' },
         { label: 'Contact & Pitching', path: '/contact' },
-        { label: 'Sign In', path: '/login' },
-        { label: 'Sign Up', path: '/signup' },
       ],
     },
     {
@@ -50,7 +56,7 @@ export default function Phase1DevNav() {
         >
           <div className="flex items-center gap-2 font-medium">
             <Layers className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Phase 2 Quick Navigator</span>
+            <span>InkSpace Quick Navigator</span>
           </div>
           <div className="flex items-center gap-1.5 text-zinc-400">
             <span className="text-[10px] bg-white/15 px-1.5 py-0.5 rounded font-mono max-w-[100px] truncate">
