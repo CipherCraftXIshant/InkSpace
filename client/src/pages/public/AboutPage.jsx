@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { PenLine, Compass, Sparkles, Feather, ShieldCheck } from 'lucide-react';
 import Container from '../../components/common/Container.jsx';
 import Button from '../../components/common/Button.jsx';

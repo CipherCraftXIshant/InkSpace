@@ -11,6 +11,8 @@ import HomePage from '../pages/public/HomePage.jsx';
 import ExplorePage from '../pages/public/ExplorePage.jsx';
 import CategoryPage from '../pages/public/CategoryPage.jsx';
 import BlogDetailPage from '../pages/public/BlogDetailPage.jsx';
+import AboutPage from '../pages/public/AboutPage.jsx';
+import ContactPage from '../pages/public/ContactPage.jsx';
 import SignInPage from '../pages/public/SignInPage.jsx';
 import SignUpPage from '../pages/public/SignUpPage.jsx';
 import ForgotPasswordPage from '../pages/public/ForgotPasswordPage.jsx';
@@ -40,6 +42,8 @@ export default function AppRoutes() {
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/categories/:category" element={<CategoryPage />} />
         <Route path="/blog/:slug" element={<BlogDetailPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />

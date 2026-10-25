@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Check } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Check, AlertCircle } from 'lucide-react';
 import Container from '../../components/common/Container.jsx';
 import Button from '../../components/common/Button.jsx';
 import SectionHeading from '../../components/common/SectionHeading.jsx';
@@ -10,20 +11,42 @@ import { MOCK_CATEGORIES, MOCK_ARTICLES } from '../../data/mockData.js';
 export default function HomePage() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const prefersReducedMotion = useReducedMotion();
 
   const featuredMain = MOCK_ARTICLES[0];
   const featuredSide = MOCK_ARTICLES.slice(1, 4);
-  const popularArticles = MOCK_ARTICLES.slice(4, 8);
+  const popularArticles = MOCK_ARTICLES.filter((a) => a.popular || a.views > 2000).slice(0, 4);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    if (newsletterEmail.trim()) {
-      setSubscribed(true);
-      setTimeout(() => {
-        setNewsletterEmail('');
-      }, 3000);
+    setEmailError('');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!newsletterEmail.trim()) {
+      setEmailError('Please enter your email address.');
+      return;
     }
+    if (!emailRegex.test(newsletterEmail.trim())) {
+      setEmailError('Please provide a valid email format (e.g. name@domain.com).');
+      return;
+    }
+
+    setSubscribed(true);
+    setTimeout(() => {
+      setNewsletterEmail('');
+      setSubscribed(false);
+    }, 4500);
   };
+
+  const animProps = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 16 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: '-50px' },
+        transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] },
+      };
 
   return (
     <div className="space-y-16 sm:space-y-24 py-8 sm:py-12">
@@ -32,19 +55,22 @@ export default function HomePage() {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Hero Left Content */}
-            <div className="lg:col-span-6 space-y-6">
-              <span className="inline-block text-[11px] font-bold tracking-widest uppercase text-[#525252]">
-                MODERN PUBLISHING
+            <motion.div
+              {...animProps}
+              className="lg:col-span-6 space-y-6"
+            >
+              <span className="inline-block text-[11px] font-bold tracking-widest uppercase text-[#525252] bg-white border border-[#ECECE8] px-3 py-1 rounded-full shadow-2xs">
+                MODERN EDITORIAL PUBLISHING
               </span>
 
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#121212] font-semibold leading-[1.08] tracking-tight">
                 Ideas Worth <br className="hidden sm:inline" /> Reading.
               </h1>
 
-              <p className="text-base sm:text-lg text-[#666666] leading-relaxed max-w-lg">
-                InkSpace is a modern blog platform for curious minds. Explore
-                stories on tech, design, life and more from writers around the
-                world.
+              <p className="text-base sm:text-lg text-[#666666] leading-relaxed max-w-lg font-normal">
+                InkSpace is an open editorial platform for curious minds. Explore
+                long-form essays on software architecture, design systems, quiet productivity,
+                and modern culture from practitioners worldwide.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -55,20 +81,26 @@ export default function HomePage() {
                   Start Writing
                 </Button>
               </div>
-            </div>
+            </motion.div>
 
             {/* Hero Right Visual */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-2xl overflow-hidden border border-[#ECECE8] bg-[#F5F5F0] shadow-sm">
+            <motion.div
+              initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.98 }}
+              whileInView={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="lg:col-span-6"
+            >
+              <div className="relative rounded-2xl overflow-hidden border border-[#ECECE8] bg-[#F5F5F0] shadow-sm group">
                 <img
                   src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
-                  alt="Minimalist workspace with lamp, laptop and notebook"
-                  className="w-full aspect-4/3 sm:aspect-16/10 object-cover"
+                  alt="Minimalist editorial workspace with desk lamp, laptop and notebook"
+                  className="w-full aspect-4/3 sm:aspect-16/10 object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                   loading="eager"
                   fetchPriority="high"
                 />
               </div>
-            </div>
+            </motion.div>
           </div>
         </Container>
       </section>
@@ -76,11 +108,11 @@ export default function HomePage() {
       {/* 2. Category Ribbon */}
       <section>
         <Container>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          <motion.div {...animProps} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {MOCK_CATEGORIES.map((cat) => (
               <CategoryCard key={cat.id} category={cat} />
             ))}
-          </div>
+          </motion.div>
         </Container>
       </section>
 
@@ -93,68 +125,86 @@ export default function HomePage() {
             actionHref="/explore"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          <motion.div
+            {...animProps}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12"
+          >
             {/* Left Main Featured Article */}
             <div className="lg:col-span-7">
               <BlogCard article={featuredMain} variant="featured" />
             </div>
 
-            {/* Right Stack of 3 Compact Articles */}
+            {/* Right Stack of Secondary Articles */}
             <div className="lg:col-span-5 flex flex-col justify-between divide-y divide-[#ECECE8]">
               {featuredSide.map((art) => (
                 <BlogCard key={art.id} article={art} variant="compact" />
               ))}
             </div>
-          </div>
+          </motion.div>
         </Container>
       </section>
 
-      {/* 4. Newsletter Banner (Stay Inspired) */}
+      {/* 4. Newsletter Section (Stay Inspired) */}
       <section>
         <Container>
-          <div className="bg-[#121212] text-white rounded-2xl px-6 py-10 sm:p-12 lg:p-16 relative overflow-hidden shadow-md">
+          <motion.div
+            {...animProps}
+            className="bg-[#121212] text-white rounded-2xl px-6 py-10 sm:p-12 lg:p-16 relative overflow-hidden shadow-md"
+          >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-6 space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#A3A3A3]">
+                  WEEKLY DISPATCH
+                </span>
                 <h3 className="font-serif text-3xl sm:text-4xl text-white font-medium tracking-tight">
                   Stay inspired.
                 </h3>
                 <p className="text-sm sm:text-base text-[#A3A3A3] font-normal leading-relaxed">
-                  Get fresh stories and insights delivered straight to your inbox.
+                  Get fresh stories, design perspectives, and architectural insights delivered straight to your inbox every Sunday morning. No spam, ever.
                 </p>
               </div>
 
               <div className="lg:col-span-6">
                 {subscribed ? (
-                  <div className="flex items-center gap-2 p-3 bg-white/10 rounded-lg text-sm text-[#E5E7EB]">
-                    <Check className="w-5 h-5 text-green-400" />
-                    <span>Thank you for subscribing! Check your inbox soon.</span>
+                  <div className="flex items-center gap-3 p-4 bg-white/10 rounded-xl text-sm text-[#E5E7EB] border border-white/20">
+                    <Check className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <span>Thank you for subscribing! Your first dispatch arrives this Sunday.</span>
                   </div>
                 ) : (
-                  <form
-                    onSubmit={handleSubscribe}
-                    className="flex flex-col sm:flex-row gap-2.5 sm:gap-2"
-                  >
-                    <input
-                      type="email"
-                      name="email"
-                      autoComplete="email"
-                      required
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      className="flex-1 px-4 py-3 text-sm text-[#121212] bg-[#FAFAF8] rounded-md border-0 focus:ring-2 focus:ring-white outline-hidden placeholder:text-[#8A8A8A]"
-                    />
-                    <button
-                      type="submit"
-                      className="px-6 py-3 text-sm font-semibold text-[#121212] bg-white hover:bg-[#F3F4F6] rounded-md transition-colors cursor-pointer select-none shrink-0"
-                    >
-                      Subscribe
-                    </button>
+                  <form onSubmit={handleSubscribe} noValidate className="space-y-2">
+                    <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-2">
+                      <input
+                        type="email"
+                        name="email"
+                        autoComplete="email"
+                        required
+                        value={newsletterEmail}
+                        onChange={(e) => {
+                          setNewsletterEmail(e.target.value);
+                          if (emailError) setEmailError('');
+                        }}
+                        placeholder="Enter your email address"
+                        className="flex-1 px-4 py-3 text-sm text-[#121212] bg-[#FAFAF8] rounded-md border-0 focus:ring-2 focus:ring-white outline-hidden placeholder:text-[#8A8A8A]"
+                        aria-label="Email for newsletter"
+                      />
+                      <button
+                        type="submit"
+                        className="px-6 py-3 text-sm font-semibold text-[#121212] bg-white hover:bg-[#F3F4F6] active:bg-[#E5E7EB] rounded-md transition-colors cursor-pointer select-none shrink-0"
+                      >
+                        Subscribe
+                      </button>
+                    </div>
+                    {emailError && (
+                      <p className="text-xs text-rose-300 flex items-center gap-1.5 pt-1" role="alert">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{emailError}</span>
+                      </p>
+                    )}
                   </form>
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         </Container>
       </section>
 
@@ -167,11 +217,14 @@ export default function HomePage() {
             actionHref="/explore"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <motion.div
+            {...animProps}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+          >
             {popularArticles.map((art) => (
               <BlogCard key={art.id} article={art} variant="vertical" />
             ))}
-          </div>
+          </motion.div>
         </Container>
       </section>
     </div>

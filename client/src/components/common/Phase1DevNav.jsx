@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { Layers, ChevronDown, ChevronUp } from 'lucide-react';
 
 /**
- * Phase 1 Design System Navigator.
- * Floating review tool to easily jump between all 16 required routes and design components.
+ * Phase 2 Review Navigator.
+ * Floating review tool to easily jump between all public pages and portals.
  */
 export default function Phase1DevNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,40 +12,29 @@ export default function Phase1DevNav() {
 
   const sections = [
     {
-      title: 'Public Pages',
+      title: 'Public Pages (Phase 2 Focus)',
       routes: [
-        { label: 'Home', path: '/' },
-        { label: 'Explore', path: '/explore' },
-        { label: 'Category: Tech', path: '/categories/technology' },
-        { label: 'Blog Detail', path: '/blog/the-future-of-web-development' },
+        { label: 'Home (/)', path: '/' },
+        { label: 'Explore (/explore)', path: '/explore' },
+        { label: 'Topic: Technology', path: '/categories/technology' },
+        { label: 'Topic: Design', path: '/categories/design' },
+        { label: 'Article Reader', path: '/blog/the-future-of-web-development' },
+        { label: 'About InkSpace', path: '/about' },
+        { label: 'Contact & Pitching', path: '/contact' },
         { label: 'Sign In', path: '/login' },
         { label: 'Sign Up', path: '/signup' },
-        { label: 'Forgot Password', path: '/forgot-password' },
       ],
     },
     {
-      title: 'Author Workspace',
+      title: 'Portals & Error States',
       routes: [
-        { label: 'Overview', path: '/dashboard' },
-        { label: 'My Posts', path: '/dashboard/posts' },
-        { label: 'New Post Editor', path: '/dashboard/editor' },
-        { label: 'Edit Post (ID: 1)', path: '/dashboard/editor/post-1' },
+        { label: 'Author Dashboard', path: '/dashboard' },
+        { label: 'Post Editor', path: '/dashboard/editor' },
         { label: 'Bookmarks', path: '/dashboard/bookmarks' },
-        { label: 'Author Settings', path: '/dashboard/settings' },
+        { label: 'Admin Console', path: '/admin' },
+        { label: 'Unknown Slug (404)', path: '/blog/unknown-sample-slug' },
+        { label: 'Route 404', path: '/non-existent-page' },
       ],
-    },
-    {
-      title: 'Admin Console',
-      routes: [
-        { label: 'Admin Overview', path: '/admin' },
-        { label: 'Users Moderation', path: '/admin/users' },
-        { label: 'Posts Moderation', path: '/admin/posts' },
-        { label: 'Comments Moderation', path: '/admin/comments' },
-      ],
-    },
-    {
-      title: 'Fallback',
-      routes: [{ label: '404 Page', path: '/non-existent-route' }],
     },
   ];
 
@@ -61,10 +50,10 @@ export default function Phase1DevNav() {
         >
           <div className="flex items-center gap-2 font-medium">
             <Layers className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Phase 1 Quick Navigator</span>
+            <span>Phase 2 Quick Navigator</span>
           </div>
           <div className="flex items-center gap-1.5 text-zinc-400">
-            <span className="text-[10px] bg-white/15 px-1.5 py-0.5 rounded font-mono">
+            <span className="text-[10px] bg-white/15 px-1.5 py-0.5 rounded font-mono max-w-[100px] truncate">
               {location.pathname}
             </span>
             {isOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
