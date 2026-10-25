@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   FileText,
@@ -10,8 +10,23 @@ import {
   LogOut,
   X,
 } from 'lucide-react';
+import { getMockAuthUser, clearMockAuthUser } from '../../utils/storage.js';
 
 export default function DashboardSidebar({ onClose }) {
+  const navigate = useNavigate();
+  const currentUser = getMockAuthUser() || {
+    name: 'Alex Morgan',
+    email: 'alex@inkspace.dev',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
+  };
+
+  const handleSignOut = () => {
+    clearMockAuthUser();
+    if (onClose) onClose();
+    navigate('/');
+  };
+
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, end: true },
     { name: 'My Posts', path: '/dashboard/posts', icon: FileText },
@@ -80,26 +95,33 @@ export default function DashboardSidebar({ onClose }) {
           <span>View Public Site</span>
         </Link>
 
-        <Link
-          to="/login"
-          className="flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors"
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors cursor-pointer text-left"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>
-        </Link>
+        </button>
 
         {/* User Card */}
-        <div className="pt-2 flex items-center gap-3 px-2">
+        <Link
+          to="/dashboard/settings"
+          onClick={onClose}
+          className="pt-2 flex items-center gap-3 px-2 rounded-lg hover:bg-[#FAF9F5] transition-colors group"
+        >
           <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-            alt="Alex Morgan"
-            className="w-8 h-8 rounded-full object-cover border border-[#ECECE8]"
+            src={currentUser.avatar}
+            alt={currentUser.name}
+            className="w-8 h-8 rounded-full object-cover border border-[#ECECE8] group-hover:border-[#121212]"
           />
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold text-[#121212] truncate">Alex Morgan</p>
-            <p className="text-[11px] text-[#8A8A8A] truncate">alex@inkspace.dev</p>
+            <p className="text-xs font-semibold text-[#121212] truncate group-hover:underline">
+              {currentUser.name}
+            </p>
+            <p className="text-[11px] text-[#8A8A8A] truncate">{currentUser.email}</p>
           </div>
-        </div>
+        </Link>
       </div>
     </aside>
   );

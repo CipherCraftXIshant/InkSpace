@@ -12,7 +12,17 @@ export default function Phase1DevNav() {
 
   const sections = [
     {
-      title: 'Authentication (Phase 3 Focus)',
+      title: 'Author Workspace (Phase 4 Focus)',
+      routes: [
+        { label: 'Dashboard (/dashboard)', path: '/dashboard' },
+        { label: 'My Posts (/dashboard/posts)', path: '/dashboard/posts' },
+        { label: 'Story Editor (/dashboard/editor)', path: '/dashboard/editor' },
+        { label: 'Bookmarks (/dashboard/bookmarks)', path: '/dashboard/bookmarks' },
+        { label: 'Settings (/dashboard/settings)', path: '/dashboard/settings' },
+      ],
+    },
+    {
+      title: 'Authentication',
       routes: [
         { label: 'Sign In (/login)', path: '/login' },
         { label: 'Sign Up (/signup)', path: '/signup' },
@@ -32,11 +42,8 @@ export default function Phase1DevNav() {
       ],
     },
     {
-      title: 'Portals & Error States',
+      title: 'Admin & Error States',
       routes: [
-        { label: 'Author Dashboard', path: '/dashboard' },
-        { label: 'Post Editor', path: '/dashboard/editor' },
-        { label: 'Bookmarks', path: '/dashboard/bookmarks' },
         { label: 'Admin Console', path: '/admin' },
         { label: 'Unknown Slug (404)', path: '/blog/unknown-sample-slug' },
         { label: 'Route 404', path: '/non-existent-page' },

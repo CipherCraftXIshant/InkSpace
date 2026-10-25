@@ -1,12 +1,29 @@
 import React, { useState } from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Menu, Bell, Plus, Search } from 'lucide-react';
 import DashboardSidebar from '../components/layout/DashboardSidebar.jsx';
 import Button from '../components/common/Button.jsx';
 import IconButton from '../components/common/IconButton.jsx';
+import { getMockAuthUser } from '../utils/storage.js';
 
 export default function DashboardLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const currentUser = getMockAuthUser() || {
+    name: 'Alex Morgan',
+    email: 'alex@inkspace.dev',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/dashboard/posts?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   return (
     <div className="min-h-screen flex bg-[#FAFAF8] text-[#121212]">
@@ -52,14 +69,16 @@ export default function DashboardLayout() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="relative hidden md:block w-48 lg:w-64">
+            <form onSubmit={handleSearchSubmit} className="relative hidden md:block w-48 lg:w-64">
               <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
               <input
-                type="text"
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search your posts..."
                 className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#F9FAFB] border border-[#E5E7EB] rounded-md focus:bg-white focus:border-[#121212] focus:ring-1 focus:ring-[#121212] outline-hidden transition-all"
               />
-            </div>
+            </form>
 
             <IconButton
               icon={Bell}
@@ -78,11 +97,15 @@ export default function DashboardLayout() {
               New Post
             </Button>
 
-            <Link to="/dashboard/settings" className="shrink-0">
+            <Link
+              to="/dashboard/settings"
+              className="shrink-0 group"
+              title={`${currentUser.name} — Settings`}
+            >
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover border border-[#E5E7EB]"
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="w-8 h-8 rounded-full object-cover border border-[#E5E7EB] group-hover:border-[#121212] transition-colors"
               />
             </Link>
           </div>
