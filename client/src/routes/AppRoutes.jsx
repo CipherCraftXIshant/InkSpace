@@ -30,6 +30,8 @@ import AdminUsersPage from '../pages/admin/AdminUsersPage.jsx';
 import AdminPostsPage from '../pages/admin/AdminPostsPage.jsx';
 import AdminCommentsPage from '../pages/admin/AdminCommentsPage.jsx';
 
+import ProtectedRoute from '../components/common/ProtectedRoute.jsx';
+
 // Not Found
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 
@@ -50,22 +52,26 @@ export default function AppRoutes() {
         <Route path="*" element={<NotFoundPage />} />
       </Route>
 
-      {/* 2. Author Dashboard Routes */}
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        <Route index element={<DashboardOverviewPage />} />
-        <Route path="posts" element={<DashboardPostsPage />} />
-        <Route path="editor" element={<EditorPage />} />
-        <Route path="editor/:id" element={<EditorPage />} />
-        <Route path="bookmarks" element={<BookmarksPage />} />
-        <Route path="settings" element={<SettingsPage />} />
+      {/* 2. Author Dashboard Routes (Protected: must register/login first to write or view dashboard) */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardOverviewPage />} />
+          <Route path="posts" element={<DashboardPostsPage />} />
+          <Route path="editor" element={<EditorPage />} />
+          <Route path="editor/:id" element={<EditorPage />} />
+          <Route path="bookmarks" element={<BookmarksPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
       </Route>
 
-      {/* 3. Admin Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminOverviewPage />} />
-        <Route path="users" element={<AdminUsersPage />} />
-        <Route path="posts" element={<AdminPostsPage />} />
-        <Route path="comments" element={<AdminCommentsPage />} />
+      {/* 3. Admin Routes (Protected: requires admin credentials) */}
+      <Route element={<ProtectedRoute requiredRole="admin" />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminOverviewPage />} />
+          <Route path="users" element={<AdminUsersPage />} />
+          <Route path="posts" element={<AdminPostsPage />} />
+          <Route path="comments" element={<AdminCommentsPage />} />
+        </Route>
       </Route>
     </Routes>
   );

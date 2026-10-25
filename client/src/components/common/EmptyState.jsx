@@ -18,13 +18,13 @@ export default function EmptyState({
     <div
       className={`flex flex-col items-center justify-center text-center py-16 px-4 max-w-md mx-auto ${className}`}
     >
-      <div className="w-12 h-12 rounded-full bg-[#F4F4F5] border border-[#E4E4E7] flex items-center justify-center text-[#71717A] mb-4">
+      <div className="w-12 h-12 rounded-full bg-[#F4F4F5] dark:bg-[#202024] border border-[#E4E4E7] dark:border-[#27272A] flex items-center justify-center text-[#71717A] dark:text-[#A1A1AA] mb-4">
         <Icon className="w-6 h-6 stroke-[1.5]" />
       </div>
-      <h3 className="font-serif text-xl sm:text-2xl text-[#121212] font-medium mb-2">
+      <h3 className="font-serif text-xl sm:text-2xl text-[#121212] dark:text-[#F4F4F6] font-medium mb-2">
         {title}
       </h3>
-      <p className="text-sm text-[#737373] leading-relaxed mb-6 font-normal">
+      <p className="text-sm text-[#737373] dark:text-[#A1A1AA] leading-relaxed mb-6 font-normal">
         {description}
       </p>
       {actionText && (

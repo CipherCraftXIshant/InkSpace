@@ -42,33 +42,33 @@ export default function CategoryPage() {
     <div className="py-8 sm:py-12 space-y-12">
       <Container>
         {/* Category Header */}
-        <div className="border-b border-[#ECECE8] pb-8 mb-10">
+        <div className="border-b border-[#ECECE8] dark:border-[#27272A] pb-8 mb-10">
           <Link
             to="/explore"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#737373] hover:text-[#121212] mb-4 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white mb-4 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to All Articles</span>
           </Link>
 
-          <span className="block text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-2">
+          <span className="block text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-2">
             CURATED TOPIC ARCHIVE
           </span>
 
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#121212] font-semibold tracking-tight mb-3">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#121212] dark:text-[#F4F4F6] font-semibold tracking-tight mb-3">
             {category.name}
           </h1>
 
-          <p className="text-sm sm:text-base text-[#666666] max-w-2xl leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-[#666666] dark:text-[#A1A1AA] max-w-2xl leading-relaxed font-normal">
             {category.description}
           </p>
 
-          <div className="mt-4 flex items-center gap-3 text-xs font-semibold text-[#8A8A8A]">
+          <div className="mt-4 flex items-center gap-3 text-xs font-semibold text-[#8A8A8A] dark:text-[#71717A]">
             <span>{articles.length} curated stories</span>
             <span>•</span>
             <Link
               to={`/explore?category=${category.slug}`}
-              className="text-[#121212] hover:underline"
+              className="text-[#121212] dark:text-[#F4F4F6] hover:underline"
             >
               Filter in Explore →
             </Link>
@@ -92,8 +92,8 @@ export default function CategoryPage() {
         )}
 
         {/* Explore Other Topics Strip */}
-        <div className="pt-12 border-t border-[#ECECE8]">
-          <p className="text-xs font-bold uppercase tracking-wider text-[#A3A3A3] mb-4">
+        <div className="pt-12 border-t border-[#ECECE8] dark:border-[#27272A]">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#A3A3A3] dark:text-[#71717A] mb-4">
             Explore Other Topics
           </p>
           <div className="flex flex-wrap gap-2.5">
@@ -101,9 +101,9 @@ export default function CategoryPage() {
               <Link
                 key={c.id}
                 to={`/categories/${c.slug}`}
-                className="px-3.5 py-1.5 bg-white border border-[#ECECE8] hover:border-[#121212] rounded-full text-xs font-medium text-[#4A4A4A] hover:text-[#121212] transition-colors"
+                className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white dark:bg-[#18181B] border border-[#ECECE8] dark:border-[#27272A] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-white hover:text-[#121212] dark:hover:text-white transition-colors"
               >
-                {c.name}
+                {c.name} ({c.count})
               </Link>
             ))}
           </div>

@@ -103,6 +103,72 @@ export const addArticleComment = (slug, comment) => {
 // Strictly stores safe profile metadata; NO passwords stored.
 // ==========================================
 const MOCK_USER_KEY = 'inkspace_mock_auth_user';
+const REGISTERED_USERS_KEY = 'inkspace_registered_users';
+
+export const getRegisteredUsers = () => {
+  try {
+    const raw = localStorage.getItem(REGISTERED_USERS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+};
+
+export const findRegisteredUser = (email) => {
+  const users = getRegisteredUsers();
+  return users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase()) || null;
+};
+
+export const registerUser = ({ name, email, avatar } = {}) => {
+  try {
+    const users = getRegisteredUsers();
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanName = (name || '').trim();
+
+    const existingIndex = users.findIndex((u) => u.email.toLowerCase() === cleanEmail);
+    const userProfile = {
+      id: existingIndex >= 0 ? users[existingIndex].id : `u-${Date.now()}`,
+      name: cleanName,
+      email: cleanEmail,
+      role: 'author',
+      status: 'Active',
+      joinedDate: new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      postsCount: 0,
+      avatar:
+        avatar ||
+        `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80`,
+    };
+
+    if (existingIndex >= 0) {
+      users[existingIndex] = { ...users[existingIndex], ...userProfile };
+    } else {
+      users.push(userProfile);
+    }
+
+    localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
+
+    // Also auto-sync to admin users list so admin panel sees new user
+    try {
+      const adminUsersRaw = localStorage.getItem('inkspace_admin_users');
+      const adminUsers = adminUsersRaw ? JSON.parse(adminUsersRaw) : [];
+      if (adminUsers.length > 0 && !adminUsers.some((u) => u.email.toLowerCase() === cleanEmail)) {
+        adminUsers.unshift(userProfile);
+        localStorage.setItem('inkspace_admin_users', JSON.stringify(adminUsers));
+      }
+    } catch {
+      // ignore
+    }
+
+    setMockAuthUser(userProfile);
+    return userProfile;
+  } catch {
+    return null;
+  }
+};
 
 export const getMockAuthUser = () => {
   try {

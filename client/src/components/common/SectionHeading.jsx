@@ -29,19 +29,19 @@ export default function SectionHeading({
     >
       <div>
         {eyebrow && (
-          <p className="text-[11px] font-semibold tracking-widest text-[#737373] uppercase mb-2">
+          <p className="text-[11px] font-semibold tracking-widest text-[#737373] dark:text-[#A1A1AA] uppercase mb-2">
             {eyebrow}
           </p>
         )}
         <h2
-          className={`font-serif font-medium text-[#121212] tracking-tight leading-tight ${
+          className={`font-serif font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight leading-tight ${
             titleSizes[titleSize] || titleSizes.default
           }`}
         >
           {title}
         </h2>
         {description && (
-          <p className="mt-2 text-sm sm:text-base text-[#666666] max-w-2xl font-normal leading-relaxed">
+          <p className="mt-2 text-sm sm:text-base text-[#666666] dark:text-[#A1A1AA] max-w-2xl font-normal leading-relaxed">
             {description}
           </p>
         )}
@@ -50,7 +50,7 @@ export default function SectionHeading({
       {actionText && actionHref && (
         <Link
           to={actionHref}
-          className="group inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-[#121212] hover:text-[#525252] transition-colors shrink-0 self-start sm:self-end pb-1 border-b border-transparent hover:border-[#121212]"
+          className="group inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-[#121212] dark:text-[#F4F4F6] hover:text-[#525252] dark:hover:text-white transition-colors shrink-0 self-start sm:self-end pb-1 border-b border-transparent hover:border-[#121212] dark:hover:border-white"
         >
           <span>{actionText}</span>
           <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />

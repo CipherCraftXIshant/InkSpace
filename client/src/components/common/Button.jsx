@@ -21,17 +21,17 @@ export default function Button({
   ...props
 }) {
   const baseClasses =
-    'inline-flex items-center justify-center font-medium transition-all duration-150 select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121212]';
+    'inline-flex items-center justify-center font-medium transition-all duration-150 select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121212] dark:focus-visible:ring-white';
 
   const variants = {
     primary:
-      'bg-[#121212] text-white border border-[#121212] hover:bg-[#2A2A2A] active:bg-black shadow-xs',
+      'bg-[#121212] text-white border border-[#121212] hover:bg-[#2A2A2A] dark:bg-white dark:text-[#121212] dark:border-white dark:hover:bg-zinc-200 active:bg-black shadow-xs',
     secondary:
-      'bg-white text-[#121212] border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] active:bg-[#F3F4F6] shadow-2xs',
+      'bg-white dark:bg-[#18181B] text-[#121212] dark:text-[#F4F4F6] border border-[#E5E7EB] dark:border-[#27272A] hover:bg-[#F9FAFB] dark:hover:bg-[#27272A] hover:border-[#D1D5DB] dark:hover:border-zinc-500 shadow-2xs',
     outline:
-      'bg-transparent text-[#121212] border border-[#121212] hover:bg-[#121212] hover:text-white active:bg-black',
+      'bg-transparent text-[#121212] dark:text-[#F4F4F6] border border-[#121212] dark:border-zinc-400 hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212]',
     ghost:
-      'bg-transparent text-[#4A4A4A] hover:text-[#121212] hover:bg-black/5 active:bg-black/10',
+      'bg-transparent text-[#4A4A4A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10',
     danger:
       'bg-red-600 text-white border border-red-600 hover:bg-red-700 active:bg-red-800 shadow-xs',
   };

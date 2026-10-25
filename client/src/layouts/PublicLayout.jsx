@@ -5,7 +5,7 @@ import Footer from '../components/layout/Footer.jsx';
 
 export default function PublicLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAF8] text-[#121212] overflow-x-clip">
+    <div className="min-h-screen flex flex-col bg-[#FAFAF8] dark:bg-[#0C0C0E] text-[#121212] dark:text-[#F4F4F6] overflow-x-clip transition-colors duration-150">
       <Navbar />
       <main className="flex-1">
         <Outlet />

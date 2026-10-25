@@ -88,15 +88,15 @@ export default function AdminPostsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1">
             CONTENT OVERSIGHT
           </p>
-          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             Article Management & Curation
           </h1>
-          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+          <p className="text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA] mt-1">
             Curate homepage features, inspect author publications, and moderate content standards.
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function AdminPostsPage() {
         <div className="flex items-center gap-2">
           <Link
             to="/dashboard/editor"
-            className="px-3.5 py-2 text-xs font-semibold bg-[#121212] text-white rounded-lg hover:bg-neutral-800 transition-colors shadow-2xs"
+            className="px-3.5 py-2 text-xs font-semibold bg-[#121212] dark:bg-white text-white dark:text-[#121212] rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors shadow-2xs"
           >
             Create Platform Story
           </Link>
@@ -112,17 +112,17 @@ export default function AdminPostsPage() {
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="bg-white p-4 rounded-xl border border-[#ECECE8] shadow-2xs space-y-3">
+      <div className="bg-white dark:bg-[#18181B] p-4 rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Search */}
           <div className="relative w-full sm:w-80">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] dark:text-[#71717A]" />
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by story title, author, or topic..."
-              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] border border-[#E5E7EB] rounded-lg outline-hidden focus:bg-white focus:border-[#121212] transition-colors"
+              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] dark:bg-[#202024] border border-[#E5E7EB] dark:border-[#27272A] rounded-lg outline-hidden focus:bg-white dark:focus:bg-[#18181B] focus:border-[#121212] dark:focus:border-white/40 text-[#121212] dark:text-[#F4F4F6] transition-colors"
             />
           </div>
 
@@ -143,8 +143,8 @@ export default function AdminPostsPage() {
                   onClick={() => setStatusFilter(tab.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-[#121212] text-white shadow-2xs'
-                      : 'text-[#525252] hover:text-[#121212] hover:bg-[#FAF9F5]'
+                      ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
+                      : 'text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]'
                   }`}
                 >
                   {tab.label}
@@ -156,7 +156,7 @@ export default function AdminPostsPage() {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="p-1.5 text-[#737373] hover:text-[#121212] rounded-lg border border-[#E5E7EB] hover:bg-[#FAF9F5] cursor-pointer shrink-0"
+                className="p-1.5 text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-lg border border-[#E5E7EB] dark:border-[#27272A] hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] cursor-pointer shrink-0"
                 title="Reset filters"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -168,10 +168,10 @@ export default function AdminPostsPage() {
 
       {/* Stories Table */}
       {filteredPosts.length > 0 ? (
-        <div className="bg-white rounded-xl border border-[#ECECE8] shadow-2xs overflow-hidden">
+        <div className="bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-[#FAF9F5] border-b border-[#ECECE8] text-[11px] font-semibold text-[#737373] uppercase tracking-wider">
+              <thead className="bg-[#FAF9F5] dark:bg-[#202024] border-b border-[#ECECE8] dark:border-[#27272A] text-[11px] font-semibold text-[#737373] dark:text-[#A1A1AA] uppercase tracking-wider">
                 <tr>
                   <th scope="col" className="px-6 py-3.5">Feature</th>
                   <th scope="col" className="px-6 py-3.5">Story Title</th>
@@ -183,9 +183,9 @@ export default function AdminPostsPage() {
                   <th scope="col" className="px-6 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#ECECE8] text-[#121212]">
+              <tbody className="divide-y divide-[#ECECE8] dark:divide-[#27272A] text-[#121212] dark:text-[#F4F4F6]">
                 {filteredPosts.map((post) => (
-                  <tr key={post.id} className="hover:bg-[#FAF9F5]/60 transition-colors">
+                  <tr key={post.id} className="hover:bg-[#FAF9F5]/60 dark:hover:bg-[#27272A]/40 transition-colors">
                     {/* Feature / Unfeature Star Control */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
@@ -193,8 +193,8 @@ export default function AdminPostsPage() {
                         onClick={() => handleToggleFeature(post)}
                         className={`p-1.5 rounded-lg border transition-colors cursor-pointer flex items-center gap-1.5 text-xs ${
                           post.isFeatured
-                            ? 'bg-amber-50 border-amber-300 text-amber-700 shadow-2xs'
-                            : 'border-[#E5E7EB] text-[#A3A3A3] hover:text-[#121212] hover:border-[#121212]'
+                            ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-900/50 text-amber-700 dark:text-amber-300 shadow-2xs'
+                            : 'border-[#E5E7EB] dark:border-[#27272A] text-[#A3A3A3] dark:text-[#71717A] hover:text-[#121212] dark:hover:text-white hover:border-[#121212] dark:hover:border-white/40'
                         }`}
                         title={post.isFeatured ? 'Click to unfeature' : 'Click to feature on homepage'}
                       >
@@ -213,20 +213,20 @@ export default function AdminPostsPage() {
                     <td className="px-6 py-4 max-w-sm">
                       <Link
                         to={`/blog/${post.slug}`}
-                        className="font-serif font-medium text-sm sm:text-base text-[#121212] hover:underline block truncate"
+                        className="font-serif font-medium text-sm sm:text-base text-[#121212] dark:text-[#F4F4F6] hover:underline block truncate"
                       >
                         {post.title}
                       </Link>
                     </td>
 
                     {/* Author */}
-                    <td className="px-6 py-4 text-[#525252] font-medium whitespace-nowrap">
+                    <td className="px-6 py-4 text-[#525252] dark:text-[#A1A1AA] font-medium whitespace-nowrap">
                       {post.author}
                     </td>
 
                     {/* Category */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-xs font-medium text-[#525252] bg-[#F4F4F5] px-2.5 py-1 rounded-md">
+                      <span className="text-xs font-medium text-[#525252] dark:text-[#D4D4D8] bg-[#F4F4F5] dark:bg-[#27272A] px-2.5 py-1 rounded-md">
                         {post.category}
                       </span>
                     </td>
@@ -234,31 +234,31 @@ export default function AdminPostsPage() {
                     {/* Status */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       {post.status === 'Published' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                           <span>Published</span>
                         </span>
                       )}
                       {post.status === 'Draft' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900/50">
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                           <span>Draft</span>
                         </span>
                       )}
                       {post.status === 'Scheduled' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900/50">
                           <span>Scheduled</span>
                         </span>
                       )}
                     </td>
 
                     {/* Readers / Views */}
-                    <td className="px-6 py-4 text-[#525252] text-xs whitespace-nowrap">
+                    <td className="px-6 py-4 text-[#525252] dark:text-[#A1A1AA] text-xs whitespace-nowrap">
                       {post.views ? post.views.toLocaleString() : '—'}
                     </td>
 
                     {/* Date */}
-                    <td className="px-6 py-4 text-[#737373] text-xs whitespace-nowrap">
+                    <td className="px-6 py-4 text-[#737373] dark:text-[#71717A] text-xs whitespace-nowrap">
                       {post.publishedAt}
                     </td>
 
@@ -267,7 +267,7 @@ export default function AdminPostsPage() {
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
                           to={`/blog/${post.slug}`}
-                          className="p-1.5 text-[#525252] hover:text-[#121212] hover:bg-black/5 rounded-md transition-colors"
+                          className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors"
                           title="Preview Story on Public Site"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -276,7 +276,7 @@ export default function AdminPostsPage() {
                         <button
                           type="button"
                           onClick={() => setPostToDelete(post)}
-                          className="p-1.5 text-[#8A8A8A] hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                          className="p-1.5 text-[#8A8A8A] dark:text-[#71717A] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-md transition-colors cursor-pointer"
                           title="Delete Story Permanently"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -307,32 +307,32 @@ export default function AdminPostsPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
         >
           <div
-            className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] space-y-4"
+            className="bg-white dark:bg-[#18181B] rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] dark:border-[#27272A] space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
+            <div className="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50">
               <AlertTriangle className="w-5 h-5 stroke-[1.8]" />
             </div>
 
             <div>
-              <h3 className="font-serif text-lg font-medium text-[#121212]">
+              <h3 className="font-serif text-lg font-medium text-[#121212] dark:text-[#F4F4F6]">
                 Delete platform story?
               </h3>
-              <p className="text-xs sm:text-sm text-[#666666] leading-relaxed mt-1.5">
+              <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed mt-1.5">
                 Are you sure you want to permanently delete{' '}
-                <strong className="text-[#121212]">"{postToDelete.title}"</strong>{' '}
+                <strong className="text-[#121212] dark:text-[#F4F4F6]">"{postToDelete.title}"</strong>{' '}
                 by {postToDelete.author}? This story will be purged from the catalog.
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8]">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8] dark:border-[#27272A]">
               <button
                 type="button"
                 onClick={() => setPostToDelete(null)}
-                className="px-3.5 py-1.5 text-xs text-[#525252] hover:text-[#121212] rounded-md cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-md cursor-pointer"
               >
                 Cancel
               </button>

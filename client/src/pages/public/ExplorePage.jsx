@@ -98,16 +98,16 @@ export default function ExplorePage() {
     <div className="py-8 sm:py-12">
       <Container size="default">
         {/* Page Header */}
-        <div className="border-b border-[#ECECE8] pb-8 mb-8 space-y-6">
+        <div className="border-b border-[#ECECE8] dark:border-[#27272A] pb-8 mb-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1.5">
+              <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1.5">
                 EDITORIAL CATALOGUE
               </p>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#121212] font-semibold tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#121212] dark:text-[#F4F4F6] font-semibold tracking-tight">
                 Explore Articles
               </h1>
-              <p className="mt-2 text-sm sm:text-base text-[#666666]">
+              <p className="mt-2 text-sm sm:text-base text-[#666666] dark:text-[#A1A1AA]">
                 Discover ideas, technical deep-dives, and perspectives from a variety of topics.
               </p>
             </div>
@@ -115,14 +115,14 @@ export default function ExplorePage() {
             {/* Search Input & Reset */}
             <div className="flex items-center gap-2 w-full md:w-auto">
               <div className="relative flex-1 md:w-80">
-                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9CA3AF] dark:text-[#71717A]" />
                 <input
                   type="search"
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder="Search title, tag, author, or excerpt..."
                   enterKeyHint="search"
-                  className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm bg-white border border-[#E5E7EB] rounded-lg focus:border-[#121212] focus:ring-1 focus:ring-[#121212] outline-hidden placeholder:text-[#9CA3AF] transition-all"
+                  className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm bg-white dark:bg-[#18181B] border border-[#E5E7EB] dark:border-[#27272A] rounded-lg focus:border-[#121212] dark:focus:border-white focus:ring-1 focus:ring-[#121212] dark:focus:ring-white outline-hidden text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] transition-all"
                 />
               </div>
 
@@ -130,7 +130,7 @@ export default function ExplorePage() {
                 <button
                   type="button"
                   onClick={handleResetFilters}
-                  className="inline-flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium border border-[#E5E7EB] bg-white rounded-lg hover:bg-[#F9FAFB] text-[#4A4A4A] hover:text-[#121212] cursor-pointer shrink-0 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium border border-[#E5E7EB] dark:border-[#27272A] bg-white dark:bg-[#18181B] rounded-lg hover:bg-[#F9FAFB] dark:hover:bg-[#27272A] text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white cursor-pointer shrink-0 transition-colors"
                   title="Reset all filters"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -151,8 +151,8 @@ export default function ExplorePage() {
                   onClick={() => handleCategorySelect(cat.id)}
                   className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-[#121212] text-white shadow-2xs'
-                      : 'bg-white text-[#525252] border border-[#E5E7EB] hover:border-[#121212] hover:text-[#121212]'
+                      ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
+                      : 'bg-white dark:bg-[#18181B] text-[#525252] dark:text-[#A1A1AA] border border-[#E5E7EB] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:text-[#121212] dark:hover:text-white'
                   }`}
                 >
                   {cat.name}
@@ -162,17 +162,17 @@ export default function ExplorePage() {
           </div>
 
           {/* Controls Bar: Results Count, Sort Dropdown & Layout Mode Toggle */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 text-xs text-[#737373]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 text-xs text-[#737373] dark:text-[#A1A1AA]">
             <p>
               Showing{' '}
-              <strong className="text-[#121212] font-semibold">
+              <strong className="text-[#121212] dark:text-[#F4F4F6] font-semibold">
                 {processedArticles.length}
               </strong>{' '}
               {processedArticles.length === 1 ? 'story' : 'stories'}
               {selectedCategory !== 'all' && (
                 <span>
                   {' '}in{' '}
-                  <span className="text-[#121212] font-medium capitalize">
+                  <span className="text-[#121212] dark:text-[#F4F4F6] font-medium capitalize">
                     {selectedCategory}
                   </span>
                 </span>
@@ -182,7 +182,7 @@ export default function ExplorePage() {
             <div className="flex items-center gap-4 self-end sm:self-auto">
               {/* Sort Selector */}
               <div className="flex items-center gap-1.5">
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-[#71717A]" />
                 <label htmlFor="sort-select" className="sr-only">Sort articles</label>
                 <select
                   id="sort-select"
@@ -191,7 +191,7 @@ export default function ExplorePage() {
                     setSortBy(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="bg-white border border-[#E5E7EB] text-xs text-[#121212] rounded-md px-2.5 py-1 outline-hidden focus:border-[#121212] cursor-pointer"
+                  className="bg-white dark:bg-[#18181B] border border-[#E5E7EB] dark:border-[#27272A] text-xs text-[#121212] dark:text-[#F4F4F6] rounded-md px-2.5 py-1 outline-hidden focus:border-[#121212] dark:focus:border-white cursor-pointer"
                 >
                   <option value="newest">Newest First</option>
                   <option value="popular">Most Popular</option>
@@ -199,14 +199,14 @@ export default function ExplorePage() {
               </div>
 
               {/* View Toggle */}
-              <div className="flex items-center border border-[#E5E7EB] rounded-md bg-white p-0.5">
+              <div className="flex items-center border border-[#E5E7EB] dark:border-[#27272A] rounded-md bg-white dark:bg-[#18181B] p-0.5">
                 <button
                   type="button"
                   onClick={() => setViewMode('list')}
                   className={`p-1.5 rounded cursor-pointer ${
                     viewMode === 'list'
-                      ? 'bg-[#121212] text-white'
-                      : 'text-[#737373] hover:text-[#121212]'
+                      ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212]'
+                      : 'text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white'
                   }`}
                   aria-label="List view"
                   title="List view"
@@ -218,8 +218,8 @@ export default function ExplorePage() {
                   onClick={() => setViewMode('grid')}
                   className={`p-1.5 rounded cursor-pointer ${
                     viewMode === 'grid'
-                      ? 'bg-[#121212] text-white'
-                      : 'text-[#737373] hover:text-[#121212]'
+                      ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212]'
+                      : 'text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white'
                   }`}
                   aria-label="Grid view"
                   title="Grid view"
@@ -235,7 +235,7 @@ export default function ExplorePage() {
         {paginatedArticles.length > 0 ? (
           <div>
             {viewMode === 'list' ? (
-              <div className="divide-y divide-[#ECECE8]">
+              <div className="divide-y divide-[#ECECE8] dark:divide-[#27272A]">
                 {paginatedArticles.map((article) => (
                   <BlogCard
                     key={article.id}
@@ -258,7 +258,7 @@ export default function ExplorePage() {
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="pt-12 flex items-center justify-center gap-1.5 text-sm font-medium text-[#4A4A4A]">
+              <div className="pt-12 flex items-center justify-center gap-1.5 text-sm font-medium text-[#4A4A4A] dark:text-[#A1A1AA]">
                 {Array.from({ length: totalPages }).map((_, idx) => {
                   const pageNum = idx + 1;
                   const isActive = currentPage === pageNum;
@@ -269,8 +269,8 @@ export default function ExplorePage() {
                       onClick={() => setCurrentPage(pageNum)}
                       className={`w-8 h-8 rounded-md flex items-center justify-center font-semibold cursor-pointer transition-colors ${
                         isActive
-                          ? 'bg-[#121212] text-white'
-                          : 'bg-white border border-[#E5E7EB] hover:bg-black/5 text-[#525252]'
+                          ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212]'
+                          : 'bg-white dark:bg-[#18181B] border border-[#E5E7EB] dark:border-[#27272A] hover:bg-black/5 dark:hover:bg-white/10 text-[#525252] dark:text-[#D4D4D8]'
                       }`}
                     >
                       {pageNum}
@@ -282,7 +282,7 @@ export default function ExplorePage() {
                   <button
                     type="button"
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                    className="px-3 py-1 bg-white border border-[#E5E7EB] rounded-md hover:bg-black/5 text-[#525252] flex items-center justify-center ml-2 cursor-pointer text-xs"
+                    className="px-3 py-1 bg-white dark:bg-[#18181B] border border-[#E5E7EB] dark:border-[#27272A] rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-[#525252] dark:text-[#D4D4D8] flex items-center justify-center ml-2 cursor-pointer text-xs"
                   >
                     Next →
                   </button>

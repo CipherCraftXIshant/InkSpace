@@ -36,7 +36,7 @@ export default function BookmarksPage() {
       {/* Toast Notification */}
       {toastMessage && (
         <div
-          className="fixed top-20 right-6 z-50 bg-[#121212] text-white text-xs px-4 py-2.5 rounded-lg shadow-xl border border-white/10 flex items-center gap-2 animate-in fade-in"
+          className="fixed top-20 right-6 z-50 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-xs px-4 py-2.5 rounded-lg shadow-xl border border-white/10 dark:border-black/10 flex items-center gap-2 animate-in fade-in"
           role="status"
         >
           <span>{toastMessage}</span>
@@ -44,15 +44,15 @@ export default function BookmarksPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1">
             PERSONAL LIBRARY
           </p>
-          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             Saved Bookmarks
           </h1>
-          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+          <p className="text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA] mt-1">
             Articles and research essays you have bookmarked for deep reading.
           </p>
         </div>
@@ -60,10 +60,10 @@ export default function BookmarksPage() {
         <div className="flex items-center gap-2">
           <Link
             to="/explore"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium border border-[#ECECE8] bg-white rounded-lg hover:border-[#121212] text-[#121212] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium border border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] rounded-lg hover:border-[#121212] dark:hover:border-white text-[#121212] dark:text-[#F4F4F6] transition-colors"
           >
             <span>Explore Catalogue</span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#737373]" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#737373] dark:text-[#A1A1AA]" />
           </Link>
         </div>
       </div>
@@ -74,12 +74,12 @@ export default function BookmarksPage() {
           {bookmarkedArticles.map((article) => (
             <div
               key={article.id}
-              className="bg-white rounded-xl border border-[#ECECE8] overflow-hidden shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between"
+              className="bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] overflow-hidden shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between"
             >
               <div>
                 <Link
                   to={`/blog/${article.slug}`}
-                  className="block aspect-16/10 bg-[#F0F0ED] overflow-hidden group"
+                  className="block aspect-16/10 bg-[#F0F0ED] dark:bg-[#121214] overflow-hidden group"
                 >
                   <img
                     src={article.coverImage}
@@ -99,7 +99,7 @@ export default function BookmarksPage() {
                     </CategoryBadge>
                   </div>
 
-                  <h3 className="font-serif text-lg font-medium text-[#121212] mb-2 leading-snug">
+                  <h3 className="font-serif text-lg font-medium text-[#121212] dark:text-[#F4F4F6] mb-2 leading-snug">
                     <Link
                       to={`/blog/${article.slug}`}
                       className="hover:underline"
@@ -108,23 +108,23 @@ export default function BookmarksPage() {
                     </Link>
                   </h3>
 
-                  <p className="text-xs text-[#666666] line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-[#666666] dark:text-[#A1A1AA] line-clamp-2 leading-relaxed">
                     {article.excerpt}
                   </p>
                 </div>
               </div>
 
               {/* Card Footer */}
-              <div className="px-5 py-3 bg-[#FAF9F5] border-t border-[#ECECE8] flex items-center justify-between text-xs text-[#8A8A8A]">
+              <div className="px-5 py-3 bg-[#FAF9F5] dark:bg-[#121214] border-t border-[#ECECE8] dark:border-[#27272A] flex items-center justify-between text-xs text-[#8A8A8A] dark:text-[#71717A]">
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                  <Clock className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-[#71717A]" />
                   <span>{article.readingTime || article.readTime || '5 min read'}</span>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleRemove(article.id, article.title)}
-                  className="inline-flex items-center gap-1 text-red-600 hover:text-red-700 cursor-pointer font-medium transition-colors"
+                  className="inline-flex items-center gap-1 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 cursor-pointer font-medium transition-colors"
                   title="Remove from bookmarks"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

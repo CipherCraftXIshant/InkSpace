@@ -96,37 +96,37 @@ export default function AdminCommentsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1">
             COMMUNITY SAFETY
           </p>
-          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             Comment Moderation
           </h1>
-          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+          <p className="text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA] mt-1">
             Review reader feedback, approve thoughtful discussions, and eliminate spam or abusive remarks.
           </p>
         </div>
 
-        <div className="text-xs text-[#737373] bg-white border border-[#ECECE8] px-3 py-1.5 rounded-lg">
+        <div className="text-xs text-[#737373] dark:text-[#A1A1AA] bg-white dark:bg-[#18181B] border border-[#ECECE8] dark:border-[#27272A] px-3 py-1.5 rounded-lg">
           Total Feedback:{' '}
-          <strong className="text-[#121212] font-semibold">{comments.length}</strong>
+          <strong className="text-[#121212] dark:text-[#F4F4F6] font-semibold">{comments.length}</strong>
         </div>
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="bg-white p-4 rounded-xl border border-[#ECECE8] shadow-2xs space-y-3">
+      <div className="bg-white dark:bg-[#18181B] p-4 rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Search */}
           <div className="relative w-full sm:w-80">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] dark:text-[#71717A]" />
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by author, text, or story title..."
-              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] border border-[#E5E7EB] rounded-lg outline-hidden focus:bg-white focus:border-[#121212] transition-colors"
+              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] dark:bg-[#202024] border border-[#E5E7EB] dark:border-[#27272A] rounded-lg outline-hidden focus:bg-white dark:focus:bg-[#18181B] focus:border-[#121212] dark:focus:border-white/40 text-[#121212] dark:text-[#F4F4F6] transition-colors"
             />
           </div>
 
@@ -146,16 +146,16 @@ export default function AdminCommentsPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
                     isActive
-                      ? 'bg-[#121212] text-white shadow-2xs'
-                      : 'text-[#525252] hover:text-[#121212] hover:bg-[#FAF9F5]'
+                      ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
+                      : 'text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]'
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full ${
                       isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-[#F4F4F5] text-[#737373]'
+                        ? 'bg-white/20 dark:bg-black/20 text-white dark:text-[#121212]'
+                        : 'bg-[#F4F4F5] dark:bg-[#27272A] text-[#737373] dark:text-[#A1A1AA]'
                     }`}
                   >
                     {tab.count}
@@ -168,7 +168,7 @@ export default function AdminCommentsPage() {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="p-1.5 text-[#737373] hover:text-[#121212] rounded-lg border border-[#E5E7EB] hover:bg-[#FAF9F5] cursor-pointer shrink-0"
+                className="p-1.5 text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-lg border border-[#E5E7EB] dark:border-[#27272A] hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] cursor-pointer shrink-0"
                 title="Reset filters"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -180,44 +180,44 @@ export default function AdminCommentsPage() {
 
       {/* Comments List */}
       {filteredComments.length > 0 ? (
-        <div className="bg-white rounded-xl border border-[#ECECE8] shadow-2xs divide-y divide-[#ECECE8]">
+        <div className="bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs divide-y divide-[#ECECE8] dark:divide-[#27272A]">
           {filteredComments.map((comment) => (
             <div
               key={comment.id}
-              className="p-5 sm:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 hover:bg-[#FAF9F5]/40 transition-colors"
+              className="p-5 sm:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 hover:bg-[#FAF9F5]/40 dark:hover:bg-[#27272A]/40 transition-colors"
             >
               {/* Comment Content */}
               <div className="space-y-2 flex-1">
                 <div className="flex items-center gap-2 flex-wrap text-xs">
-                  <div className="w-6 h-6 rounded-full bg-[#121212] text-white flex items-center justify-center font-bold text-[10px]">
+                  <div className="w-6 h-6 rounded-full bg-[#121212] dark:bg-white text-white dark:text-[#121212] flex items-center justify-center font-bold text-[10px]">
                     {comment.author.charAt(0)}
                   </div>
-                  <span className="font-semibold text-[#121212]">{comment.author}</span>
+                  <span className="font-semibold text-[#121212] dark:text-[#F4F4F6]">{comment.author}</span>
                   {comment.authorEmail && (
-                    <span className="text-[#8A8A8A] font-mono text-[11px]">
+                    <span className="text-[#8A8A8A] dark:text-[#71717A] font-mono text-[11px]">
                       ({comment.authorEmail})
                     </span>
                   )}
-                  <span className="text-[#A3A3A3]">•</span>
-                  <span className="text-[#737373]">on story:</span>
+                  <span className="text-[#A3A3A3] dark:text-[#71717A]">•</span>
+                  <span className="text-[#737373] dark:text-[#A1A1AA]">on story:</span>
                   <Link
                     to={`/blog/${comment.articleSlug}`}
-                    className="font-medium text-[#121212] hover:underline flex items-center gap-1"
+                    className="font-medium text-[#121212] dark:text-[#F4F4F6] hover:underline flex items-center gap-1"
                   >
                     <span>{comment.articleTitle}</span>
-                    <ExternalLink className="w-3 h-3 text-[#A3A3A3]" />
+                    <ExternalLink className="w-3 h-3 text-[#A3A3A3] dark:text-[#71717A]" />
                   </Link>
-                  <span className="text-[#A3A3A3]">•</span>
-                  <span className="text-[#8A8A8A]">{comment.submittedAt}</span>
+                  <span className="text-[#A3A3A3] dark:text-[#71717A]">•</span>
+                  <span className="text-[#8A8A8A] dark:text-[#71717A]">{comment.submittedAt}</span>
 
                   {/* Status Badge */}
                   <span
                     className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                       comment.status === 'Approved'
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50'
                         : comment.status === 'Flagged'
-                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                        ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50'
+                        : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900/50'
                     }`}
                   >
                     {comment.status}
@@ -225,12 +225,12 @@ export default function AdminCommentsPage() {
                 </div>
 
                 {comment.flagReason && (
-                  <div className="text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded inline-block">
+                  <div className="text-[11px] font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 px-2.5 py-1 rounded inline-block">
                     Flag Reason: {comment.flagReason}
                   </div>
                 )}
 
-                <p className="text-xs sm:text-sm text-[#333333] leading-relaxed bg-[#FAF9F5] p-3 rounded-lg border border-[#ECECE8]">
+                <p className="text-xs sm:text-sm text-[#333333] dark:text-[#D4D4D8] leading-relaxed bg-[#FAF9F5] dark:bg-[#202024] p-3 rounded-lg border border-[#ECECE8] dark:border-[#27272A]">
                   "{comment.content}"
                 </p>
               </div>
@@ -241,7 +241,7 @@ export default function AdminCommentsPage() {
                   <button
                     type="button"
                     onClick={() => handleApprove(comment.id)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-900/50 cursor-pointer transition-colors"
                     title="Approve Comment"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -253,7 +253,7 @@ export default function AdminCommentsPage() {
                   <button
                     type="button"
                     onClick={() => handleFlag(comment.id)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-950/60 border border-amber-200 dark:border-amber-900/50 cursor-pointer transition-colors"
                     title="Flag Comment"
                   >
                     <Flag className="w-3.5 h-3.5" />
@@ -264,7 +264,7 @@ export default function AdminCommentsPage() {
                 <button
                   type="button"
                   onClick={() => setCommentToDelete(comment)}
-                  className="p-1.5 text-[#8A8A8A] hover:text-rose-600 hover:bg-rose-50 rounded-lg border border-[#E5E7EB] cursor-pointer transition-colors"
+                  className="p-1.5 text-[#8A8A8A] dark:text-[#71717A] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg border border-[#E5E7EB] dark:border-[#27272A] cursor-pointer transition-colors"
                   title="Delete Comment Permanently"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -296,32 +296,32 @@ export default function AdminCommentsPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
         >
           <div
-            className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] space-y-4"
+            className="bg-white dark:bg-[#18181B] rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] dark:border-[#27272A] space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
+            <div className="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50">
               <AlertTriangle className="w-5 h-5 stroke-[1.8]" />
             </div>
 
             <div>
-              <h3 className="font-serif text-lg font-medium text-[#121212]">
+              <h3 className="font-serif text-lg font-medium text-[#121212] dark:text-[#F4F4F6]">
                 Permanently delete comment?
               </h3>
-              <p className="text-xs sm:text-sm text-[#666666] leading-relaxed mt-1.5">
+              <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed mt-1.5">
                 Are you sure you want to remove the comment by{' '}
-                <strong className="text-[#121212]">{commentToDelete.author}</strong> on{' '}
+                <strong className="text-[#121212] dark:text-[#F4F4F6]">{commentToDelete.author}</strong> on{' '}
                 <em>"{commentToDelete.articleTitle}"</em>? This action cannot be undone.
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8]">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8] dark:border-[#27272A]">
               <button
                 type="button"
                 onClick={() => setCommentToDelete(null)}
-                className="px-3.5 py-1.5 text-xs text-[#525252] hover:text-[#121212] rounded-md cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-md cursor-pointer"
               >
                 Cancel
               </button>

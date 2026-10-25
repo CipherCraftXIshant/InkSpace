@@ -103,14 +103,14 @@ export default function DashboardPostsPage() {
       {/* Toast Notification */}
       {toastMessage && (
         <div
-          className="fixed top-20 right-6 z-50 bg-[#121212] text-white text-xs px-4 py-2.5 rounded-lg shadow-xl border border-white/10 flex items-center gap-2 animate-in fade-in slide-in-from-top-2"
+          className="fixed top-20 right-6 z-50 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-xs px-4 py-2.5 rounded-lg shadow-xl border border-white/10 dark:border-black/10 flex items-center gap-2 animate-in fade-in slide-in-from-top-2"
           role="status"
         >
           <span>{toastMessage}</span>
           <button
             type="button"
             onClick={() => setToastMessage('')}
-            className="text-neutral-400 hover:text-white ml-2 cursor-pointer"
+            className="text-neutral-400 dark:text-neutral-600 hover:text-white dark:hover:text-black ml-2 cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -118,15 +118,15 @@ export default function DashboardPostsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1">
             STORY MANAGEMENT
           </p>
-          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             My Posts
           </h1>
-          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+          <p className="text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA] mt-1">
             Organize, draft, and publish your editorial writing.
           </p>
         </div>
@@ -137,7 +137,7 @@ export default function DashboardPostsPage() {
       </div>
 
       {/* Filter Tabs and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-3.5 rounded-xl border border-[#ECECE8] shadow-2xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-[#18181B] p-3.5 rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs">
         {/* Filter Tabs */}
         <div className="flex items-center gap-1.5 self-start sm:self-auto overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
           {[
@@ -154,14 +154,14 @@ export default function DashboardPostsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
                   isActive
-                    ? 'bg-[#121212] text-white shadow-2xs'
-                    : 'text-[#525252] hover:text-[#121212] hover:bg-[#FAF9F5]'
+                    ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
+                    : 'text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]'
                 }`}
               >
                 <span>{tab.label}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-[#F4F4F5] text-[#737373]'
+                    isActive ? 'bg-white/20 dark:bg-black/20 text-white dark:text-[#121212]' : 'bg-[#F4F4F5] dark:bg-[#27272A] text-[#737373] dark:text-[#A1A1AA]'
                   }`}
                 >
                   {tab.count}
@@ -174,13 +174,13 @@ export default function DashboardPostsPage() {
         {/* Search */}
         <div className="relative w-full sm:w-72 flex items-center gap-2">
           <div className="relative flex-1">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] dark:text-[#71717A]" />
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search posts by title or category..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#FAF9F5] border border-[#E5E7EB] rounded-lg focus:bg-white focus:border-[#121212] outline-hidden placeholder:text-[#9CA3AF] transition-all"
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#FAF9F5] dark:bg-[#121214] border border-[#E5E7EB] dark:border-[#27272A] rounded-lg text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] focus:bg-white dark:focus:bg-[#18181B] focus:border-[#121212] dark:focus:border-white outline-hidden transition-all"
             />
           </div>
 
@@ -188,7 +188,7 @@ export default function DashboardPostsPage() {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="p-1.5 text-[#737373] hover:text-[#121212] rounded-lg border border-[#E5E7EB] hover:bg-[#FAF9F5] cursor-pointer"
+              className="p-1.5 text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-lg border border-[#E5E7EB] dark:border-[#27272A] hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] cursor-pointer"
               title="Reset filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -199,10 +199,10 @@ export default function DashboardPostsPage() {
 
       {/* Posts Table */}
       {filteredPosts.length > 0 ? (
-        <div className="bg-white rounded-xl border border-[#ECECE8] shadow-2xs overflow-hidden">
+        <div className="bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-[#FAF9F5] border-b border-[#ECECE8] text-[11px] font-semibold text-[#737373] uppercase tracking-wider">
+              <thead className="bg-[#FAF9F5] dark:bg-[#121214] border-b border-[#ECECE8] dark:border-[#27272A] text-[11px] font-semibold text-[#737373] dark:text-[#A1A1AA] uppercase tracking-wider">
                 <tr>
                   <th scope="col" className="px-6 py-3.5">
                     Story & Excerpt
@@ -224,19 +224,19 @@ export default function DashboardPostsPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#ECECE8] text-[#121212]">
+              <tbody className="divide-y divide-[#ECECE8] dark:divide-[#27272A] text-[#121212] dark:text-[#F4F4F6]">
                 {filteredPosts.map((post) => (
-                  <tr key={post.id} className="hover:bg-[#FAF9F5]/70 transition-colors">
+                  <tr key={post.id} className="hover:bg-[#FAF9F5]/70 dark:hover:bg-[#27272A]/40 transition-colors">
                     {/* Title & Excerpt */}
                     <td className="px-6 py-4 max-w-sm">
                       <Link
                         to={`/dashboard/editor/${post.id}`}
-                        className="font-serif font-medium text-sm sm:text-base text-[#121212] hover:underline block truncate"
+                        className="font-serif font-medium text-sm sm:text-base text-[#121212] dark:text-[#F4F4F6] hover:underline block truncate"
                       >
                         {post.title}
                       </Link>
                       {post.excerpt && (
-                        <p className="text-xs text-[#737373] line-clamp-1 mt-0.5">
+                        <p className="text-xs text-[#737373] dark:text-[#A1A1AA] line-clamp-1 mt-0.5">
                           {post.excerpt}
                         </p>
                       )}
@@ -244,7 +244,7 @@ export default function DashboardPostsPage() {
 
                     {/* Category */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-xs font-medium text-[#525252] bg-[#F4F4F5] px-2.5 py-1 rounded-md">
+                      <span className="text-xs font-medium text-[#525252] dark:text-[#D4D4D8] bg-[#F4F4F5] dark:bg-[#27272A] px-2.5 py-1 rounded-md">
                         {post.category || 'General'}
                       </span>
                     </td>
@@ -252,20 +252,20 @@ export default function DashboardPostsPage() {
                     {/* Status Badge */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       {post.status === 'Published' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                           <span>Published</span>
                         </span>
                       )}
                       {post.status === 'Draft' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                           <span>Draft</span>
                         </span>
                       )}
                       {post.status === 'Scheduled' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
-                          <Calendar className="w-3 h-3 text-sky-600" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 border border-sky-200 dark:border-sky-800">
+                          <Calendar className="w-3 h-3 text-sky-600 dark:text-sky-400" />
                           <span>Scheduled</span>
                         </span>
                       )}
@@ -273,20 +273,20 @@ export default function DashboardPostsPage() {
 
                     {/* Metrics */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-3 text-xs text-[#525252]">
+                      <div className="flex items-center gap-3 text-xs text-[#525252] dark:text-[#A1A1AA]">
                         <span className="inline-flex items-center gap-1" title="Reader Views">
-                          <Eye className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                          <Eye className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-[#71717A]" />
                           {post.views ? post.views.toLocaleString() : '—'}
                         </span>
                         <span className="inline-flex items-center gap-1" title="Reader Likes">
-                          <Heart className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                          <Heart className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-[#71717A]" />
                           {post.likes ? post.likes : '—'}
                         </span>
                       </div>
                     </td>
 
                     {/* Timeline */}
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-[#737373]">
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-[#737373] dark:text-[#A1A1AA]">
                       {post.status === 'Scheduled'
                         ? post.scheduledDate || 'Upcoming'
                         : post.updatedAt || post.publishedAt || 'Recently'}
@@ -297,7 +297,7 @@ export default function DashboardPostsPage() {
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
                           to={`/dashboard/editor/${post.id}`}
-                          className="p-1.5 text-[#525252] hover:text-[#121212] hover:bg-black/5 rounded-md transition-colors"
+                          className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors"
                           title="Edit Story"
                         >
                           <Edit3 className="w-4 h-4" />
@@ -306,7 +306,7 @@ export default function DashboardPostsPage() {
                         {post.status === 'Published' && (
                           <Link
                             to={`/blog/${post.slug}`}
-                            className="p-1.5 text-[#525252] hover:text-[#121212] hover:bg-black/5 rounded-md transition-colors"
+                            className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors"
                             title="Preview on Public Site"
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -316,7 +316,7 @@ export default function DashboardPostsPage() {
                         <button
                           type="button"
                           onClick={() => promptDelete(post)}
-                          className="p-1.5 text-[#8A8A8A] hover:text-red-600 hover:bg-red-50 rounded-md transition-colors cursor-pointer"
+                          className="p-1.5 text-[#8A8A8A] dark:text-[#71717A] hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md transition-colors cursor-pointer"
                           title="Delete Post"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -349,35 +349,35 @@ export default function DashboardPostsPage() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="delete-dialog-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
         >
           <div
-            className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-[#ECECE8] space-y-4"
+            className="bg-white dark:bg-[#18181B] rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-[#ECECE8] dark:border-[#27272A] space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center border border-red-100">
+            <div className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center border border-red-100 dark:border-red-800">
               <AlertTriangle className="w-5 h-5 stroke-[1.8]" />
             </div>
 
             <div>
               <h2
                 id="delete-dialog-title"
-                className="font-serif text-xl font-medium text-[#121212]"
+                className="font-serif text-xl font-medium text-[#121212] dark:text-[#F4F4F6]"
               >
                 Delete this story?
               </h2>
-              <p className="text-xs sm:text-sm text-[#666666] leading-relaxed mt-1.5">
+              <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed mt-1.5">
                 Are you sure you want to delete{' '}
-                <strong className="text-[#121212]">"{postToDelete.title}"</strong>?
+                <strong className="text-[#121212] dark:text-white">"{postToDelete.title}"</strong>?
                 This action is permanent and will remove the story from your dashboard and public catalog.
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8]">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8] dark:border-[#27272A]">
               <button
                 type="button"
                 onClick={() => setDeleteModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5] rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-[#4A4A4A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] rounded-lg transition-colors cursor-pointer"
               >
                 Cancel
               </button>

@@ -1,13 +1,17 @@
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { CheckCircle2, AlertCircle, ArrowLeft, ShieldCheck, Sparkles } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { CheckCircle2, AlertCircle, ArrowLeft, ShieldCheck, PenLine } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
-import { setMockAuthUser } from '../../utils/storage.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function SignUpPage() {
   useDocumentTitle('Create Account');
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/dashboard/editor';
+  const notice = searchParams.get('notice');
+  const { register } = useAuth();
 
   // Form Fields
   const [fullName, setFullName] = useState('');
@@ -108,7 +112,6 @@ export default function SignUpPage() {
     if (field === 'email') setEmail(value);
     if (field === 'password') {
       setPassword(value);
-      // Re-validate confirm password if it's already touched
       if (touched.confirmPassword) {
         const confirmErr = value !== confirmPassword ? 'Passwords do not match.' : '';
         setErrors((prev) => ({ ...prev, confirmPassword: confirmErr }));
@@ -162,96 +165,101 @@ export default function SignUpPage() {
 
     setIsLoading(true);
 
-    // Simulate safe registration delay
+    // Register user and update auth state
     setTimeout(() => {
       setIsLoading(false);
-      // Strictly store safe mock profile without password
-      setMockAuthUser({
-        name: fullName.trim(),
+      register({
+        fullName: fullName.trim(),
         email: email.trim(),
-        role: 'author',
       });
       setIsSuccess(true);
-    }, 700);
+    }, 550);
   };
 
   return (
     <div className="py-12 sm:py-20 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white p-7 sm:p-10 rounded-2xl border border-[#ECECE8] shadow-sm">
+      <div className="w-full max-w-md bg-white dark:bg-[#18181B] p-7 sm:p-10 rounded-2xl border border-[#ECECE8] dark:border-[#27272A] shadow-sm transition-colors">
+        {/* Registration Required Notice */}
+        {notice === 'register_required' && !isSuccess && (
+          <div
+            className="mb-6 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2.5"
+            role="alert"
+          >
+            <PenLine className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-semibold">Author Registration Required</p>
+              <p className="text-[11px] leading-relaxed opacity-90">
+                You must register an author account before writing stories or accessing the author desk. Create your account below in seconds:
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-6">
           <Link
             to="/"
-            className="font-serif font-bold text-2xl tracking-tight text-[#121212] inline-block mb-3"
+            className="font-serif font-bold text-2xl tracking-tight text-[#121212] dark:text-[#F4F4F6] inline-block mb-3"
           >
             InkSpace
           </Link>
-          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             Create an Account
           </h1>
-          <p className="mt-1.5 text-xs sm:text-sm text-[#737373]">
-            Join our community of thoughtful essayists and curious readers.
+          <p className="mt-1.5 text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA]">
+            Join our publication. Register once to unlock writing and publishing.
           </p>
         </div>
 
         {isSuccess ? (
           /* Success Screen */
           <div className="text-center space-y-4 py-4 animate-in fade-in duration-200">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-100">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-100 dark:border-emerald-800">
               <CheckCircle2 className="w-6 h-6 stroke-[1.8]" />
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-medium text-[#121212]">
-              Welcome, {fullName}!
+            <h2 className="font-serif text-xl sm:text-2xl font-medium text-[#121212] dark:text-[#F4F4F6]">
+              Welcome to InkSpace, {fullName}!
             </h2>
-            <p className="text-xs sm:text-sm text-[#666666] leading-relaxed max-w-sm mx-auto">
-              Your mock author account has been prepared with full access to the editorial workspace and writing desk.
+            <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed max-w-sm mx-auto">
+              Your author account is ready with complete publishing capabilities. You can now compose stories, draft essays, and curate your editorial desk.
             </p>
-            <div className="p-3 bg-[#FAF9F5] border border-[#ECECE8] rounded-xl text-left text-xs text-[#737373] space-y-1">
-              <div className="flex items-center gap-1.5 font-semibold text-[#121212]">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Client Demonstration State</span>
+            <div className="p-3 bg-[#FAF9F5] dark:bg-[#121214] border border-[#ECECE8] dark:border-[#27272A] rounded-xl text-left text-xs text-[#737373] dark:text-[#A1A1AA] space-y-1">
+              <div className="flex items-center gap-1.5 font-semibold text-[#121212] dark:text-[#F4F4F6]">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Account Verified</span>
               </div>
               <p>
-                In accordance with Phase 3 specifications, credentials are simulated locally. No real passwords or backend accounts are retained.
+                Your profile has been saved. You have full author access to create, edit, and publish stories.
               </p>
             </div>
             <div className="pt-3 space-y-2.5">
               <Button
-                to="/dashboard"
+                to={redirectPath}
                 variant="primary"
                 size="md"
                 className="w-full justify-center"
               >
-                Go to Author Workspace
+                Start Writing Now
               </Button>
               <Button
-                to="/explore"
+                to="/dashboard"
                 variant="secondary"
                 size="md"
                 className="w-full justify-center"
               >
-                Explore Stories
+                Go to Author Workspace
               </Button>
             </div>
           </div>
         ) : (
           /* Registration Form */
           <>
-            {/* Demonstration Notice */}
-            <div className="mb-5 p-3 rounded-xl bg-[#FAF9F5] border border-[#ECECE8] text-xs flex items-start gap-2 text-[#737373]">
-              <Sparkles className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-              <p className="leading-relaxed">
-                <strong className="text-[#121212]">Frontend Demo:</strong> Testing registration creates a client-side author profile so you can explore all dashboard features.
-              </p>
-            </div>
-
-            {/* General Error Alert */}
             {generalError && (
               <div
-                className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
+                className="mb-5 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 text-xs flex items-center gap-2"
                 role="alert"
               >
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
                 <span>{generalError}</span>
               </div>
             )}
@@ -263,7 +271,7 @@ export default function SignUpPage() {
                 name="fullName"
                 type="text"
                 autoComplete="name"
-                placeholder="e.g. Elena Rostova"
+                placeholder="e.g. Julian Hayes"
                 required
                 value={fullName}
                 onChange={(e) => handleChange('fullName', e.target.value)}
@@ -277,7 +285,7 @@ export default function SignUpPage() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="e.g. elena@inkspace.dev"
+                placeholder="julian@example.com"
                 required
                 value={email}
                 onChange={(e) => handleChange('email', e.target.value)}
@@ -292,7 +300,7 @@ export default function SignUpPage() {
                   name="password"
                   type="password"
                   autoComplete="new-password"
-                  placeholder="Create a secure password"
+                  placeholder="At least 8 characters"
                   required
                   value={password}
                   onChange={(e) => handleChange('password', e.target.value)}
@@ -301,20 +309,29 @@ export default function SignUpPage() {
                 />
 
                 {/* Password Strength Indicator */}
-                {password.length > 0 && !errors.password && (
+                {password && (
                   <div className="mt-2 space-y-1">
-                    <div className="flex items-center justify-between text-[11px] text-[#737373]">
+                    <div className="flex items-center justify-between text-[11px] text-[#737373] dark:text-[#A1A1AA]">
                       <span>Password strength:</span>
-                      <span className="font-medium text-[#121212]">
+                      <span className="font-medium text-[#121212] dark:text-[#F4F4F6]">
                         {passwordStrength.label}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1.5 h-1 w-full bg-[#E5E7EB] rounded-full overflow-hidden">
+                    <div className="h-1 w-full bg-[#E5E7EB] dark:bg-zinc-700 rounded-full overflow-hidden flex gap-1">
                       <div
-                        className={`h-full transition-all duration-300 ${passwordStrength.color}`}
-                        style={{
-                          width: `${(passwordStrength.score / 3) * 100}%`,
-                        }}
+                        className={`h-full transition-all duration-300 rounded-full ${
+                          passwordStrength.score >= 1 ? passwordStrength.color : 'bg-transparent'
+                        } flex-1`}
+                      />
+                      <div
+                        className={`h-full transition-all duration-300 rounded-full ${
+                          passwordStrength.score >= 2 ? passwordStrength.color : 'bg-transparent'
+                        } flex-1`}
+                      />
+                      <div
+                        className={`h-full transition-all duration-300 rounded-full ${
+                          passwordStrength.score >= 3 ? passwordStrength.color : 'bg-transparent'
+                        } flex-1`}
                       />
                     </div>
                   </div>
@@ -327,7 +344,7 @@ export default function SignUpPage() {
                 name="confirmPassword"
                 type="password"
                 autoComplete="new-password"
-                placeholder="Confirm your password"
+                placeholder="Re-enter your password"
                 required
                 value={confirmPassword}
                 onChange={(e) => handleChange('confirmPassword', e.target.value)}
@@ -336,30 +353,30 @@ export default function SignUpPage() {
               />
 
               {/* Terms Checkbox */}
-              <div className="pt-1">
-                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <div>
+                <label className="flex items-start gap-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
-                    id="agree-terms"
+                    id="agreeTerms"
                     checked={agreeTerms}
                     onChange={(e) => handleChange('agreeTerms', e.target.checked)}
                     onBlur={() => handleBlur('agreeTerms')}
-                    className="mt-0.5 rounded border-[#D1D5DB] text-[#121212] focus:ring-1 focus:ring-[#121212] w-4 h-4 cursor-pointer accent-[#121212]"
-                    aria-invalid={touched.agreeTerms && errors.agreeTerms ? 'true' : 'false'}
+                    className="mt-0.5 rounded border-[#D1D5DB] dark:border-zinc-600 text-[#121212] dark:text-white focus:ring-1 focus:ring-[#121212] w-4 h-4 cursor-pointer accent-[#121212] dark:accent-zinc-200"
                   />
-                  <span className="text-xs text-[#525252] leading-relaxed">
+                  <span className="text-xs text-[#525252] dark:text-[#A1A1AA] leading-relaxed">
                     I agree to the{' '}
-                    <span className="text-[#121212] font-medium underline">
+                    <span className="text-[#121212] dark:text-[#F4F4F6] underline">
                       Terms of Service
                     </span>{' '}
-                    and acknowledge the{' '}
-                    <span className="text-[#121212] font-medium underline">
+                    and{' '}
+                    <span className="text-[#121212] dark:text-[#F4F4F6] underline">
                       Privacy Policy
-                    </span>.
+                    </span>
+                    .
                   </span>
                 </label>
                 {touched.agreeTerms && errors.agreeTerms && (
-                  <p className="mt-1.5 text-xs text-red-600" role="alert">
+                  <p className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">
                     {errors.agreeTerms}
                   </p>
                 )}
@@ -371,19 +388,19 @@ export default function SignUpPage() {
                 size="md"
                 isLoading={isLoading}
                 disabled={isLoading}
-                className="w-full justify-center mt-3 font-medium"
+                className="w-full justify-center mt-2 font-medium"
               >
-                {isLoading ? 'Creating Account...' : 'Create Account'}
+                {isLoading ? 'Creating Account...' : 'Complete Registration'}
               </Button>
             </form>
 
-            {/* Footer Link */}
-            <div className="mt-8 pt-5 border-t border-[#ECECE8] text-center space-y-2">
-              <p className="text-xs text-[#737373]">
+            {/* Footer Links */}
+            <div className="mt-8 pt-5 border-t border-[#ECECE8] dark:border-[#27272A] text-center space-y-2">
+              <p className="text-xs text-[#737373] dark:text-[#A1A1AA]">
                 Already have an account?{' '}
                 <Link
-                  to="/login"
-                  className="font-semibold text-[#121212] hover:underline"
+                  to={notice ? `/login?redirect=${encodeURIComponent(redirectPath)}&notice=${notice}` : '/login'}
+                  className="font-semibold text-[#121212] dark:text-white hover:underline"
                 >
                   Sign in
                 </Link>
@@ -391,7 +408,7 @@ export default function SignUpPage() {
               <div>
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] hover:text-[#121212] transition-colors"
+                  className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] dark:text-[#71717A] hover:text-[#121212] dark:hover:text-white transition-colors"
                 >
                   <ArrowLeft className="w-3 h-3" />
                   <span>Back to homepage</span>

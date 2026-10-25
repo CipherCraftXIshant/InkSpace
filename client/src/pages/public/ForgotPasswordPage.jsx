@@ -75,147 +75,121 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="py-12 sm:py-20 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white p-7 sm:p-10 rounded-2xl border border-[#ECECE8] shadow-sm">
+      <div className="w-full max-w-md bg-white dark:bg-[#18181B] p-7 sm:p-10 rounded-2xl border border-[#ECECE8] dark:border-[#27272A] shadow-sm transition-colors">
         {/* Header */}
         <div className="text-center mb-6">
           <Link
             to="/"
-            className="font-serif font-bold text-2xl tracking-tight text-[#121212] inline-block mb-3"
+            className="font-serif font-bold text-2xl tracking-tight text-[#121212] dark:text-[#F4F4F6] inline-block mb-3"
           >
             InkSpace
           </Link>
-          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] tracking-tight">
-            {isSubmitted ? 'Check Your Inbox' : 'Reset Password'}
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
+            Reset Password
           </h1>
-          <p className="mt-1.5 text-xs sm:text-sm text-[#737373]">
-            {isSubmitted
-              ? 'Password recovery instructions have been sent.'
-              : 'Enter your registered email and we will send recovery instructions.'}
+          <p className="mt-1.5 text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA]">
+            Enter your registered email and we'll dispatch password recovery instructions.
           </p>
         </div>
 
         {isSubmitted ? (
-          /* Confirmation State */
-          <div className="space-y-5 animate-in fade-in duration-200">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-100">
-              <Mail className="w-6 h-6 stroke-[1.8]" />
+          /* Confirmation Screen */
+          <div className="text-center space-y-4 py-4 animate-in fade-in duration-200">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-100 dark:border-emerald-800">
+              <CheckCircle2 className="w-6 h-6 stroke-[1.8]" />
             </div>
 
-            <div className="text-center space-y-2">
-              <p className="text-xs sm:text-sm text-[#4A4A4A] leading-relaxed">
-                We sent a password reset link to{' '}
-                <strong className="text-[#121212] font-semibold">{email}</strong>.
-              </p>
-              <p className="text-xs text-[#737373] leading-relaxed">
-                Click the link in the message to choose a new password. The link expires in 15 minutes.
-              </p>
-            </div>
+            <h2 className="font-serif text-xl font-medium text-[#121212] dark:text-[#F4F4F6]">
+              Check your inbox
+            </h2>
+
+            <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed max-w-xs mx-auto">
+              We dispatched instructions to{' '}
+              <strong className="text-[#121212] dark:text-white font-semibold">{email}</strong>. If an
+              account exists for this address, you'll receive a password reset link shortly.
+            </p>
 
             {resendMessage && (
-              <div
-                className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-lg flex items-center gap-2"
-                role="status"
-              >
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                <span>{resendMessage}</span>
+              <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs border border-emerald-200 dark:border-emerald-800 animate-in fade-in">
+                {resendMessage}
               </div>
             )}
 
-            <div className="p-3 bg-[#FAF9F5] border border-[#ECECE8] rounded-xl text-xs text-[#737373] space-y-1">
-              <span className="font-semibold text-[#121212] block">Didn't receive the email?</span>
-              <p className="leading-relaxed">
-                Check your spam folder or click below to resend. Ensure the address entered matches your InkSpace account.
-              </p>
-            </div>
-
-            <div className="pt-2 space-y-2.5">
+            <div className="pt-2 space-y-2">
               <Button
                 type="button"
-                variant="secondary"
-                size="md"
+                variant="outline"
+                size="sm"
                 onClick={handleResend}
                 isLoading={isResending}
                 disabled={isResending}
                 icon={RotateCw}
-                className="w-full justify-center"
+                className="w-full justify-center text-xs"
               >
-                {isResending ? 'Resending...' : 'Resend Recovery Email'}
+                Resend instructions
               </Button>
 
-              <Button
-                to="/login"
-                variant="primary"
-                size="md"
-                className="w-full justify-center"
-              >
-                Back to Sign In
-              </Button>
-            </div>
-
-            <div className="text-center pt-2">
               <button
                 type="button"
                 onClick={handleResetForm}
-                className="text-xs text-[#737373] hover:text-[#121212] cursor-pointer hover:underline"
+                className="text-xs text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white underline cursor-pointer"
               >
-                Try a different email address
+                Use another email address
               </button>
             </div>
           </div>
         ) : (
-          /* Initial Request Form */
-          <>
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              <FormInput
-                label="Email address"
-                id="forgot-email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                placeholder="e.g. alex.morgan@inkspace.dev"
-                required
-                value={email}
-                onChange={handleEmailChange}
-                onBlur={handleBlur}
-                error={touched ? error : ''}
-                helperText="We will send a secure password reset link to this address."
-              />
+          /* Submission Form */
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            <FormInput
+              label="Account email address"
+              id="reset-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="e.g. julian@example.com"
+              required
+              value={email}
+              onChange={handleEmailChange}
+              onBlur={handleBlur}
+              error={touched ? error : ''}
+            />
 
-              <Button
-                type="submit"
-                variant="primary"
-                size="md"
-                isLoading={isLoading}
-                disabled={isLoading}
-                className="w-full justify-center mt-3 font-medium"
-              >
-                {isLoading ? 'Sending Instructions...' : 'Send Recovery Instructions'}
-              </Button>
-            </form>
-
-            {/* Footer Navigation */}
-            <div className="mt-8 pt-5 border-t border-[#ECECE8] text-center space-y-2">
-              <p className="text-xs text-[#737373]">
-                Remember your password?{' '}
-                <Link
-                  to="/login"
-                  className="font-semibold text-[#121212] hover:underline"
-                >
-                  Sign in
-                </Link>
-              </p>
-              <div>
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] hover:text-[#121212] transition-colors"
-                >
-                  <ArrowLeft className="w-3 h-3" />
-                  <span>Back to homepage</span>
-                </Link>
-              </div>
-            </div>
-          </>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              isLoading={isLoading}
+              disabled={isLoading}
+              icon={Mail}
+              className="w-full justify-center mt-2 font-medium"
+            >
+              {isLoading ? 'Sending instructions...' : 'Send Reset Instructions'}
+            </Button>
+          </form>
         )}
+
+        {/* Footer Links */}
+        <div className="mt-8 pt-5 border-t border-[#ECECE8] dark:border-[#27272A] text-center space-y-2">
+          <p className="text-xs text-[#737373] dark:text-[#A1A1AA]">
+            Remembered your credentials?{' '}
+            <Link
+              to="/login"
+              className="font-semibold text-[#121212] dark:text-white hover:underline"
+            >
+              Sign in
+            </Link>
+          </p>
+          <div>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] dark:text-[#71717A] hover:text-[#121212] dark:hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span>Back to homepage</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -114,36 +114,36 @@ export default function AdminUsersPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1">
             ACCOUNT GOVERNANCE
           </p>
-          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             User Management
           </h1>
-          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+          <p className="text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA] mt-1">
             Assign reader, author, or admin permissions, monitor accounts, and control platform access.
           </p>
         </div>
 
-        <div className="text-xs text-[#737373] bg-white border border-[#ECECE8] px-3 py-1.5 rounded-lg">
-          Total Members: <strong className="text-[#121212] font-semibold">{users.length}</strong>
+        <div className="text-xs text-[#737373] dark:text-[#A1A1AA] bg-white dark:bg-[#18181B] border border-[#ECECE8] dark:border-[#27272A] px-3 py-1.5 rounded-lg">
+          Total Members: <strong className="text-[#121212] dark:text-[#F4F4F6] font-semibold">{users.length}</strong>
         </div>
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="bg-white p-4 rounded-xl border border-[#ECECE8] shadow-2xs space-y-3">
+      <div className="bg-white dark:bg-[#18181B] p-4 rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Search Input */}
           <div className="relative w-full sm:w-80">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] dark:text-[#71717A]" />
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by user name or email..."
-              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] border border-[#E5E7EB] rounded-lg outline-hidden focus:bg-white focus:border-[#121212] transition-colors"
+              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] dark:bg-[#202024] border border-[#E5E7EB] dark:border-[#27272A] rounded-lg outline-hidden focus:bg-white dark:focus:bg-[#18181B] focus:border-[#121212] dark:focus:border-white/40 text-[#121212] dark:text-[#F4F4F6] transition-colors"
             />
           </div>
 
@@ -151,14 +151,14 @@ export default function AdminUsersPage() {
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             {/* Role Filter */}
             <div className="flex items-center gap-1.5 text-xs">
-              <label htmlFor="role-filter" className="text-[#737373] font-medium hidden md:inline">
+              <label htmlFor="role-filter" className="text-[#737373] dark:text-[#A1A1AA] font-medium hidden md:inline">
                 Role:
               </label>
               <select
                 id="role-filter"
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
-                className="bg-[#FAF9F5] border border-[#E5E7EB] text-xs text-[#121212] rounded-lg px-2.5 py-1.5 outline-hidden focus:border-[#121212] cursor-pointer"
+                className="bg-[#FAF9F5] dark:bg-[#202024] border border-[#E5E7EB] dark:border-[#27272A] text-xs text-[#121212] dark:text-[#F4F4F6] rounded-lg px-2.5 py-1.5 outline-hidden focus:border-[#121212] dark:focus:border-white/40 cursor-pointer"
               >
                 <option value="all">All Roles</option>
                 <option value="Author">Authors</option>
@@ -169,14 +169,14 @@ export default function AdminUsersPage() {
 
             {/* Status Filter */}
             <div className="flex items-center gap-1.5 text-xs">
-              <label htmlFor="status-filter" className="text-[#737373] font-medium hidden md:inline">
+              <label htmlFor="status-filter" className="text-[#737373] dark:text-[#A1A1AA] font-medium hidden md:inline">
                 Status:
               </label>
               <select
                 id="status-filter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-[#FAF9F5] border border-[#E5E7EB] text-xs text-[#121212] rounded-lg px-2.5 py-1.5 outline-hidden focus:border-[#121212] cursor-pointer"
+                className="bg-[#FAF9F5] dark:bg-[#202024] border border-[#E5E7EB] dark:border-[#27272A] text-xs text-[#121212] dark:text-[#F4F4F6] rounded-lg px-2.5 py-1.5 outline-hidden focus:border-[#121212] dark:focus:border-white/40 cursor-pointer"
               >
                 <option value="all">All Statuses</option>
                 <option value="Active">Active</option>
@@ -188,7 +188,7 @@ export default function AdminUsersPage() {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="p-1.5 text-[#737373] hover:text-[#121212] rounded-lg border border-[#E5E7EB] hover:bg-[#FAF9F5] cursor-pointer"
+                className="p-1.5 text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-lg border border-[#E5E7EB] dark:border-[#27272A] hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] cursor-pointer"
                 title="Reset filters"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -200,10 +200,10 @@ export default function AdminUsersPage() {
 
       {/* Users Table */}
       {filteredUsers.length > 0 ? (
-        <div className="bg-white rounded-xl border border-[#ECECE8] shadow-2xs overflow-hidden">
+        <div className="bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-[#FAF9F5] border-b border-[#ECECE8] text-[11px] font-semibold text-[#737373] uppercase tracking-wider">
+              <thead className="bg-[#FAF9F5] dark:bg-[#202024] border-b border-[#ECECE8] dark:border-[#27272A] text-[11px] font-semibold text-[#737373] dark:text-[#A1A1AA] uppercase tracking-wider">
                 <tr>
                   <th scope="col" className="px-6 py-3.5">User</th>
                   <th scope="col" className="px-6 py-3.5">Email Address</th>
@@ -214,23 +214,23 @@ export default function AdminUsersPage() {
                   <th scope="col" className="px-6 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#ECECE8] text-[#121212]">
+              <tbody className="divide-y divide-[#ECECE8] dark:divide-[#27272A] text-[#121212] dark:text-[#F4F4F6]">
                 {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-[#FAF9F5]/60 transition-colors">
+                  <tr key={u.id} className="hover:bg-[#FAF9F5]/60 dark:hover:bg-[#27272A]/40 transition-colors">
                     {/* User Name & Avatar */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <img
                           src={u.avatar}
                           alt={u.name}
-                          className="w-8 h-8 rounded-full object-cover border border-[#ECECE8]"
+                          className="w-8 h-8 rounded-full object-cover border border-[#ECECE8] dark:border-[#27272A]"
                         />
-                        <span className="font-medium text-[#121212]">{u.name}</span>
+                        <span className="font-medium text-[#121212] dark:text-[#F4F4F6]">{u.name}</span>
                       </div>
                     </td>
 
                     {/* Email */}
-                    <td className="px-6 py-4 text-[#525252] font-mono text-xs whitespace-nowrap">
+                    <td className="px-6 py-4 text-[#525252] dark:text-[#A1A1AA] font-mono text-xs whitespace-nowrap">
                       {u.email}
                     </td>
 
@@ -239,10 +239,10 @@ export default function AdminUsersPage() {
                       <span
                         className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
                           u.role === 'Admin'
-                            ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                            ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50'
                             : u.role === 'Author'
-                            ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                            : 'bg-zinc-100 text-zinc-700'
+                            ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900/50'
+                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-transparent dark:border-zinc-700'
                         }`}
                       >
                         {u.role}
@@ -250,7 +250,7 @@ export default function AdminUsersPage() {
                     </td>
 
                     {/* Published Stories */}
-                    <td className="px-6 py-4 text-[#525252] font-medium whitespace-nowrap">
+                    <td className="px-6 py-4 text-[#525252] dark:text-[#A1A1AA] font-medium whitespace-nowrap">
                       {u.postsCount}
                     </td>
 
@@ -259,8 +259,8 @@ export default function AdminUsersPage() {
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           u.status === 'Active'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-rose-50 text-rose-700 border border-rose-200'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50'
+                            : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50'
                         }`}
                       >
                         <span
@@ -273,7 +273,7 @@ export default function AdminUsersPage() {
                     </td>
 
                     {/* Member Since */}
-                    <td className="px-6 py-4 text-[#737373] text-xs whitespace-nowrap">
+                    <td className="px-6 py-4 text-[#737373] dark:text-[#A1A1AA] text-xs whitespace-nowrap">
                       {u.joinedDate}
                     </td>
 
@@ -284,7 +284,7 @@ export default function AdminUsersPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenRoleModal(u)}
-                          className="p-1.5 text-[#525252] hover:text-[#121212] hover:bg-black/5 rounded-md transition-colors cursor-pointer"
+                          className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors cursor-pointer"
                           title="Change User Role"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -296,8 +296,8 @@ export default function AdminUsersPage() {
                           onClick={() => promptConfirmAction('suspend', u)}
                           className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                             u.status === 'Active'
-                              ? 'text-amber-600 hover:bg-amber-50'
-                              : 'text-emerald-600 hover:bg-emerald-50'
+                              ? 'text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+                              : 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
                           }`}
                           title={u.status === 'Active' ? 'Suspend User' : 'Reactivate User'}
                         >
@@ -312,7 +312,7 @@ export default function AdminUsersPage() {
                         <button
                           type="button"
                           onClick={() => promptConfirmAction('delete', u)}
-                          className="p-1.5 text-[#8A8A8A] hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                          className="p-1.5 text-[#8A8A8A] dark:text-[#71717A] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-md transition-colors cursor-pointer"
                           title="Delete User Permanently"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -344,28 +344,28 @@ export default function AdminUsersPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
         >
           <div
-            className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-[#ECECE8] space-y-4"
+            className="bg-white dark:bg-[#18181B] rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-[#ECECE8] dark:border-[#27272A] space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[#ECECE8]">
-              <h3 className="font-serif text-lg font-medium text-[#121212]">
+            <div className="flex items-center justify-between pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
+              <h3 className="font-serif text-lg font-medium text-[#121212] dark:text-[#F4F4F6]">
                 Assign User Role
               </h3>
               <button
                 type="button"
                 onClick={() => setRoleModalUser(null)}
-                className="text-[#8A8A8A] hover:text-[#121212] cursor-pointer"
+                className="text-[#8A8A8A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-[#666666]">
+            <p className="text-xs text-[#666666] dark:text-[#A1A1AA]">
               Modify platform permissions for{' '}
-              <strong className="text-[#121212]">{roleModalUser.name}</strong>.
+              <strong className="text-[#121212] dark:text-[#F4F4F6]">{roleModalUser.name}</strong>.
             </p>
 
             <div className="space-y-2">
@@ -374,8 +374,8 @@ export default function AdminUsersPage() {
                   key={r}
                   className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
                     newSelectedRole === r
-                      ? 'border-[#121212] bg-[#FAF9F5]'
-                      : 'border-[#ECECE8] hover:bg-[#F9FAFB]'
+                      ? 'border-[#121212] dark:border-white bg-[#FAF9F5] dark:bg-[#27272A]'
+                      : 'border-[#ECECE8] dark:border-[#27272A] hover:bg-[#F9FAFB] dark:hover:bg-[#202024]'
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -385,11 +385,11 @@ export default function AdminUsersPage() {
                       value={r}
                       checked={newSelectedRole === r}
                       onChange={() => setNewSelectedRole(r)}
-                      className="accent-[#121212]"
+                      className="accent-[#121212] dark:accent-white"
                     />
-                    <span className="text-xs font-semibold text-[#121212]">{r}</span>
+                    <span className="text-xs font-semibold text-[#121212] dark:text-[#F4F4F6]">{r}</span>
                   </div>
-                  <span className="text-[11px] text-[#737373]">
+                  <span className="text-[11px] text-[#737373] dark:text-[#A1A1AA]">
                     {r === 'Admin'
                       ? 'Full Governance'
                       : r === 'Author'
@@ -404,14 +404,14 @@ export default function AdminUsersPage() {
               <button
                 type="button"
                 onClick={() => setRoleModalUser(null)}
-                className="px-3 py-1.5 text-xs text-[#525252] hover:text-[#121212] rounded-md cursor-pointer"
+                className="px-3 py-1.5 text-xs text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-md cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleSaveRole}
-                className="px-4 py-1.5 text-xs font-semibold bg-[#121212] text-white rounded-lg hover:bg-neutral-800 cursor-pointer shadow-2xs"
+                className="px-4 py-1.5 text-xs font-semibold bg-[#121212] dark:bg-white text-white dark:text-[#121212] rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-200 cursor-pointer shadow-2xs"
               >
                 Save Role
               </button>
@@ -425,31 +425,31 @@ export default function AdminUsersPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
         >
           <div
-            className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] space-y-4"
+            className="bg-white dark:bg-[#18181B] rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] dark:border-[#27272A] space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center border ${
                 confirmModalData.type === 'delete'
-                  ? 'bg-rose-50 text-rose-600 border-rose-100'
-                  : 'bg-amber-50 text-amber-600 border-amber-100'
+                  ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/50'
+                  : 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/50'
               }`}
             >
               <AlertTriangle className="w-5 h-5 stroke-[1.8]" />
             </div>
 
             <div>
-              <h3 className="font-serif text-lg font-medium text-[#121212]">
+              <h3 className="font-serif text-lg font-medium text-[#121212] dark:text-[#F4F4F6]">
                 {confirmModalData.type === 'delete'
                   ? 'Permanently delete user account?'
                   : confirmModalData.user.status === 'Active'
                   ? 'Suspend user access?'
                   : 'Reactivate user access?'}
               </h3>
-              <p className="text-xs sm:text-sm text-[#666666] leading-relaxed mt-1.5">
+              <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed mt-1.5">
                 {confirmModalData.type === 'delete'
                   ? `Are you sure you want to permanently delete ${confirmModalData.user.name}'s account (${confirmModalData.user.email})? This action cannot be undone.`
                   : confirmModalData.user.status === 'Active'
@@ -458,11 +458,11 @@ export default function AdminUsersPage() {
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8]">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8] dark:border-[#27272A]">
               <button
                 type="button"
                 onClick={() => setConfirmModalData(null)}
-                className="px-3.5 py-1.5 text-xs text-[#525252] hover:text-[#121212] rounded-md cursor-pointer"
+                className="px-3.5 py-1.5 text-xs text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white rounded-md cursor-pointer"
               >
                 Cancel
               </button>
@@ -472,7 +472,7 @@ export default function AdminUsersPage() {
                 className={`px-4 py-1.5 text-xs font-semibold text-white rounded-lg cursor-pointer shadow-2xs ${
                   confirmModalData.type === 'delete'
                     ? 'bg-rose-600 hover:bg-rose-700'
-                    : 'bg-[#121212] hover:bg-neutral-800'
+                    : 'bg-[#121212] dark:bg-white dark:text-[#121212] hover:bg-neutral-800 dark:hover:bg-neutral-200'
                 }`}
               >
                 {confirmModalData.type === 'delete'

@@ -17,13 +17,14 @@ import Button from '../../components/common/Button.jsx';
 import {
   getAuthorPosts,
   getAuthorStats,
-  getMockAuthUser,
 } from '../../utils/storage.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function DashboardOverviewPage() {
   useDocumentTitle('Author Workspace');
-  const currentUser = getMockAuthUser() || { name: 'Alex Morgan' };
+  const { currentUser } = useAuth();
+  const user = currentUser || { name: 'Alex Morgan' };
   const authorPosts = getAuthorPosts();
   const stats = getAuthorStats();
   const recentPosts = authorPosts.slice(0, 5);
@@ -62,15 +63,15 @@ export default function DashboardOverviewPage() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* Top Welcome Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8] dark:border-[#27272A]">
         <div>
-          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1">
             EDITORIAL WORKSPACE
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl font-medium text-[#121212] tracking-tight">
-            Welcome back, {currentUser.name.split(' ')[0]}
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
+            Welcome back, {user.name.split(' ')[0]}
           </h1>
-          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+          <p className="text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA] mt-1">
             Here is your publication performance, publishing pipeline, and audience engagement overview.
           </p>
         </div>
@@ -95,26 +96,26 @@ export default function DashboardOverviewPage() {
           return (
             <div
               key={idx}
-              className="p-5 bg-white rounded-xl border border-[#ECECE8] shadow-2xs hover:shadow-xs transition-shadow relative overflow-hidden"
+              className="p-5 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs hover:shadow-xs transition-shadow relative overflow-hidden"
             >
-              <div className="flex items-center justify-between text-[#737373] mb-3">
+              <div className="flex items-center justify-between text-[#737373] dark:text-[#A1A1AA] mb-3">
                 <span className="text-xs font-medium uppercase tracking-wider">{stat.label}</span>
-                <div className="w-7 h-7 rounded-lg bg-[#FAF9F5] border border-[#ECECE8] flex items-center justify-center text-[#121212]">
+                <div className="w-7 h-7 rounded-lg bg-[#FAF9F5] dark:bg-[#27272A] border border-[#ECECE8] dark:border-[#3F3F46] flex items-center justify-center text-[#121212] dark:text-white">
                   <Icon className="w-3.5 h-3.5" />
                 </div>
               </div>
 
               <div className="flex items-baseline justify-between mt-1">
-                <span className="font-serif text-3xl font-semibold text-[#121212]">
+                <span className="font-serif text-3xl font-semibold text-[#121212] dark:text-[#F4F4F6]">
                   {stat.value}
                 </span>
-                <span className="inline-flex items-center text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                <span className="inline-flex items-center text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-100 dark:border-emerald-800">
                   <ArrowUpRight className="w-3 h-3 mr-0.5" />
                   {stat.change}
                 </span>
               </div>
 
-              <p className="text-[11px] text-[#8A8A8A] mt-2 font-normal">
+              <p className="text-[11px] text-[#8A8A8A] dark:text-[#71717A] mt-2 font-normal">
                 {stat.subtext}
               </p>
             </div>
@@ -123,20 +124,20 @@ export default function DashboardOverviewPage() {
       </div>
 
       {/* Recent Posts Section */}
-      <div className="bg-white rounded-xl border border-[#ECECE8] shadow-2xs overflow-hidden">
-        <div className="p-5 sm:p-6 border-b border-[#ECECE8] flex items-center justify-between">
+      <div className="bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-2xs overflow-hidden">
+        <div className="p-5 sm:p-6 border-b border-[#ECECE8] dark:border-[#27272A] flex items-center justify-between">
           <div>
-            <h2 className="font-serif text-xl font-medium text-[#121212]">
+            <h2 className="font-serif text-xl font-medium text-[#121212] dark:text-[#F4F4F6]">
               Recent Articles & Working Drafts
             </h2>
-            <p className="text-xs text-[#737373] mt-0.5">
+            <p className="text-xs text-[#737373] dark:text-[#A1A1AA] mt-0.5">
               Your latest writing and editorial revisions.
             </p>
           </div>
 
           <Link
             to="/dashboard/posts"
-            className="text-xs font-semibold text-[#121212] hover:text-[#525252] transition-colors flex items-center gap-1"
+            className="text-xs font-semibold text-[#121212] dark:text-[#F4F4F6] hover:text-[#525252] dark:hover:text-white transition-colors flex items-center gap-1"
           >
             <span>View all stories</span>
             <span>→</span>
@@ -146,7 +147,7 @@ export default function DashboardOverviewPage() {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-[#FAF9F5] border-b border-[#ECECE8] text-[11px] font-semibold text-[#737373] uppercase tracking-wider">
+            <thead className="bg-[#FAF9F5] dark:bg-[#121214] border-b border-[#ECECE8] dark:border-[#27272A] text-[11px] font-semibold text-[#737373] dark:text-[#A1A1AA] uppercase tracking-wider">
               <tr>
                 <th scope="col" className="px-6 py-3.5">
                   Story Title
@@ -168,64 +169,64 @@ export default function DashboardOverviewPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#ECECE8] text-[#121212]">
+            <tbody className="divide-y divide-[#ECECE8] dark:divide-[#27272A] text-[#121212] dark:text-[#F4F4F6]">
               {recentPosts.map((post) => (
-                <tr key={post.id} className="hover:bg-[#FAF9F5]/70 transition-colors">
+                <tr key={post.id} className="hover:bg-[#FAF9F5]/70 dark:hover:bg-[#27272A]/40 transition-colors">
                   <td className="px-6 py-4 max-w-xs sm:max-w-md">
                     <Link
                       to={`/dashboard/editor/${post.id}`}
-                      className="font-serif font-medium text-sm sm:text-base text-[#121212] hover:underline block truncate"
+                      className="font-serif font-medium text-sm sm:text-base text-[#121212] dark:text-[#F4F4F6] hover:underline block truncate"
                     >
                       {post.title}
                     </Link>
                     {post.excerpt && (
-                      <p className="text-xs text-[#737373] truncate mt-0.5">
+                      <p className="text-xs text-[#737373] dark:text-[#A1A1AA] truncate mt-0.5">
                         {post.excerpt}
                       </p>
                     )}
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-xs font-medium text-[#525252] bg-[#F4F4F5] px-2.5 py-1 rounded-md">
+                    <span className="text-xs font-medium text-[#525252] dark:text-[#D4D4D8] bg-[#F4F4F5] dark:bg-[#27272A] px-2.5 py-1 rounded-md">
                       {post.category || 'General'}
                     </span>
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     {post.status === 'Published' && (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span>Published</span>
                       </span>
                     )}
                     {post.status === 'Draft' && (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                         <span>Draft</span>
                       </span>
                     )}
                     {post.status === 'Scheduled' && (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
-                        <Calendar className="w-3 h-3 text-sky-600" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 border border-sky-200 dark:border-sky-800">
+                        <Calendar className="w-3 h-3 text-sky-600 dark:text-sky-400" />
                         <span>Scheduled</span>
                       </span>
                     )}
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3 text-xs text-[#525252]">
+                    <div className="flex items-center gap-3 text-xs text-[#525252] dark:text-[#A1A1AA]">
                       <span className="inline-flex items-center gap-1">
-                        <Eye className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                        <Eye className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-[#71717A]" />
                         {post.views ? post.views.toLocaleString() : '—'}
                       </span>
                       <span className="inline-flex items-center gap-1">
-                        <Heart className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                        <Heart className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-[#71717A]" />
                         {post.likes ? post.likes : '—'}
                       </span>
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-xs text-[#737373]">
+                  <td className="px-6 py-4 whitespace-nowrap text-xs text-[#737373] dark:text-[#A1A1AA]">
                     {post.updatedAt || post.publishedAt || 'Recently'}
                   </td>
 
@@ -233,7 +234,7 @@ export default function DashboardOverviewPage() {
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         to={`/dashboard/editor/${post.id}`}
-                        className="p-1.5 text-[#525252] hover:text-[#121212] hover:bg-black/5 rounded-md transition-colors"
+                        className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors"
                         title="Edit post"
                       >
                         <Edit3 className="w-4 h-4" />
@@ -241,7 +242,7 @@ export default function DashboardOverviewPage() {
                       {post.status === 'Published' && (
                         <Link
                           to={`/blog/${post.slug}`}
-                          className="p-1.5 text-[#525252] hover:text-[#121212] hover:bg-black/5 rounded-md transition-colors"
+                          className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors"
                           title="View on site"
                         >
                           <ExternalLink className="w-4 h-4" />
@@ -257,22 +258,22 @@ export default function DashboardOverviewPage() {
       </div>
 
       {/* Editorial Writing Insights Box */}
-      <div className="p-6 bg-[#FAF9F5] rounded-xl border border-[#ECECE8] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-6 bg-[#FAF9F5] dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-9 h-9 rounded-full bg-[#121212] text-white flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4 text-amber-300" />
+          <div className="w-9 h-9 rounded-full bg-[#121212] dark:bg-white text-white dark:text-[#121212] flex items-center justify-center shrink-0">
+            <Sparkles className="w-4 h-4 text-amber-300 dark:text-amber-600" />
           </div>
           <div>
-            <h3 className="font-serif text-base font-semibold text-[#121212]">
+            <h3 className="font-serif text-base font-semibold text-[#121212] dark:text-[#F4F4F6]">
               InkSpace Editorial Best Practice
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed max-w-2xl mt-0.5">
+            <p className="text-xs text-[#666666] dark:text-[#A1A1AA] leading-relaxed max-w-2xl mt-0.5">
               Articles with structured heading levels, clear pullquotes, and 5-8 minute reading times receive 42% higher reader completion rates. Use the built-in live preview to review formatting before publishing.
             </p>
           </div>
         </div>
 
-        <Button to="/dashboard/editor" variant="secondary" size="sm" className="shrink-0 bg-white">
+        <Button to="/dashboard/editor" variant="secondary" size="sm" className="shrink-0 bg-white dark:bg-[#27272A]">
           Draft a New Story
         </Button>
       </div>

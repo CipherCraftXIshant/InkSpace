@@ -7,6 +7,7 @@ import SectionHeading from '../../components/common/SectionHeading.jsx';
 import BlogCard from '../../components/blog/BlogCard.jsx';
 import CategoryCard from '../../components/blog/CategoryCard.jsx';
 import { MOCK_CATEGORIES, MOCK_ARTICLES } from '../../data/mockData.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function HomePage() {
@@ -15,10 +16,16 @@ export default function HomePage() {
   const [subscribed, setSubscribed] = useState(false);
   const [emailError, setEmailError] = useState('');
   const prefersReducedMotion = useReducedMotion();
+  const { isAuthenticated } = useAuth();
 
   const featuredMain = MOCK_ARTICLES[0];
   const featuredSide = MOCK_ARTICLES.slice(1, 4);
   const popularArticles = MOCK_ARTICLES.filter((a) => a.popular || a.views > 2000).slice(0, 4);
+
+  // Require user to register/login before writing blogs
+  const writeDestination = isAuthenticated
+    ? '/dashboard/editor'
+    : '/signup?redirect=/dashboard/editor&notice=register_required';
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -61,15 +68,15 @@ export default function HomePage() {
               {...animProps}
               className="lg:col-span-6 space-y-6"
             >
-              <span className="inline-block text-[11px] font-bold tracking-widest uppercase text-[#525252] bg-white border border-[#ECECE8] px-3 py-1 rounded-full shadow-2xs">
+              <span className="inline-block text-[11px] font-bold tracking-widest uppercase text-[#525252] dark:text-[#A1A1AA] bg-white dark:bg-[#18181B] border border-[#ECECE8] dark:border-[#27272A] px-3 py-1 rounded-full shadow-2xs">
                 MODERN EDITORIAL PUBLISHING
               </span>
 
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#121212] font-semibold leading-[1.08] tracking-tight">
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#121212] dark:text-[#F4F4F6] font-semibold leading-[1.08] tracking-tight">
                 Ideas Worth <br className="hidden sm:inline" /> Reading.
               </h1>
 
-              <p className="text-base sm:text-lg text-[#666666] leading-relaxed max-w-lg font-normal">
+              <p className="text-base sm:text-lg text-[#666666] dark:text-[#A1A1AA] leading-relaxed max-w-lg font-normal">
                 InkSpace is an open editorial platform for curious minds. Explore
                 long-form essays on software architecture, design systems, quiet productivity,
                 and modern culture from practitioners worldwide.
@@ -79,7 +86,7 @@ export default function HomePage() {
                 <Button to="/explore" variant="primary" size="lg" rounded="md">
                   Explore Articles
                 </Button>
-                <Button to="/dashboard/editor" variant="secondary" size="lg" rounded="md">
+                <Button to={writeDestination} variant="secondary" size="lg" rounded="md">
                   Start Writing
                 </Button>
               </div>
@@ -93,7 +100,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, ease: 'easeOut' }}
               className="lg:col-span-6"
             >
-              <div className="relative rounded-2xl overflow-hidden border border-[#ECECE8] bg-[#F5F5F0] shadow-sm group">
+              <div className="relative rounded-2xl overflow-hidden border border-[#ECECE8] dark:border-[#27272A] bg-[#F5F5F0] dark:bg-[#18181B] shadow-sm group">
                 <img
                   src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
                   alt="Minimalist editorial workspace with desk lamp, laptop and notebook"
@@ -137,7 +144,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Stack of Secondary Articles */}
-            <div className="lg:col-span-5 flex flex-col justify-between divide-y divide-[#ECECE8]">
+            <div className="lg:col-span-5 flex flex-col justify-between divide-y divide-[#ECECE8] dark:divide-[#27272A]">
               {featuredSide.map((art) => (
                 <BlogCard key={art.id} article={art} variant="compact" />
               ))}
@@ -151,7 +158,7 @@ export default function HomePage() {
         <Container>
           <motion.div
             {...animProps}
-            className="bg-[#121212] text-white rounded-2xl px-6 py-10 sm:p-12 lg:p-16 relative overflow-hidden shadow-md"
+            className="bg-[#121212] dark:bg-[#18181B] text-white rounded-2xl px-6 py-10 sm:p-12 lg:p-16 relative overflow-hidden shadow-md border border-transparent dark:border-[#27272A]"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-6 space-y-2">

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Sparkles, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Sparkles, AlertCircle, ArrowLeft, PenLine } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
-import { setMockAuthUser } from '../../utils/storage.js';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { findRegisteredUser } from '../../utils/storage.js';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function SignInPage() {
@@ -11,6 +12,8 @@ export default function SignInPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/dashboard';
+  const notice = searchParams.get('notice');
+  const { login } = useAuth();
 
   // Form State
   const [email, setEmail] = useState('');
@@ -81,6 +84,9 @@ export default function SignInPage() {
     if (role === 'author') {
       setEmail('alex.morgan@inkspace.dev');
       setPassword('Editorial2026!');
+    } else if (role === 'admin') {
+      setEmail('elena@inkspace.dev');
+      setPassword('AdminPass2026!');
     } else {
       setEmail('clara.reader@inkspace.dev');
       setPassword('ReadingPass2026!');
@@ -107,44 +113,106 @@ export default function SignInPage() {
     // Simulate safe authentication delay
     setTimeout(() => {
       setIsLoading(false);
-      // Strictly store safe mock profile without password
-      setMockAuthUser({
-        name: email.includes('alex') ? 'Alex Morgan' : 'Clara Oswald',
-        email: email.trim(),
-        role: email.includes('alex') ? 'author' : 'reader',
-      });
+      const cleanEmail = email.trim();
+      const existingUser = findRegisteredUser(cleanEmail);
+
+      let targetUser;
+      if (existingUser) {
+        targetUser = existingUser;
+      } else if (cleanEmail.includes('admin') || cleanEmail.includes('elena')) {
+        targetUser = {
+          name: 'Elena Rostova',
+          email: cleanEmail,
+          role: 'admin',
+          avatar:
+            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
+        };
+      } else if (cleanEmail.includes('alex')) {
+        targetUser = {
+          name: 'Alex Morgan',
+          email: cleanEmail,
+          role: 'author',
+          avatar:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+        };
+      } else {
+        targetUser = {
+          name: cleanEmail.split('@')[0],
+          email: cleanEmail,
+          role: 'author',
+        };
+      }
+
+      login(targetUser);
       navigate(redirectPath);
-    }, 650);
+    }, 500);
   };
 
   return (
     <div className="py-12 sm:py-20 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white p-7 sm:p-10 rounded-2xl border border-[#ECECE8] shadow-sm">
+      <div className="w-full max-w-md bg-white dark:bg-[#18181B] p-7 sm:p-10 rounded-2xl border border-[#ECECE8] dark:border-[#27272A] shadow-sm transition-colors">
+        {/* Registration Required Notice if routed from Write or Protected Route */}
+        {notice === 'register_required' && (
+          <div
+            className="mb-6 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2.5"
+            role="alert"
+          >
+            <PenLine className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-semibold">Sign in to write stories</p>
+              <p className="text-[11px] leading-relaxed opacity-90">
+                You must be signed in to write blogs and access your dashboard. Don't have an account yet?{' '}
+                <Link
+                  to={`/signup?redirect=${encodeURIComponent(redirectPath)}&notice=register_required`}
+                  className="font-bold underline hover:opacity-80"
+                >
+                  Register here
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+        )}
+
+        {notice === 'admin_required' && (
+          <div
+            className="mb-6 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-900 dark:text-red-200 text-xs flex items-start gap-2.5"
+            role="alert"
+          >
+            <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-semibold">Administrator access required</p>
+              <p className="text-[11px] leading-relaxed opacity-90">
+                Please sign in with administrator credentials (or click "Admin" below) to access the moderation console.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-6">
           <Link
             to="/"
-            className="font-serif font-bold text-2xl tracking-tight text-[#121212] inline-block mb-3"
+            className="font-serif font-bold text-2xl tracking-tight text-[#121212] dark:text-[#F4F4F6] inline-block mb-3"
           >
             InkSpace
           </Link>
-          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] tracking-tight">
+          <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#121212] dark:text-[#F4F4F6] tracking-tight">
             Sign In
           </h1>
-          <p className="mt-1.5 text-xs sm:text-sm text-[#737373]">
+          <p className="mt-1.5 text-xs sm:text-sm text-[#737373] dark:text-[#A1A1AA]">
             Welcome back. Sign in to your publishing workspace.
           </p>
         </div>
 
         {/* Demo Mode Banner & Fast-Fill */}
-        <div className="mb-6 p-3.5 rounded-xl bg-[#FAF9F5] border border-[#ECECE8] text-xs">
-          <div className="flex items-center gap-1.5 text-[#121212] font-semibold mb-1">
+        <div className="mb-6 p-3.5 rounded-xl bg-[#FAF9F5] dark:bg-[#121214] border border-[#ECECE8] dark:border-[#27272A] text-xs">
+          <div className="flex items-center gap-1.5 text-[#121212] dark:text-[#F4F4F6] font-semibold mb-1">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Demonstration Mode</span>
+            <span>Fast Sign-in Options</span>
           </div>
-          <p className="text-[#666666] leading-relaxed mb-3">
-            Frontend phase only. Passwords are never saved in storage or transmitted.
-            Click a role to fill mock credentials:
+          <p className="text-[#666666] dark:text-[#A1A1AA] leading-relaxed mb-3">
+            Choose a demo account or sign in with any registered author email:
           </p>
           <div className="flex items-center gap-2">
             <button
@@ -152,22 +220,33 @@ export default function SignInPage() {
               onClick={() => handleQuickFill('author')}
               className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
                 demoSelected === 'author'
-                  ? 'border-[#121212] bg-[#121212] text-white shadow-2xs'
-                  : 'border-[#E5E7EB] bg-white text-[#4A4A4A] hover:border-[#121212] hover:text-[#121212]'
+                  ? 'border-[#121212] bg-[#121212] text-white dark:border-white dark:bg-white dark:text-[#121212]'
+                  : 'border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-zinc-400'
               }`}
             >
-              Author Profile
+              Author
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickFill('admin')}
+              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
+                demoSelected === 'admin'
+                  ? 'border-[#121212] bg-[#121212] text-white dark:border-white dark:bg-white dark:text-[#121212]'
+                  : 'border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-zinc-400'
+              }`}
+            >
+              Admin
             </button>
             <button
               type="button"
               onClick={() => handleQuickFill('reader')}
               className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
                 demoSelected === 'reader'
-                  ? 'border-[#121212] bg-[#121212] text-white shadow-2xs'
-                  : 'border-[#E5E7EB] bg-white text-[#4A4A4A] hover:border-[#121212] hover:text-[#121212]'
+                  ? 'border-[#121212] bg-[#121212] text-white dark:border-white dark:bg-white dark:text-[#121212]'
+                  : 'border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-zinc-400'
               }`}
             >
-              Reader Profile
+              Reader
             </button>
           </div>
         </div>
@@ -175,10 +254,10 @@ export default function SignInPage() {
         {/* General Error Alert */}
         {generalError && (
           <div
-            className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
+            className="mb-5 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 text-xs flex items-center gap-2"
             role="alert"
           >
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
             <span>{generalError}</span>
           </div>
         )}
@@ -220,14 +299,14 @@ export default function SignInPage() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded border-[#D1D5DB] text-[#121212] focus:ring-1 focus:ring-[#121212] w-4 h-4 cursor-pointer accent-[#121212]"
+                className="rounded border-[#D1D5DB] dark:border-zinc-600 text-[#121212] dark:text-white focus:ring-1 focus:ring-[#121212] w-4 h-4 cursor-pointer accent-[#121212] dark:accent-zinc-200"
               />
-              <span className="text-xs text-[#525252]">Remember me</span>
+              <span className="text-xs text-[#525252] dark:text-[#A1A1AA]">Remember me</span>
             </label>
 
             <Link
               to="/forgot-password"
-              className="text-xs text-[#525252] hover:text-[#121212] transition-colors font-medium hover:underline"
+              className="text-xs text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white transition-colors font-medium hover:underline"
             >
               Forgot password?
             </Link>
@@ -249,10 +328,12 @@ export default function SignInPage() {
         <div className="mt-7">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#ECECE8]" />
+              <div className="w-full border-t border-[#ECECE8] dark:border-[#27272A]" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 text-[#8A8A8A]">or sign in with</span>
+              <span className="bg-white dark:bg-[#18181B] px-3 text-[#8A8A8A] dark:text-[#71717A]">
+                or continue with
+              </span>
             </div>
           </div>
 
@@ -260,7 +341,7 @@ export default function SignInPage() {
             <button
               type="button"
               onClick={() => handleQuickFill('author')}
-              className="p-2.5 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-[#4A4A4A] hover:text-[#121212]"
+              className="p-2.5 rounded-full border border-[#ECECE8] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:bg-[#F9FAFB] dark:hover:bg-[#27272A] transition-colors cursor-pointer text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white"
               aria-label="Demo login with Google"
               title="Demo Google Sign In"
             >
@@ -272,7 +353,7 @@ export default function SignInPage() {
             <button
               type="button"
               onClick={() => handleQuickFill('author')}
-              className="p-2.5 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:bg-[#F9FAFB] transition-colors cursor-pointer text-[#4A4A4A] hover:text-[#121212]"
+              className="p-2.5 rounded-full border border-[#ECECE8] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:bg-[#F9FAFB] dark:hover:bg-[#27272A] transition-colors cursor-pointer text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white"
               aria-label="Demo login with GitHub"
               title="Demo GitHub Sign In"
             >
@@ -288,20 +369,20 @@ export default function SignInPage() {
         </div>
 
         {/* Footer Links */}
-        <div className="mt-8 pt-5 border-t border-[#ECECE8] text-center space-y-2">
-          <p className="text-xs text-[#737373]">
+        <div className="mt-8 pt-5 border-t border-[#ECECE8] dark:border-[#27272A] text-center space-y-2">
+          <p className="text-xs text-[#737373] dark:text-[#A1A1AA]">
             Don't have an account?{' '}
             <Link
-              to="/signup"
-              className="font-semibold text-[#121212] hover:underline"
+              to={notice ? `/signup?redirect=${encodeURIComponent(redirectPath)}&notice=${notice}` : '/signup'}
+              className="font-semibold text-[#121212] dark:text-white hover:underline"
             >
-              Sign up
+              Register here
             </Link>
           </p>
           <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] hover:text-[#121212] transition-colors"
+              className="inline-flex items-center gap-1 text-[11px] text-[#8A8A8A] dark:text-[#71717A] hover:text-[#121212] dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="w-3 h-3" />
               <span>Back to homepage</span>

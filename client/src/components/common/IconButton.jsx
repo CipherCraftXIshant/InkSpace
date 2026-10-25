@@ -16,13 +16,13 @@ export default function IconButton({
   ...props
 }) {
   const baseClasses =
-    'inline-flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121212]';
+    'inline-flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#121212] dark:focus-visible:ring-white';
 
   const variants = {
-    ghost: 'bg-transparent text-[#4A4A4A] hover:text-[#121212] hover:bg-black/5 active:bg-black/10',
-    secondary: 'bg-white text-[#121212] border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] shadow-2xs',
-    outline: 'bg-transparent text-[#121212] border border-[#E5E7EB] hover:border-[#121212] hover:bg-black/5',
-    primary: 'bg-[#121212] text-white hover:bg-[#2A2A2A]',
+    ghost: 'bg-transparent text-[#4A4A4A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10',
+    secondary: 'bg-white dark:bg-[#18181B] text-[#121212] dark:text-[#F4F4F6] border border-[#E5E7EB] dark:border-[#27272A] hover:bg-[#F9FAFB] dark:hover:bg-[#27272A] hover:border-[#D1D5DB] dark:hover:border-zinc-500 shadow-2xs',
+    outline: 'bg-transparent text-[#121212] dark:text-[#F4F4F6] border border-[#E5E7EB] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:bg-black/5 dark:hover:bg-white/10',
+    primary: 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] hover:bg-[#2A2A2A] dark:hover:bg-zinc-200',
   };
 
   const sizes = {

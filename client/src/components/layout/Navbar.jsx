@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   Search,
   PenLine,
@@ -16,8 +16,9 @@ import {
 import Container from '../common/Container.jsx';
 import Button from '../common/Button.jsx';
 import IconButton from '../common/IconButton.jsx';
+import ThemeToggle from '../common/ThemeToggle.jsx';
 import { MOCK_CATEGORIES, MOCK_ARTICLES } from '../../data/mockData.js';
-import { getMockAuthUser, clearMockAuthUser } from '../../utils/storage.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 const CATEGORY_ICONS = {
   technology: Laptop,
@@ -39,13 +40,11 @@ export default function Navbar() {
   const pagesRef = useRef(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
-  useLocation(); // Subscribes to route changes so currentUser re-evaluates fresh
 
-  // Read current mock auth user directly on render
-  const currentUser = getMockAuthUser();
+  const { currentUser, isAuthenticated, logout } = useAuth();
 
   const handleSignOut = () => {
-    clearMockAuthUser();
+    logout();
     navigate('/');
   };
 
@@ -108,26 +107,31 @@ export default function Navbar() {
     }
   };
 
+  // Write button destination: directly to editor if registered/authenticated, or to registration if guest
+  const writeDestination = isAuthenticated
+    ? '/dashboard/editor'
+    : '/signup?redirect=/dashboard/editor&notice=register_required';
+
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#FAFAF8]/95 backdrop-blur-md border-b border-[#ECECE8] transition-colors">
+      <header className="sticky top-0 z-40 bg-[#FAFAF8]/95 dark:bg-[#0C0C0E]/95 backdrop-blur-md border-b border-[#ECECE8] dark:border-[#27272A] transition-colors">
         <Container>
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Wordmark Logo */}
             <Link
               to="/"
-              className="font-serif font-bold text-2xl sm:text-2xl tracking-tight text-[#121212] hover:opacity-80 transition-opacity select-none"
+              className="font-serif font-bold text-2xl sm:text-2xl tracking-tight text-[#121212] dark:text-[#F4F4F6] hover:opacity-80 transition-opacity select-none"
             >
               InkSpace
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#4A4A4A]">
+            <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#4A4A4A] dark:text-[#A1A1AA]">
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `transition-colors hover:text-[#121212] ${
-                    isActive ? 'text-[#121212] font-semibold' : ''
+                  `transition-colors hover:text-[#121212] dark:hover:text-white ${
+                    isActive ? 'text-[#121212] dark:text-white font-semibold' : ''
                   }`
                 }
               >
@@ -137,8 +141,8 @@ export default function Navbar() {
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
-                  `transition-colors hover:text-[#121212] ${
-                    isActive ? 'text-[#121212] font-semibold' : ''
+                  `transition-colors hover:text-[#121212] dark:hover:text-white ${
+                    isActive ? 'text-[#121212] dark:text-white font-semibold' : ''
                   }`
                 }
               >
@@ -155,8 +159,8 @@ export default function Navbar() {
                   }}
                   aria-expanded={categoriesOpen}
                   aria-haspopup="true"
-                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] cursor-pointer py-2 ${
-                    categoriesOpen ? 'text-[#121212]' : ''
+                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] dark:hover:text-white cursor-pointer py-2 ${
+                    categoriesOpen ? 'text-[#121212] dark:text-white' : ''
                   }`}
                 >
                   <span>Categories</span>
@@ -168,8 +172,8 @@ export default function Navbar() {
                 </button>
 
                 {categoriesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl border border-[#ECECE8] shadow-lg p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                    <div className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3] px-3 py-1.5 border-b border-[#F0F0EC] mb-1">
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                    <div className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3] dark:text-[#71717A] px-3 py-1.5 border-b border-[#F0F0EC] dark:border-[#27272A] mb-1">
                       Topics
                     </div>
                     {MOCK_CATEGORIES.map((cat) => {
@@ -179,13 +183,13 @@ export default function Navbar() {
                           key={cat.id}
                           to={`/categories/${cat.slug}`}
                           onClick={() => setCategoriesOpen(false)}
-                          className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5] transition-colors"
+                          className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] transition-colors"
                         >
                           <div className="flex items-center gap-2.5">
-                            <Icon className="w-3.5 h-3.5 text-[#737373]" />
+                            <Icon className="w-3.5 h-3.5 text-[#737373] dark:text-[#A1A1AA]" />
                             <span>{cat.name}</span>
                           </div>
-                          <span className="text-[10px] text-[#A3A3A3]">
+                          <span className="text-[10px] text-[#A3A3A3] dark:text-[#71717A]">
                             {cat.count}
                           </span>
                         </Link>
@@ -205,8 +209,8 @@ export default function Navbar() {
                   }}
                   aria-expanded={pagesOpen}
                   aria-haspopup="true"
-                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] cursor-pointer py-2 ${
-                    pagesOpen ? 'text-[#121212]' : ''
+                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] dark:hover:text-white cursor-pointer py-2 ${
+                    pagesOpen ? 'text-[#121212] dark:text-white' : ''
                   }`}
                 >
                   <span>Pages</span>
@@ -218,50 +222,50 @@ export default function Navbar() {
                 </button>
 
                 {pagesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl border border-[#ECECE8] shadow-lg p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                    <div className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3] px-3 py-1.5 border-b border-[#F0F0EC] mb-1">
+                  <div className="absolute top-full left-0 mt-1 w-52 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                    <div className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3] dark:text-[#71717A] px-3 py-1.5 border-b border-[#F0F0EC] dark:border-[#27272A] mb-1">
                       Public & Portal
                     </div>
                     <Link
                       to="/explore"
                       onClick={() => setPagesOpen(false)}
-                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5]"
+                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]"
                     >
                       Explore Articles
                     </Link>
                     <Link
                       to="/blog/the-future-of-web-development"
                       onClick={() => setPagesOpen(false)}
-                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5]"
+                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]"
                     >
                       Featured Story
                     </Link>
                     <Link
                       to="/about"
                       onClick={() => setPagesOpen(false)}
-                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5]"
+                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]"
                     >
                       About Platform
                     </Link>
                     <Link
                       to="/contact"
                       onClick={() => setPagesOpen(false)}
-                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5]"
+                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]"
                     >
                       Contact & Submissions
                     </Link>
-                    <div className="my-1 border-t border-[#F0F0EC]" />
+                    <div className="my-1 border-t border-[#F0F0EC] dark:border-[#27272A]" />
                     <Link
                       to="/dashboard"
                       onClick={() => setPagesOpen(false)}
-                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5]"
+                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]"
                     >
                       Author Workspace
                     </Link>
                     <Link
                       to="/admin"
                       onClick={() => setPagesOpen(false)}
-                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] hover:text-[#121212] hover:bg-[#FAF9F5]"
+                      className="block px-3 py-1.5 rounded-lg text-xs font-medium text-[#4A4A4A] dark:text-[#D4D4D8] hover:text-[#121212] dark:hover:text-white hover:bg-[#FAF9F5] dark:hover:bg-[#27272A]"
                     >
                       Admin Console
                     </Link>
@@ -272,8 +276,8 @@ export default function Navbar() {
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
-                  `transition-colors hover:text-[#121212] ${
-                    isActive ? 'text-[#121212] font-semibold' : ''
+                  `transition-colors hover:text-[#121212] dark:hover:text-white ${
+                    isActive ? 'text-[#121212] dark:text-white font-semibold' : ''
                   }`
                 }
               >
@@ -282,7 +286,7 @@ export default function Navbar() {
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2.5">
               <IconButton
                 icon={Search}
                 label="Search articles"
@@ -291,54 +295,66 @@ export default function Navbar() {
                 size="md"
               />
 
+              {/* Theme Toggle Button */}
+              <ThemeToggle size="md" />
+
               <Button
-                to="/dashboard/editor"
+                to={writeDestination}
                 variant="primary"
                 size="sm"
                 rounded="full"
                 icon={PenLine}
-                className="px-4 py-1.5"
+                className="px-4 py-1.5 ml-1"
               >
                 Write
               </Button>
 
               {currentUser ? (
-                <div className="flex items-center gap-1.5 pl-2 border-l border-[#ECECE8]">
+                <div className="flex items-center gap-1.5 pl-2 border-l border-[#ECECE8] dark:border-[#27272A]">
                   <Link
                     to="/dashboard"
-                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-black/5 transition-colors group"
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors group"
                     title={`${currentUser.name} (${currentUser.role})`}
                   >
                     <img
                       src={currentUser.avatar}
                       alt={currentUser.name}
-                      className="w-5 h-5 rounded-full object-cover border border-[#ECECE8]"
+                      className="w-5 h-5 rounded-full object-cover border border-[#ECECE8] dark:border-[#27272A]"
                     />
-                    <span className="text-xs font-medium text-[#121212] hidden md:inline truncate max-w-[90px]">
+                    <span className="text-xs font-medium text-[#121212] dark:text-[#F4F4F6] hidden md:inline truncate max-w-[90px]">
                       {currentUser.name.split(' ')[0]}
                     </span>
                   </Link>
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="text-xs text-[#737373] hover:text-[#121212] px-2 py-1 rounded-md hover:bg-black/5 transition-colors cursor-pointer"
-                    title="Simulate sign out"
+                    className="text-xs text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white px-2 py-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                    title="Sign out of current account"
                   >
                     Sign Out
                   </button>
                 </div>
               ) : (
-                <Link
-                  to="/login"
-                  className="text-xs font-semibold text-[#4A4A4A] hover:text-[#121212] ml-1 px-2.5 py-1.5 rounded-md hover:bg-black/5 transition-colors"
-                >
-                  Sign In
-                </Link>
+                <div className="flex items-center gap-1 pl-1">
+                  <Link
+                    to="/login"
+                    className="text-xs font-medium text-[#4A4A4A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white px-2.5 py-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="text-xs font-semibold text-[#121212] dark:text-white px-2.5 py-1.5 rounded-md border border-[#ECECE8] dark:border-[#27272A] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                  >
+                    Register
+                  </Link>
+                </div>
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="flex sm:hidden items-center gap-2">
+            {/* Mobile Actions: Search, ThemeToggle, Menu */}
+            <div className="flex sm:hidden items-center gap-1.5">
+              <ThemeToggle size="sm" />
               <IconButton
                 icon={Search}
                 label="Search"
@@ -358,14 +374,16 @@ export default function Navbar() {
 
           {/* Mobile Menu Dropdown Drawer */}
           {mobileMenuOpen && (
-            <div className="sm:hidden border-t border-[#ECECE8] py-4 space-y-4 bg-[#FAFAF8] animate-in fade-in duration-150">
+            <div className="sm:hidden border-t border-[#ECECE8] dark:border-[#27272A] py-4 space-y-4 bg-[#FAFAF8] dark:bg-[#0C0C0E] animate-in fade-in duration-150">
               <div className="flex flex-col space-y-1">
                 <NavLink
                   to="/"
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive ? 'bg-black/5 text-[#121212] font-semibold' : 'text-[#4A4A4A]'
+                      isActive
+                        ? 'bg-black/5 dark:bg-white/10 text-[#121212] dark:text-white font-semibold'
+                        : 'text-[#4A4A4A] dark:text-[#A1A1AA]'
                     }`
                   }
                 >
@@ -376,7 +394,9 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive ? 'bg-black/5 text-[#121212] font-semibold' : 'text-[#4A4A4A]'
+                      isActive
+                        ? 'bg-black/5 dark:bg-white/10 text-[#121212] dark:text-white font-semibold'
+                        : 'text-[#4A4A4A] dark:text-[#A1A1AA]'
                     }`
                   }
                 >
@@ -387,7 +407,9 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive ? 'bg-black/5 text-[#121212] font-semibold' : 'text-[#4A4A4A]'
+                      isActive
+                        ? 'bg-black/5 dark:bg-white/10 text-[#121212] dark:text-white font-semibold'
+                        : 'text-[#4A4A4A] dark:text-[#A1A1AA]'
                     }`
                   }
                 >
@@ -398,7 +420,9 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive ? 'bg-black/5 text-[#121212] font-semibold' : 'text-[#4A4A4A]'
+                      isActive
+                        ? 'bg-black/5 dark:bg-white/10 text-[#121212] dark:text-white font-semibold'
+                        : 'text-[#4A4A4A] dark:text-[#A1A1AA]'
                     }`
                   }
                 >
@@ -407,8 +431,8 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Categories Grid */}
-              <div className="pt-2 border-t border-[#ECECE8]">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3] px-3 mb-2">
+              <div className="pt-2 border-t border-[#ECECE8] dark:border-[#27272A]">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3] dark:text-[#71717A] px-3 mb-2">
                   Browse by Topic
                 </p>
                 <div className="grid grid-cols-2 gap-1.5 px-3">
@@ -417,7 +441,7 @@ export default function Navbar() {
                       key={cat.id}
                       to={`/categories/${cat.slug}`}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-2.5 py-1.5 rounded-md text-xs font-medium bg-white border border-[#ECECE8] text-[#4A4A4A] truncate"
+                      className="px-2.5 py-1.5 rounded-md text-xs font-medium bg-white dark:bg-[#18181B] border border-[#ECECE8] dark:border-[#27272A] text-[#4A4A4A] dark:text-[#D4D4D8] truncate"
                     >
                       {cat.name}
                     </Link>
@@ -425,9 +449,9 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[#ECECE8] flex flex-col gap-2 px-3">
+              <div className="pt-2 border-t border-[#ECECE8] dark:border-[#27272A] flex flex-col gap-2 px-3">
                 <Button
-                  to="/dashboard/editor"
+                  to={writeDestination}
                   variant="primary"
                   size="md"
                   rounded="full"
@@ -446,7 +470,7 @@ export default function Navbar() {
                         alt={currentUser.name}
                         className="w-5 h-5 rounded-full object-cover"
                       />
-                      <span className="font-medium text-[#121212]">{currentUser.name}</span>
+                      <span className="font-medium text-[#121212] dark:text-white">{currentUser.name}</span>
                     </div>
                     <button
                       type="button"
@@ -454,7 +478,7 @@ export default function Navbar() {
                         handleSignOut();
                         setMobileMenuOpen(false);
                       }}
-                      className="text-[#737373] hover:text-red-600 cursor-pointer"
+                      className="text-[#737373] dark:text-[#A1A1AA] hover:text-red-500 cursor-pointer"
                     >
                       Sign Out
                     </button>
@@ -464,16 +488,16 @@ export default function Navbar() {
                     <Link
                       to="/login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="font-medium text-[#4A4A4A] hover:text-[#121212]"
+                      className="font-medium text-[#4A4A4A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white"
                     >
                       Sign In
                     </Link>
                     <Link
                       to="/signup"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="font-semibold text-[#121212]"
+                      className="font-semibold text-[#121212] dark:text-white"
                     >
-                      Create Account
+                      Register
                     </Link>
                   </div>
                 )}
@@ -489,28 +513,28 @@ export default function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Quick search modal"
-          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/40 dark:bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
           onClick={() => setSearchModalOpen(false)}
         >
           <div
-            className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-[#ECECE8] overflow-hidden"
+            className="w-full max-w-2xl bg-white dark:bg-[#18181B] rounded-2xl shadow-2xl border border-[#ECECE8] dark:border-[#27272A] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Search Input Bar */}
-            <form onSubmit={handleSearchSubmit} className="relative border-b border-[#ECECE8]">
-              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+            <form onSubmit={handleSearchSubmit} className="relative border-b border-[#ECECE8] dark:border-[#27272A]">
+              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] dark:text-[#71717A]" />
               <input
                 ref={searchInputRef}
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles by title, topic, or keyword..."
-                className="w-full pl-12 pr-12 py-4 text-base sm:text-lg text-[#121212] placeholder:text-[#9CA3AF] bg-transparent outline-hidden"
+                className="w-full pl-12 pr-12 py-4 text-base sm:text-lg text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] bg-transparent outline-hidden"
               />
               <button
                 type="button"
                 onClick={() => setSearchModalOpen(false)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#737373] hover:text-[#121212] p-1 rounded"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white p-1 rounded"
               >
                 ESC
               </button>
@@ -520,7 +544,7 @@ export default function Navbar() {
             <div className="p-4 max-h-96 overflow-y-auto">
               {searchResults.length > 0 ? (
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3] px-2 mb-1">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3] dark:text-[#71717A] px-2 mb-1">
                     Matching Stories
                   </p>
                   {searchResults.map((art) => (
@@ -528,29 +552,29 @@ export default function Navbar() {
                       key={art.id}
                       type="button"
                       onClick={() => handleSearchResultClick(art.slug)}
-                      className="w-full flex items-center justify-between p-2.5 rounded-lg hover:bg-[#FAF9F5] text-left transition-colors cursor-pointer group"
+                      className="w-full flex items-center justify-between p-2.5 rounded-lg hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] text-left transition-colors cursor-pointer group"
                     >
                       <div className="min-w-0 pr-4">
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-[#737373]">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-[#737373] dark:text-[#A1A1AA]">
                           {art.category}
                         </span>
-                        <h4 className="font-serif text-sm sm:text-base font-medium text-[#121212] truncate group-hover:text-black">
+                        <h4 className="font-serif text-sm sm:text-base font-medium text-[#121212] dark:text-[#F4F4F6] truncate group-hover:text-black dark:group-hover:text-white">
                           {art.title}
                         </h4>
                       </div>
-                      <span className="text-xs text-[#8A8A8A] shrink-0">
+                      <span className="text-xs text-[#8A8A8A] dark:text-[#71717A] shrink-0">
                         {art.readingTime}
                       </span>
                     </button>
                   ))}
                 </div>
               ) : searchQuery.trim() ? (
-                <div className="py-8 text-center text-sm text-[#737373]">
+                <div className="py-8 text-center text-sm text-[#737373] dark:text-[#A1A1AA]">
                   No stories found for "{searchQuery}". Press Enter to search on Explore page.
                 </div>
               ) : (
                 <div className="space-y-3 p-2">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3]">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3] dark:text-[#71717A]">
                     Popular Topics
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -562,7 +586,7 @@ export default function Navbar() {
                           setSearchModalOpen(false);
                           navigate(`/categories/${c.slug}`);
                         }}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-[#FAF9F5] border border-[#ECECE8] hover:border-[#121212] transition-colors"
+                        className="px-3 py-1 rounded-full text-xs font-medium bg-[#FAF9F5] dark:bg-[#27272A] border border-[#ECECE8] dark:border-[#3F3F46] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-white transition-colors cursor-pointer"
                       >
                         {c.name}
                       </button>

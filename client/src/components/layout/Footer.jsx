@@ -6,30 +6,30 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="bg-[#FAFAF8] border-t border-[#ECECE8] pt-16 pb-12 text-[#4A4A4A]">
+    <footer className="bg-[#FAFAF8] dark:bg-[#0C0C0E] border-t border-[#ECECE8] dark:border-[#27272A] pt-16 pb-12 text-[#4A4A4A] dark:text-[#A1A1AA] transition-colors">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-[#ECECE8]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-[#ECECE8] dark:border-[#27272A]">
           {/* Brand & Manifesto */}
           <div className="md:col-span-5 space-y-4">
             <Link
               to="/"
-              className="font-serif font-bold text-2xl tracking-tight text-[#121212] inline-block"
+              className="font-serif font-bold text-2xl tracking-tight text-[#121212] dark:text-[#F4F4F6] inline-block"
             >
               InkSpace
             </Link>
-            <p className="text-sm text-[#737373] max-w-sm leading-relaxed">
+            <p className="text-sm text-[#737373] dark:text-[#A1A1AA] max-w-sm leading-relaxed">
               An open editorial publishing platform dedicated to authentic voices,
               craftsmanship, and ideas worth reading. Built for thoughtful writers
               and curious minds.
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-3 pt-2 text-[#737373]">
+            <div className="flex items-center gap-3 pt-2 text-[#737373] dark:text-[#A1A1AA]">
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:text-[#121212] transition-colors"
+                className="p-2 rounded-full border border-[#ECECE8] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:text-[#121212] dark:hover:text-white transition-colors"
                 aria-label="InkSpace on X (Twitter)"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -40,7 +40,7 @@ export default function Footer() {
                 href="https://github.com/CipherCraftXIshant/InkSpace"
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:text-[#121212] transition-colors"
+                className="p-2 rounded-full border border-[#ECECE8] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:text-[#121212] dark:hover:text-white transition-colors"
                 aria-label="InkSpace GitHub repository"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -55,7 +55,7 @@ export default function Footer() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-full border border-[#ECECE8] hover:border-[#121212] hover:text-[#121212] transition-colors"
+                className="p-2 rounded-full border border-[#ECECE8] dark:border-[#27272A] hover:border-[#121212] dark:hover:border-white hover:text-[#121212] dark:hover:text-white transition-colors"
                 aria-label="InkSpace on LinkedIn"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -67,27 +67,27 @@ export default function Footer() {
 
           {/* Navigation Links */}
           <div className="md:col-span-2 space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#121212]">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#121212] dark:text-[#F4F4F6]">
               Explore
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm text-[#737373] dark:text-[#A1A1AA]">
               <li>
-                <Link to="/" className="hover:text-[#121212] transition-colors">
+                <Link to="/" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/explore" className="hover:text-[#121212] transition-colors">
+                <Link to="/explore" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   All Articles
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-[#121212] transition-colors">
+                <Link to="/about" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   About InkSpace
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-[#121212] transition-colors">
+                <Link to="/contact" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Contact
                 </Link>
               </li>
@@ -95,27 +95,27 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-2 space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#121212]">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#121212] dark:text-[#F4F4F6]">
               Topics
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm text-[#737373] dark:text-[#A1A1AA]">
               <li>
-                <Link to="/categories/technology" className="hover:text-[#121212] transition-colors">
+                <Link to="/categories/technology" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Technology
                 </Link>
               </li>
               <li>
-                <Link to="/categories/design" className="hover:text-[#121212] transition-colors">
+                <Link to="/categories/design" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Design
                 </Link>
               </li>
               <li>
-                <Link to="/categories/lifestyle" className="hover:text-[#121212] transition-colors">
+                <Link to="/categories/lifestyle" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Lifestyle
                 </Link>
               </li>
               <li>
-                <Link to="/categories/business" className="hover:text-[#121212] transition-colors">
+                <Link to="/categories/business" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Business
                 </Link>
               </li>
@@ -123,27 +123,27 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#121212]">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#121212] dark:text-[#F4F4F6]">
               Portals
             </h4>
-            <ul className="space-y-2 text-sm text-[#737373]">
+            <ul className="space-y-2 text-sm text-[#737373] dark:text-[#A1A1AA]">
               <li>
-                <Link to="/dashboard" className="hover:text-[#121212] transition-colors">
+                <Link to="/dashboard" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Author Workspace
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard/editor" className="hover:text-[#121212] transition-colors">
+                <Link to="/dashboard/editor" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Write a Story
                 </Link>
               </li>
               <li>
-                <Link to="/admin" className="hover:text-[#121212] transition-colors">
+                <Link to="/admin" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Admin Console
                 </Link>
               </li>
               <li>
-                <Link to="/login" className="hover:text-[#121212] transition-colors">
+                <Link to="/login" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   Sign In
                 </Link>
               </li>
@@ -152,16 +152,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8A8A8A]">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8A8A8A] dark:text-[#71717A]">
           <p>© {CURRENT_YEAR} InkSpace. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link to="/about" className="hover:text-[#121212] transition-colors">
+            <Link to="/about" className="hover:text-[#121212] dark:hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/about" className="hover:text-[#121212] transition-colors">
+            <Link to="/about" className="hover:text-[#121212] dark:hover:text-white transition-colors">
               Terms of Service
             </Link>
-            <Link to="/contact" className="hover:text-[#121212] transition-colors">
+            <Link to="/contact" className="hover:text-[#121212] dark:hover:text-white transition-colors">
               Editorial Guidelines
             </Link>
           </div>

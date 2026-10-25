@@ -10,11 +10,13 @@ import {
   LogOut,
   X,
 } from 'lucide-react';
-import { getMockAuthUser, clearMockAuthUser } from '../../utils/storage.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 export default function DashboardSidebar({ onClose }) {
   const navigate = useNavigate();
-  const currentUser = getMockAuthUser() || {
+  const { currentUser, logout } = useAuth();
+
+  const user = currentUser || {
     name: 'Alex Morgan',
     email: 'alex@inkspace.dev',
     avatar:
@@ -22,7 +24,7 @@ export default function DashboardSidebar({ onClose }) {
   };
 
   const handleSignOut = () => {
-    clearMockAuthUser();
+    logout();
     if (onClose) onClose();
     navigate('/');
   };
@@ -36,13 +38,13 @@ export default function DashboardSidebar({ onClose }) {
   ];
 
   return (
-    <aside className="w-64 h-full bg-[#FFFFFF] border-r border-[#ECECE8] flex flex-col justify-between select-none">
+    <aside className="w-64 h-full bg-[#FFFFFF] dark:bg-[#18181B] border-r border-[#ECECE8] dark:border-[#27272A] flex flex-col justify-between select-none transition-colors">
       <div>
         {/* Header */}
-        <div className="h-16 px-6 border-b border-[#ECECE8] flex items-center justify-between">
+        <div className="h-16 px-6 border-b border-[#ECECE8] dark:border-[#27272A] flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <span className="font-serif font-bold text-xl text-[#121212]">InkSpace</span>
-            <span className="text-[10px] uppercase font-semibold tracking-wider bg-[#F4F4F5] text-[#525252] px-2 py-0.5 rounded">
+            <span className="font-serif font-bold text-xl text-[#121212] dark:text-[#F4F4F6]">InkSpace</span>
+            <span className="text-[10px] uppercase font-semibold tracking-wider bg-[#F4F4F5] dark:bg-[#27272A] text-[#525252] dark:text-[#D4D4D8] px-2 py-0.5 rounded">
               Author
             </span>
           </Link>
@@ -51,7 +53,7 @@ export default function DashboardSidebar({ onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="lg:hidden p-1 text-[#71717A] hover:text-[#121212]"
+              className="lg:hidden p-1 text-[#71717A] hover:text-[#121212] dark:hover:text-white"
               aria-label="Close sidebar"
             >
               <X className="w-5 h-5" />
@@ -72,8 +74,8 @@ export default function DashboardSidebar({ onClose }) {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#121212] text-white shadow-2xs'
-                      : 'text-[#4A4A4A] hover:text-[#121212] hover:bg-[#F8F8F6]'
+                      ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
+                      : 'text-[#4A4A4A] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-[#F8F8F6] dark:hover:bg-[#27272A]'
                   }`
                 }
               >
@@ -86,10 +88,10 @@ export default function DashboardSidebar({ onClose }) {
       </div>
 
       {/* Footer Area */}
-      <div className="p-4 border-t border-[#ECECE8] space-y-2">
+      <div className="p-4 border-t border-[#ECECE8] dark:border-[#27272A] space-y-2">
         <Link
           to="/"
-          className="flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-[#737373] hover:text-[#121212] hover:bg-[#F8F8F6] transition-colors"
+          className="flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-[#737373] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-[#F8F8F6] dark:hover:bg-[#27272A] transition-colors"
         >
           <ExternalLink className="w-4 h-4" />
           <span>View Public Site</span>
@@ -98,7 +100,7 @@ export default function DashboardSidebar({ onClose }) {
         <button
           type="button"
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors cursor-pointer text-left"
+          className="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer text-left"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>
@@ -108,18 +110,18 @@ export default function DashboardSidebar({ onClose }) {
         <Link
           to="/dashboard/settings"
           onClick={onClose}
-          className="pt-2 flex items-center gap-3 px-2 rounded-lg hover:bg-[#FAF9F5] transition-colors group"
+          className="pt-2 flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-[#FAF9F5] dark:hover:bg-[#27272A] transition-colors group"
         >
           <img
-            src={currentUser.avatar}
-            alt={currentUser.name}
-            className="w-8 h-8 rounded-full object-cover border border-[#ECECE8] group-hover:border-[#121212]"
+            src={user.avatar}
+            alt={user.name}
+            className="w-8 h-8 rounded-full object-cover border border-[#ECECE8] dark:border-[#27272A] group-hover:border-[#121212] dark:group-hover:border-white"
           />
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold text-[#121212] truncate group-hover:underline">
-              {currentUser.name}
+            <p className="text-xs font-semibold text-[#121212] dark:text-[#F4F4F6] truncate group-hover:underline">
+              {user.name}
             </p>
-            <p className="text-[11px] text-[#8A8A8A] truncate">{currentUser.email}</p>
+            <p className="text-[11px] text-[#8A8A8A] dark:text-[#71717A] truncate">{user.email}</p>
           </div>
         </Link>
       </div>

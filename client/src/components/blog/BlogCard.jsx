@@ -45,7 +45,7 @@ export default function BlogCard({
       >
         <Link
           to={articleUrl}
-          className="block overflow-hidden rounded-xl mb-5 bg-[#F0F0ED] aspect-16/10"
+          className="block overflow-hidden rounded-xl mb-5 bg-[#F0F0ED] dark:bg-[#18181B] aspect-16/10"
         >
           <img
             src={imageSrc}
@@ -63,17 +63,17 @@ export default function BlogCard({
             <CategoryBadge slug={categorySlug}>{category}</CategoryBadge>
           </div>
 
-          <h3 className="font-serif text-2xl sm:text-3xl text-[#121212] font-medium leading-snug tracking-tight mb-3 group-hover:text-[#525252] transition-colors">
+          <h3 className="font-serif text-2xl sm:text-3xl text-[#121212] dark:text-[#F4F4F6] font-medium leading-snug tracking-tight mb-3 group-hover:text-[#525252] dark:group-hover:text-[#D4D4D8] transition-colors">
             <Link to={articleUrl}>{title}</Link>
           </h3>
 
           {excerpt && (
-            <p className="text-sm sm:text-base text-[#666666] leading-relaxed mb-4 line-clamp-2">
+            <p className="text-sm sm:text-base text-[#666666] dark:text-[#A1A1AA] leading-relaxed mb-4 line-clamp-2">
               {excerpt}
             </p>
           )}
 
-          <div className="flex items-center gap-2 text-xs text-[#8A8A8A] font-normal">
+          <div className="flex items-center gap-2 text-xs text-[#8A8A8A] dark:text-[#71717A] font-normal">
             <span>{displayDate}</span>
             <span>•</span>
             <span>{displayReadTime}</span>
@@ -97,7 +97,7 @@ export default function BlogCard({
       >
         <Link
           to={articleUrl}
-          className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-lg bg-[#F0F0ED]"
+          className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-lg bg-[#F0F0ED] dark:bg-[#18181B]"
         >
           <img
             src={imageSrc}
@@ -115,11 +115,11 @@ export default function BlogCard({
             <CategoryBadge slug={categorySlug} size="xs">{category}</CategoryBadge>
           </div>
 
-          <h4 className="font-serif text-base sm:text-lg text-[#121212] font-medium leading-snug line-clamp-2 mb-2 group-hover:text-[#525252] transition-colors">
+          <h4 className="font-serif text-base sm:text-lg text-[#121212] dark:text-[#F4F4F6] font-medium leading-snug line-clamp-2 mb-2 group-hover:text-[#525252] dark:group-hover:text-[#D4D4D8] transition-colors">
             <Link to={articleUrl}>{title}</Link>
           </h4>
 
-          <div className="flex items-center gap-2 text-xs text-[#8A8A8A]">
+          <div className="flex items-center gap-2 text-xs text-[#8A8A8A] dark:text-[#71717A]">
             <span>{displayDate}</span>
             <span>•</span>
             <span>{displayReadTime}</span>
@@ -133,11 +133,11 @@ export default function BlogCard({
   if (variant === 'horizontal') {
     return (
       <article
-        className={`group flex flex-col md:flex-row gap-5 md:gap-7 items-start py-6 border-b border-[#EBEBEB] last:border-b-0 ${className}`}
+        className={`group flex flex-col md:flex-row gap-5 md:gap-7 items-start py-6 border-b border-[#EBEBEB] dark:border-[#27272A] last:border-b-0 ${className}`}
       >
         <Link
           to={articleUrl}
-          className="w-full md:w-64 lg:w-72 aspect-16/10 md:aspect-3/2 shrink-0 overflow-hidden rounded-lg bg-[#F0F0ED]"
+          className="w-full md:w-64 lg:w-72 aspect-16/10 md:aspect-3/2 shrink-0 overflow-hidden rounded-lg bg-[#F0F0ED] dark:bg-[#18181B]"
         >
           <img
             src={imageSrc}
@@ -156,18 +156,18 @@ export default function BlogCard({
               <CategoryBadge slug={categorySlug}>{category}</CategoryBadge>
             </div>
 
-            <h3 className="font-serif text-xl sm:text-2xl text-[#121212] font-medium leading-snug tracking-tight mb-2 group-hover:text-[#525252] transition-colors">
+            <h3 className="font-serif text-xl sm:text-2xl text-[#121212] dark:text-[#F4F4F6] font-medium leading-snug tracking-tight mb-2 group-hover:text-[#525252] dark:group-hover:text-[#D4D4D8] transition-colors">
               <Link to={articleUrl}>{title}</Link>
             </h3>
 
             {excerpt && (
-              <p className="text-sm text-[#666666] leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3">
+              <p className="text-sm text-[#666666] dark:text-[#A1A1AA] leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3">
                 {excerpt}
               </p>
             )}
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-[#8A8A8A]">
+          <div className="flex items-center gap-2 text-xs text-[#8A8A8A] dark:text-[#71717A]">
             <span>{displayDate}</span>
             <span>•</span>
             <span>{displayReadTime}</span>
@@ -188,7 +188,7 @@ export default function BlogCard({
     <article className={`group flex flex-col h-full ${className}`}>
       <Link
         to={articleUrl}
-        className="block overflow-hidden rounded-xl mb-4 bg-[#F0F0ED] aspect-4/3"
+        className="block overflow-hidden rounded-xl mb-4 bg-[#F0F0ED] dark:bg-[#18181B] aspect-4/3"
       >
         <img
           src={imageSrc}
@@ -206,11 +206,11 @@ export default function BlogCard({
           <CategoryBadge slug={categorySlug}>{category}</CategoryBadge>
         </div>
 
-        <h3 className="font-serif text-lg sm:text-xl text-[#121212] font-medium leading-snug tracking-tight mb-2 group-hover:text-[#525252] transition-colors">
+        <h3 className="font-serif text-lg sm:text-xl text-[#121212] dark:text-[#F4F4F6] font-medium leading-snug tracking-tight mb-2 group-hover:text-[#525252] dark:group-hover:text-[#D4D4D8] transition-colors">
           <Link to={articleUrl}>{title}</Link>
         </h3>
 
-        <div className="mt-auto pt-2 flex items-center gap-2 text-xs text-[#8A8A8A]">
+        <div className="mt-auto pt-2 flex items-center gap-2 text-xs text-[#8A8A8A] dark:text-[#71717A]">
           <span>{displayDate}</span>
           <span>•</span>
           <span>{displayReadTime}</span>
