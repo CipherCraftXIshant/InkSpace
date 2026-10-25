@@ -9,8 +9,10 @@ import {
   removeBookmark,
   getAuthorPosts,
 } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function BookmarksPage() {
+  useDocumentTitle('Saved Bookmarks');
   const [bookmarkIds, setBookmarkIds] = useState(() => getBookmarks());
   const [toastMessage, setToastMessage] = useState('');
 

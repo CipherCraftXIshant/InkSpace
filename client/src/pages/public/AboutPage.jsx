@@ -3,8 +3,10 @@ import { PenLine, Compass, Sparkles, Feather, ShieldCheck } from 'lucide-react';
 import Container from '../../components/common/Container.jsx';
 import Button from '../../components/common/Button.jsx';
 import SectionHeading from '../../components/common/SectionHeading.jsx';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function AboutPage() {
+  useDocumentTitle('About the Publication');
   const values = [
     {
       icon: Feather,

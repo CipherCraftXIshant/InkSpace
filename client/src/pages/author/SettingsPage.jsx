@@ -3,6 +3,7 @@ import { Check, Camera, ShieldCheck } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
 import { getMockAuthUser, setMockAuthUser } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 const AVATAR_PRESETS = [
   {
@@ -24,6 +25,7 @@ const AVATAR_PRESETS = [
 ];
 
 export default function SettingsPage() {
+  useDocumentTitle('Account Settings');
   const current = getMockAuthUser() || {
     name: 'Alex Morgan',
     email: 'alex@inkspace.dev',

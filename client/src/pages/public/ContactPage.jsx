@@ -3,8 +3,10 @@ import { Mail, MapPin, Send, CheckCircle2, MessageSquare } from 'lucide-react';
 import Container from '../../components/common/Container.jsx';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function ContactPage() {
+  useDocumentTitle('Contact & Editorial Submissions');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('Editorial Inquiry');

@@ -5,10 +5,12 @@ import Container from '../../components/common/Container.jsx';
 import BlogCard from '../../components/blog/BlogCard.jsx';
 import EmptyState from '../../components/common/EmptyState.jsx';
 import { MOCK_ARTICLES, MOCK_CATEGORIES } from '../../data/mockData.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 const ITEMS_PER_PAGE = 6;
 
 export default function ExplorePage() {
+  useDocumentTitle('Explore Articles');
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get('category') || 'all';
   const searchQuery = searchParams.get('q') || '';

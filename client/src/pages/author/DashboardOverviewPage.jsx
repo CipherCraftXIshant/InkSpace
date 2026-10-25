@@ -19,8 +19,10 @@ import {
   getAuthorStats,
   getMockAuthUser,
 } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function DashboardOverviewPage() {
+  useDocumentTitle('Author Workspace');
   const currentUser = getMockAuthUser() || { name: 'Alex Morgan' };
   const authorPosts = getAuthorPosts();
   const stats = getAuthorStats();

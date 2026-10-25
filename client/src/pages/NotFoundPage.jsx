@@ -2,8 +2,10 @@ import React from 'react';
 import { ArrowLeft, Compass } from 'lucide-react';
 import Container from '../components/common/Container.jsx';
 import Button from '../components/common/Button.jsx';
+import useDocumentTitle from '../hooks/useDocumentTitle.js';
 
 export default function NotFoundPage() {
+  useDocumentTitle('404 Page Not Found');
   return (
     <div className="min-h-[75vh] flex items-center justify-center py-16 px-4">
       <Container size="narrow" className="text-center">

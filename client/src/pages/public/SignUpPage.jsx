@@ -4,8 +4,10 @@ import { CheckCircle2, AlertCircle, ArrowLeft, ShieldCheck, Sparkles } from 'luc
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
 import { setMockAuthUser } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function SignUpPage() {
+  useDocumentTitle('Create Account');
 
   // Form Fields
   const [fullName, setFullName] = useState('');

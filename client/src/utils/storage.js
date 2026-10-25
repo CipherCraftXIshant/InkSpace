@@ -365,3 +365,391 @@ export const getAuthorStats = () => {
     totalLikes: formatNumber(totalLikesRaw),
   };
 };
+
+// ==========================================
+// Admin Panel Management (Phase 5)
+// Stores mock user accounts, post moderation, and comment moderation
+// ==========================================
+const ADMIN_USERS_KEY = 'inkspace_admin_users';
+const ADMIN_POSTS_KEY = 'inkspace_admin_posts';
+const ADMIN_COMMENTS_KEY = 'inkspace_admin_comments';
+
+const INITIAL_ADMIN_USERS = [
+  {
+    id: 'u-1',
+    name: 'Alex Morgan',
+    email: 'alex@inkspace.dev',
+    role: 'Author',
+    status: 'Active',
+    joinedDate: 'Jan 15, 2024',
+    postsCount: 14,
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+  },
+  {
+    id: 'u-2',
+    name: 'Sarah Johnson',
+    email: 'sarah@inkspace.dev',
+    role: 'Author',
+    status: 'Active',
+    joinedDate: 'Feb 02, 2024',
+    postsCount: 22,
+    avatar:
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
+  },
+  {
+    id: 'u-3',
+    name: 'Elena Rostova',
+    email: 'elena@inkspace.dev',
+    role: 'Admin',
+    status: 'Active',
+    joinedDate: 'Nov 12, 2023',
+    postsCount: 31,
+    avatar:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
+  },
+  {
+    id: 'u-4',
+    name: 'Marcus Chen',
+    email: 'marcus@inkspace.dev',
+    role: 'Author',
+    status: 'Active',
+    joinedDate: 'Apr 05, 2024',
+    postsCount: 8,
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+  },
+  {
+    id: 'u-5',
+    name: 'Clara Oswald',
+    email: 'clara.reader@inkspace.dev',
+    role: 'Reader',
+    status: 'Active',
+    joinedDate: 'Mar 10, 2024',
+    postsCount: 0,
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+  },
+  {
+    id: 'u-6',
+    name: 'James Carter',
+    email: 'james.carter@inkspace.dev',
+    role: 'Reader',
+    status: 'Suspended',
+    joinedDate: 'May 01, 2024',
+    postsCount: 0,
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+  },
+  {
+    id: 'u-7',
+    name: 'Maya Lin',
+    email: 'maya.lin@inkspace.dev',
+    role: 'Reader',
+    status: 'Active',
+    joinedDate: 'May 18, 2024',
+    postsCount: 0,
+    avatar:
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=150&q=80',
+  },
+];
+
+export const getAdminUsers = () => {
+  try {
+    const raw = localStorage.getItem(ADMIN_USERS_KEY);
+    if (!raw) {
+      localStorage.setItem(ADMIN_USERS_KEY, JSON.stringify(INITIAL_ADMIN_USERS));
+      return INITIAL_ADMIN_USERS;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return INITIAL_ADMIN_USERS;
+  }
+};
+
+export const updateAdminUser = (id, updates) => {
+  try {
+    const users = getAdminUsers();
+    const updated = users.map((u) => (u.id === id ? { ...u, ...updates } : u));
+    localStorage.setItem(ADMIN_USERS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+export const deleteAdminUser = (id) => {
+  try {
+    const users = getAdminUsers();
+    const updated = users.filter((u) => u.id !== id);
+    localStorage.setItem(ADMIN_USERS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+// Initial admin posts derived from initial stories
+const INITIAL_ADMIN_POSTS = [
+  {
+    id: 'adm-art-1',
+    title: 'The Future of Minimalist Web Design',
+    slug: 'the-future-of-minimalist-web-design',
+    author: 'Alex Morgan',
+    category: 'Design',
+    status: 'Published',
+    isFeatured: true,
+    views: 4200,
+    likes: 320,
+    publishedAt: 'May 12, 2024',
+    moderationStatus: 'Approved',
+  },
+  {
+    id: 'adm-art-2',
+    title: 'Architecting Resilient Distributed Systems',
+    slug: 'architecting-resilient-distributed-systems',
+    author: 'Alex Morgan',
+    category: 'Technology',
+    status: 'Published',
+    isFeatured: true,
+    views: 3100,
+    likes: 215,
+    publishedAt: 'May 05, 2024',
+    moderationStatus: 'Approved',
+  },
+  {
+    id: 'adm-art-3',
+    title: 'The Art of Slow Living and Intentional Focus',
+    slug: 'the-art-of-slow-living-and-intentional-focus',
+    author: 'Elena Rostova',
+    category: 'Lifestyle',
+    status: 'Published',
+    isFeatured: false,
+    views: 2450,
+    likes: 180,
+    publishedAt: 'Apr 28, 2024',
+    moderationStatus: 'Approved',
+  },
+  {
+    id: 'adm-art-4',
+    title: 'Rebuilding Edge Runtimes with Rust and WebAssembly',
+    slug: 'rebuilding-edge-runtimes-with-rust-and-webassembly',
+    author: 'Alex Morgan',
+    category: 'Technology',
+    status: 'Draft',
+    isFeatured: false,
+    views: 0,
+    likes: 0,
+    publishedAt: 'Draft',
+    moderationStatus: 'Pending',
+  },
+  {
+    id: 'adm-art-5',
+    title: 'The Economics of Bootstrapped Content Publishing',
+    slug: 'the-economics-of-bootstrapped-content-publishing',
+    author: 'Marcus Chen',
+    category: 'Business',
+    status: 'Scheduled',
+    isFeatured: false,
+    views: 0,
+    likes: 0,
+    publishedAt: 'Nov 12, 2026',
+    moderationStatus: 'Approved',
+  },
+  {
+    id: 'adm-art-6',
+    title: 'The Renaissance of Mechanical Keyboards in the Digital Age',
+    slug: 'the-renaissance-of-mechanical-keyboards-in-the-digital-age',
+    author: 'David Vance',
+    category: 'Lifestyle',
+    status: 'Published',
+    isFeatured: false,
+    views: 1890,
+    likes: 142,
+    publishedAt: 'May 01, 2024',
+    moderationStatus: 'Approved',
+  },
+];
+
+export const getAdminPosts = () => {
+  try {
+    const raw = localStorage.getItem(ADMIN_POSTS_KEY);
+    if (!raw) {
+      localStorage.setItem(ADMIN_POSTS_KEY, JSON.stringify(INITIAL_ADMIN_POSTS));
+      return INITIAL_ADMIN_POSTS;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return INITIAL_ADMIN_POSTS;
+  }
+};
+
+export const toggleFeaturePost = (id) => {
+  try {
+    const posts = getAdminPosts();
+    const updated = posts.map((p) =>
+      p.id === id ? { ...p, isFeatured: !p.isFeatured } : p
+    );
+    localStorage.setItem(ADMIN_POSTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+export const updateAdminPost = (id, updates) => {
+  try {
+    const posts = getAdminPosts();
+    const updated = posts.map((p) => (p.id === id ? { ...p, ...updates } : p));
+    localStorage.setItem(ADMIN_POSTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+export const deleteAdminPost = (id) => {
+  try {
+    const posts = getAdminPosts();
+    const updated = posts.filter((p) => p.id !== id);
+    localStorage.setItem(ADMIN_POSTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+// Initial admin comments
+const INITIAL_ADMIN_COMMENTS = [
+  {
+    id: 'comm-1',
+    author: 'Marcus Chen',
+    authorEmail: 'marcus@inkspace.dev',
+    articleTitle: 'The Future of Minimalist Web Design',
+    articleSlug: 'the-future-of-minimalist-web-design',
+    content:
+      'Remarkable breakdown of modern compilers and calm design. Really insightful perspective on edge computing!',
+    status: 'Approved',
+    submittedAt: 'May 13, 2024',
+  },
+  {
+    id: 'comm-2',
+    author: 'Unknown Guest',
+    authorEmail: 'promo99@spam-example.net',
+    articleTitle: 'Architecting Resilient Distributed Systems',
+    articleSlug: 'architecting-resilient-distributed-systems',
+    content:
+      'Check out this free automated backlink service at spam-rank-booster.click to rank your site in 24 hours!',
+    status: 'Flagged',
+    flagReason: 'Spam link and automated advertisement',
+    submittedAt: 'May 11, 2024',
+  },
+  {
+    id: 'comm-3',
+    author: 'Elena Rostova',
+    authorEmail: 'elena@inkspace.dev',
+    articleTitle: 'The Art of Slow Living and Intentional Focus',
+    articleSlug: 'the-art-of-slow-living-and-intentional-focus',
+    content:
+      'The section on silent mornings resonated deeply with our entire editorial guild. We are adopting this protocol.',
+    status: 'Approved',
+    submittedAt: 'May 08, 2024',
+  },
+  {
+    id: 'comm-4',
+    author: 'David Vance',
+    authorEmail: 'david.vance@example.com',
+    articleTitle: 'The Renaissance of Mechanical Keyboards',
+    articleSlug: 'the-renaissance-of-mechanical-keyboards-in-the-digital-age',
+    content:
+      'Is there a companion guide on lubrication techniques and gasket mount plates coming up in future editions?',
+    status: 'Pending',
+    submittedAt: 'May 19, 2024',
+  },
+  {
+    id: 'comm-5',
+    author: 'Anonymous User',
+    authorEmail: 'bot772@shady-network.org',
+    articleTitle: 'The Economics of Bootstrapped Content Publishing',
+    articleSlug: 'the-economics-of-bootstrapped-content-publishing',
+    content:
+      'Crypto investment returns guaranteed 500% weekly! Click the profile link to claim bonus tokens immediately.',
+    status: 'Flagged',
+    flagReason: 'Cryptocurrency scam / deceptive solicitation',
+    submittedAt: 'May 20, 2024',
+  },
+];
+
+export const getAdminComments = () => {
+  try {
+    const raw = localStorage.getItem(ADMIN_COMMENTS_KEY);
+    if (!raw) {
+      localStorage.setItem(
+        ADMIN_COMMENTS_KEY,
+        JSON.stringify(INITIAL_ADMIN_COMMENTS)
+      );
+      return INITIAL_ADMIN_COMMENTS;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return INITIAL_ADMIN_COMMENTS;
+  }
+};
+
+export const approveAdminComment = (id) => {
+  try {
+    const comments = getAdminComments();
+    const updated = comments.map((c) =>
+      c.id === id ? { ...c, status: 'Approved' } : c
+    );
+    localStorage.setItem(ADMIN_COMMENTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+export const flagAdminComment = (id, reason = 'Flagged by Administrator') => {
+  try {
+    const comments = getAdminComments();
+    const updated = comments.map((c) =>
+      c.id === id ? { ...c, status: 'Flagged', flagReason: reason } : c
+    );
+    localStorage.setItem(ADMIN_COMMENTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+export const deleteAdminComment = (id) => {
+  try {
+    const comments = getAdminComments();
+    const updated = comments.filter((c) => c.id !== id);
+    localStorage.setItem(ADMIN_COMMENTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+};
+
+export const getAdminOverviewStats = () => {
+  const users = getAdminUsers();
+  const posts = getAdminPosts();
+  const comments = getAdminComments();
+
+  const flaggedComments = comments.filter((c) => c.status === 'Flagged').length;
+  const pendingComments = comments.filter((c) => c.status === 'Pending').length;
+  const pendingPosts = posts.filter((p) => p.moderationStatus === 'Pending').length;
+
+  return {
+    totalUsers: users.length,
+    totalPosts: posts.length,
+    featuredPosts: posts.filter((p) => p.isFeatured).length,
+    totalComments: comments.length,
+    pendingReports: flaggedComments + pendingComments + pendingPosts,
+    authorsCount: users.filter((u) => u.role === 'Author').length,
+    readersCount: users.filter((u) => u.role === 'Reader').length,
+    adminsCount: users.filter((u) => u.role === 'Admin').length,
+  };
+};

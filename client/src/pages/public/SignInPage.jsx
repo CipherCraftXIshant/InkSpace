@@ -4,8 +4,10 @@ import { Sparkles, AlertCircle, ArrowLeft } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
 import { setMockAuthUser } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function SignInPage() {
+  useDocumentTitle('Sign In');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/dashboard';

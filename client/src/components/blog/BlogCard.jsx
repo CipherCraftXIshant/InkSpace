@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import CategoryBadge from '../common/CategoryBadge.jsx';
 
@@ -16,8 +16,6 @@ export default function BlogCard({
   variant = 'vertical',
   className = '',
 }) {
-  const [imgSrc, setImgSrc] = useState(article?.coverImage || FALLBACK_IMAGE);
-
   if (!article) return null;
 
   const {
@@ -31,8 +29,10 @@ export default function BlogCard({
     readingTime,
     readTime,
     author,
+    coverImage,
   } = article;
 
+  const imageSrc = coverImage || FALLBACK_IMAGE;
   const articleUrl = `/blog/${slug}`;
   const displayDate = publishedAt || date || 'Recent';
   const displayReadTime = readingTime || readTime || '5 min read';
@@ -48,9 +48,11 @@ export default function BlogCard({
           className="block overflow-hidden rounded-xl mb-5 bg-[#F0F0ED] aspect-16/10"
         >
           <img
-            src={imgSrc}
+            src={imageSrc}
             alt={title}
-            onError={() => setImgSrc(FALLBACK_IMAGE)}
+            onError={(e) => {
+              e.currentTarget.src = FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             loading="lazy"
           />
@@ -98,9 +100,11 @@ export default function BlogCard({
           className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-lg bg-[#F0F0ED]"
         >
           <img
-            src={imgSrc}
+            src={imageSrc}
             alt={title}
-            onError={() => setImgSrc(FALLBACK_IMAGE)}
+            onError={(e) => {
+              e.currentTarget.src = FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             loading="lazy"
           />
@@ -136,9 +140,11 @@ export default function BlogCard({
           className="w-full md:w-64 lg:w-72 aspect-16/10 md:aspect-3/2 shrink-0 overflow-hidden rounded-lg bg-[#F0F0ED]"
         >
           <img
-            src={imgSrc}
+            src={imageSrc}
             alt={title}
-            onError={() => setImgSrc(FALLBACK_IMAGE)}
+            onError={(e) => {
+              e.currentTarget.src = FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             loading="lazy"
           />
@@ -185,9 +191,11 @@ export default function BlogCard({
         className="block overflow-hidden rounded-xl mb-4 bg-[#F0F0ED] aspect-4/3"
       >
         <img
-          src={imgSrc}
+          src={imageSrc}
           alt={title}
-          onError={() => setImgSrc(FALLBACK_IMAGE)}
+          onError={(e) => {
+            e.currentTarget.src = FALLBACK_IMAGE;
+          }}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           loading="lazy"
         />

@@ -7,8 +7,10 @@ import SectionHeading from '../../components/common/SectionHeading.jsx';
 import BlogCard from '../../components/blog/BlogCard.jsx';
 import CategoryCard from '../../components/blog/CategoryCard.jsx';
 import { MOCK_CATEGORIES, MOCK_ARTICLES } from '../../data/mockData.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function HomePage() {
+  useDocumentTitle('Ideas Worth Reading');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [emailError, setEmailError] = useState('');

@@ -22,6 +22,7 @@ import {
   getAuthorPostById,
   saveAuthorPost,
 } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 // Curated high-res editorial cover presets
 const COVER_PRESETS = [
@@ -48,6 +49,7 @@ const COVER_PRESETS = [
 ];
 
 function EditorContent({ id }) {
+  useDocumentTitle(id ? 'Edit Story' : 'New Story');
   const navigate = useNavigate();
   const textareaRef = useRef(null);
 

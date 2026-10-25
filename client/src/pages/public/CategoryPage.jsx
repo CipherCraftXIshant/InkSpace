@@ -5,6 +5,7 @@ import Container from '../../components/common/Container.jsx';
 import BlogCard from '../../components/blog/BlogCard.jsx';
 import EmptyState from '../../components/common/EmptyState.jsx';
 import { MOCK_CATEGORIES, MOCK_ARTICLES } from '../../data/mockData.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function CategoryPage() {
   const { category: categorySlug } = useParams();
@@ -12,6 +13,8 @@ export default function CategoryPage() {
   const category = MOCK_CATEGORIES.find(
     (c) => c.slug.toLowerCase() === categorySlug?.toLowerCase()
   );
+
+  useDocumentTitle(category ? `${category.name} Stories` : 'Category Not Found');
 
   const articles = MOCK_ARTICLES.filter(
     (a) => a.categorySlug.toLowerCase() === categorySlug?.toLowerCase()

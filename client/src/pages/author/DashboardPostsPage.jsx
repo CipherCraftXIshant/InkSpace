@@ -16,8 +16,10 @@ import {
 import Button from '../../components/common/Button.jsx';
 import EmptyState from '../../components/common/EmptyState.jsx';
 import { getAuthorPosts, deleteAuthorPost } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function DashboardPostsPage() {
+  useDocumentTitle('My Posts');
   const [searchParams, setSearchParams] = useSearchParams();
   const urlQuery = searchParams.get('q') || '';
 

@@ -1,101 +1,273 @@
-import React, { useState } from 'react';
-import { CheckCircle, Trash2, MessageSquare } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  MessageSquare,
+  CheckCircle2,
+  Trash2,
+  AlertTriangle,
+  Flag,
+  Search,
+  ExternalLink,
+  RotateCcw,
+} from 'lucide-react';
 import EmptyState from '../../components/common/EmptyState.jsx';
+import {
+  getAdminComments,
+  approveAdminComment,
+  flagAdminComment,
+  deleteAdminComment,
+} from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function AdminCommentsPage() {
-  const [comments, setComments] = useState([
-    {
-      id: 'c1',
-      author: 'Marcus Chen',
-      article: 'The Future of Web Development',
-      date: 'May 13, 2024',
-      content: 'Remarkable breakdown of modern compilers. Really insightful perspective on edge compute!',
-      status: 'Approved',
-    },
-    {
-      id: 'c2',
-      author: 'Unknown Guest',
-      article: 'Building Scalable APIs',
-      date: 'May 11, 2024',
-      content: 'Check out this free tool at spam-link-example.com to boost ranking fast.',
-      status: 'Flagged',
-    },
-    {
-      id: 'c3',
-      author: 'Elena Rostova',
-      article: 'Minimalism in Life and Business',
-      date: 'May 8, 2024',
-      content: 'The section on silent mornings resonated deeply. Implementing this in our editorial team.',
-      status: 'Approved',
-    },
-  ]);
+  useDocumentTitle('Comment Moderation — Admin');
+  const [comments, setComments] = useState(() => getAdminComments());
+  const [activeTab, setActiveTab] = useState('all'); // 'all' | 'Pending' | 'Flagged' | 'Approved'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [commentToDelete, setCommentToDelete] = useState(null);
 
-  const handleDelete = (id) => {
-    setComments(comments.filter((c) => c.id !== id));
-  };
+  // Tab counts
+  const tabCounts = useMemo(() => {
+    return {
+      all: comments.length,
+      pending: comments.filter((c) => c.status === 'Pending').length,
+      flagged: comments.filter((c) => c.status === 'Flagged').length,
+      approved: comments.filter((c) => c.status === 'Approved').length,
+    };
+  }, [comments]);
+
+  // Filtered comments
+  const filteredComments = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+
+    return comments.filter((c) => {
+      const matchesSearch =
+        !q ||
+        c.author.toLowerCase().includes(q) ||
+        c.content.toLowerCase().includes(q) ||
+        c.articleTitle.toLowerCase().includes(q);
+
+      const matchesTab = activeTab === 'all' || c.status === activeTab;
+
+      return matchesSearch && matchesTab;
+    });
+  }, [comments, searchQuery, activeTab]);
 
   const handleApprove = (id) => {
-    setComments(
-      comments.map((c) => (c.id === id ? { ...c, status: 'Approved' } : c))
-    );
+    const updated = approveAdminComment(id);
+    setComments(updated);
+    setToastMessage('Comment approved and made visible to readers.');
+    setTimeout(() => setToastMessage(''), 3000);
+  };
+
+  const handleFlag = (id) => {
+    const updated = flagAdminComment(id, 'Flagged by Moderator');
+    setComments(updated);
+    setToastMessage('Comment flagged for editorial violation.');
+    setTimeout(() => setToastMessage(''), 3000);
+  };
+
+  const confirmDelete = () => {
+    if (!commentToDelete) return;
+    const updated = deleteAdminComment(commentToDelete.id);
+    setComments(updated);
+    setToastMessage('Comment permanently purged.');
+    setCommentToDelete(null);
+    setTimeout(() => setToastMessage(''), 3000);
+  };
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setActiveTab('all');
   };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <div>
-        <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
-          Comments Moderation
-        </h1>
-        <p className="text-xs sm:text-sm text-[#737373] mt-1">
-          Review comments, manage community feedback, and eliminate spam.
-        </p>
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div
+          className="fixed top-20 right-6 z-50 bg-[#121212] text-white text-xs px-4 py-2.5 rounded-lg shadow-xl border border-white/10 flex items-center gap-2 animate-in fade-in"
+          role="status"
+        >
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#ECECE8]">
+        <div>
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] mb-1">
+            COMMUNITY SAFETY
+          </p>
+          <h1 className="font-serif text-3xl font-medium text-[#121212] tracking-tight">
+            Comment Moderation
+          </h1>
+          <p className="text-xs sm:text-sm text-[#737373] mt-1">
+            Review reader feedback, approve thoughtful discussions, and eliminate spam or abusive remarks.
+          </p>
+        </div>
+
+        <div className="text-xs text-[#737373] bg-white border border-[#ECECE8] px-3 py-1.5 rounded-lg">
+          Total Feedback:{' '}
+          <strong className="text-[#121212] font-semibold">{comments.length}</strong>
+        </div>
       </div>
 
-      {comments.length > 0 ? (
+      {/* Search and Filters Bar */}
+      <div className="bg-white p-4 rounded-xl border border-[#ECECE8] shadow-2xs space-y-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          {/* Search */}
+          <div className="relative w-full sm:w-80">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by author, text, or story title..."
+              className="w-full pl-8 pr-3 py-2 text-xs bg-[#FAF9F5] border border-[#E5E7EB] rounded-lg outline-hidden focus:bg-white focus:border-[#121212] transition-colors"
+            />
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
+            {[
+              { id: 'all', label: 'All Comments', count: tabCounts.all },
+              { id: 'Pending', label: 'Pending Review', count: tabCounts.pending },
+              { id: 'Flagged', label: 'Flagged / Spam', count: tabCounts.flagged },
+              { id: 'Approved', label: 'Approved', count: tabCounts.approved },
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-[#121212] text-white shadow-2xs'
+                      : 'text-[#525252] hover:text-[#121212] hover:bg-[#FAF9F5]'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                      isActive
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#F4F4F5] text-[#737373]'
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+
+            {(searchQuery || activeTab !== 'all') && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="p-1.5 text-[#737373] hover:text-[#121212] rounded-lg border border-[#E5E7EB] hover:bg-[#FAF9F5] cursor-pointer shrink-0"
+                title="Reset filters"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Comments List */}
+      {filteredComments.length > 0 ? (
         <div className="bg-white rounded-xl border border-[#ECECE8] shadow-2xs divide-y divide-[#ECECE8]">
-          {comments.map((comment) => (
-            <div key={comment.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1.5 flex-1">
-                <div className="flex items-center gap-2 text-xs">
+          {filteredComments.map((comment) => (
+            <div
+              key={comment.id}
+              className="p-5 sm:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 hover:bg-[#FAF9F5]/40 transition-colors"
+            >
+              {/* Comment Content */}
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 flex-wrap text-xs">
+                  <div className="w-6 h-6 rounded-full bg-[#121212] text-white flex items-center justify-center font-bold text-[10px]">
+                    {comment.author.charAt(0)}
+                  </div>
                   <span className="font-semibold text-[#121212]">{comment.author}</span>
+                  {comment.authorEmail && (
+                    <span className="text-[#8A8A8A] font-mono text-[11px]">
+                      ({comment.authorEmail})
+                    </span>
+                  )}
                   <span className="text-[#A3A3A3]">•</span>
                   <span className="text-[#737373]">on story:</span>
-                  <span className="font-medium text-[#121212]">{comment.article}</span>
+                  <Link
+                    to={`/blog/${comment.articleSlug}`}
+                    className="font-medium text-[#121212] hover:underline flex items-center gap-1"
+                  >
+                    <span>{comment.articleTitle}</span>
+                    <ExternalLink className="w-3 h-3 text-[#A3A3A3]" />
+                  </Link>
                   <span className="text-[#A3A3A3]">•</span>
-                  <span className="text-[#8A8A8A]">{comment.date}</span>
+                  <span className="text-[#8A8A8A]">{comment.submittedAt}</span>
+
+                  {/* Status Badge */}
                   <span
-                    className={`ml-2 px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                    className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                       comment.status === 'Approved'
-                        ? 'bg-emerald-50 text-emerald-700'
-                        : 'bg-amber-50 text-amber-700'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : comment.status === 'Flagged'
+                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                        : 'bg-amber-50 text-amber-700 border border-amber-200'
                     }`}
                   >
                     {comment.status}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#4A4A4A] leading-relaxed">
+
+                {comment.flagReason && (
+                  <div className="text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded inline-block">
+                    Flag Reason: {comment.flagReason}
+                  </div>
+                )}
+
+                <p className="text-xs sm:text-sm text-[#333333] leading-relaxed bg-[#FAF9F5] p-3 rounded-lg border border-[#ECECE8]">
                   "{comment.content}"
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              {/* Moderation Controls */}
+              <div className="flex items-center gap-2 shrink-0 self-end md:self-start pt-1">
                 {comment.status !== 'Approved' && (
                   <button
                     type="button"
                     onClick={() => handleApprove(comment.id)}
-                    className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 cursor-pointer transition-colors"
                     title="Approve Comment"
                   >
-                    <CheckCircle className="w-4 h-4" />
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Approve</span>
                   </button>
                 )}
+
+                {comment.status !== 'Flagged' && (
+                  <button
+                    type="button"
+                    onClick={() => handleFlag(comment.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 cursor-pointer transition-colors"
+                    title="Flag Comment"
+                  >
+                    <Flag className="w-3.5 h-3.5" />
+                    <span>Flag</span>
+                  </button>
+                )}
+
                 <button
                   type="button"
-                  onClick={() => handleDelete(comment.id)}
-                  className="p-1.5 text-red-500 hover:bg-red-50 rounded cursor-pointer"
-                  title="Delete Comment"
+                  onClick={() => setCommentToDelete(comment)}
+                  className="p-1.5 text-[#8A8A8A] hover:text-rose-600 hover:bg-rose-50 rounded-lg border border-[#E5E7EB] cursor-pointer transition-colors"
+                  title="Delete Comment Permanently"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -104,9 +276,65 @@ export default function AdminCommentsPage() {
       ) : (
         <EmptyState
           icon={MessageSquare}
-          title="No comments to review"
-          description="All reader comments have been reviewed and moderated."
+          title={
+            activeTab === 'all'
+              ? 'No comments found'
+              : `Inbox zero for "${activeTab}" comments`
+          }
+          description={
+            searchQuery
+              ? `No discussions found matching "${searchQuery}". Reset filters to see all.`
+              : 'There are currently no comments pending action in this moderation queue.'
+          }
+          actionText={searchQuery ? 'Reset Filters' : undefined}
+          onAction={searchQuery ? handleResetFilters : undefined}
         />
+      )}
+
+      {/* Confirmation Modal for Comment Deletion */}
+      {commentToDelete && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+        >
+          <div
+            className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ECECE8] space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
+              <AlertTriangle className="w-5 h-5 stroke-[1.8]" />
+            </div>
+
+            <div>
+              <h3 className="font-serif text-lg font-medium text-[#121212]">
+                Permanently delete comment?
+              </h3>
+              <p className="text-xs sm:text-sm text-[#666666] leading-relaxed mt-1.5">
+                Are you sure you want to remove the comment by{' '}
+                <strong className="text-[#121212]">{commentToDelete.author}</strong> on{' '}
+                <em>"{commentToDelete.articleTitle}"</em>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ECECE8]">
+              <button
+                type="button"
+                onClick={() => setCommentToDelete(null)}
+                className="px-3.5 py-1.5 text-xs text-[#525252] hover:text-[#121212] rounded-md cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="px-4 py-1.5 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-lg cursor-pointer shadow-2xs"
+              >
+                Delete Comment
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

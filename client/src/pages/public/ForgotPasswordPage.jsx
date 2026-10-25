@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { Mail, CheckCircle2, ArrowLeft, RotateCw } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function ForgotPasswordPage() {
+  useDocumentTitle('Reset Password');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [touched, setTouched] = useState(false);

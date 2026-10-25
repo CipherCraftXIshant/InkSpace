@@ -28,6 +28,7 @@ import {
   getArticleComments,
   addArticleComment,
 } from '../../utils/storage.js';
+import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 const FALLBACK_HERO = 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80';
 
@@ -36,6 +37,7 @@ function BlogDetailContent({ slug }) {
 
   // Find exact article matching slug
   const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  useDocumentTitle(article ? article.title : 'Story Not Found');
 
   // Reading progress indicator
   const { scrollYProgress } = useScroll();

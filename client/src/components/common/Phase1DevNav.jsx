@@ -12,7 +12,16 @@ export default function Phase1DevNav() {
 
   const sections = [
     {
-      title: 'Author Workspace (Phase 4 Focus)',
+      title: 'Admin Governance (Phase 5 Focus)',
+      routes: [
+        { label: 'Admin Overview (/admin)', path: '/admin' },
+        { label: 'User Management (/admin/users)', path: '/admin/users' },
+        { label: 'Story Curation (/admin/posts)', path: '/admin/posts' },
+        { label: 'Comment Moderation (/admin/comments)', path: '/admin/comments' },
+      ],
+    },
+    {
+      title: 'Author Workspace',
       routes: [
         { label: 'Dashboard (/dashboard)', path: '/dashboard' },
         { label: 'My Posts (/dashboard/posts)', path: '/dashboard/posts' },
