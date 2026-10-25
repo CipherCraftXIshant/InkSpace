@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CategoryBadge from '../common/CategoryBadge.jsx';
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80';
 
 /**
  * Editorial BlogCard supporting multiple layouts:
  * - 'featured': Main large article in the featured showcase
- * - 'compact': Right-column thumbnail + title list
- * - 'vertical': Classic card grid (Popular Articles)
+ * - 'compact': Secondary thumbnail + title list
+ * - 'vertical': Classic card grid (Popular Articles & Explore grid)
  * - 'horizontal': Rich editorial card for Explore and search lists
  */
 export default function BlogCard({
   article,
-  variant = 'vertical', // 'featured' | 'compact' | 'vertical' | 'horizontal'
+  variant = 'vertical',
   className = '',
 }) {
+  const [imgSrc, setImgSrc] = useState(article?.coverImage || FALLBACK_IMAGE);
+
   if (!article) return null;
 
   const {
@@ -22,13 +26,16 @@ export default function BlogCard({
     excerpt,
     category,
     categorySlug,
-    coverImage,
+    publishedAt,
     date,
+    readingTime,
     readTime,
     author,
   } = article;
 
   const articleUrl = `/blog/${slug}`;
+  const displayDate = publishedAt || date || 'Recent';
+  const displayReadTime = readingTime || readTime || '5 min read';
 
   // 1. Featured Large Card
   if (variant === 'featured') {
@@ -36,11 +43,15 @@ export default function BlogCard({
       <article
         className={`group flex flex-col justify-between h-full bg-transparent ${className}`}
       >
-        <Link to={articleUrl} className="block overflow-hidden rounded-xl mb-5 bg-[#F0F0ED]">
+        <Link
+          to={articleUrl}
+          className="block overflow-hidden rounded-xl mb-5 bg-[#F0F0ED] aspect-16/10"
+        >
           <img
-            src={coverImage}
+            src={imgSrc}
             alt={title}
-            className="w-full aspect-16/10 object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+            onError={() => setImgSrc(FALLBACK_IMAGE)}
+            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             loading="lazy"
           />
         </Link>
@@ -50,7 +61,7 @@ export default function BlogCard({
             <CategoryBadge slug={categorySlug}>{category}</CategoryBadge>
           </div>
 
-          <h3 className="font-serif text-2xl sm:text-3xl text-[#121212] font-medium leading-snug tracking-tight mb-3 group-hover:text-[#4A4A4A] transition-colors">
+          <h3 className="font-serif text-2xl sm:text-3xl text-[#121212] font-medium leading-snug tracking-tight mb-3 group-hover:text-[#525252] transition-colors">
             <Link to={articleUrl}>{title}</Link>
           </h3>
 
@@ -61,10 +72,10 @@ export default function BlogCard({
           )}
 
           <div className="flex items-center gap-2 text-xs text-[#8A8A8A] font-normal">
-            <span>{date}</span>
+            <span>{displayDate}</span>
             <span>•</span>
-            <span>{readTime}</span>
-            {author && (
+            <span>{displayReadTime}</span>
+            {author?.name && (
               <>
                 <span>•</span>
                 <span>By {author.name}</span>
@@ -87,22 +98,27 @@ export default function BlogCard({
           className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-lg bg-[#F0F0ED]"
         >
           <img
-            src={coverImage}
+            src={imgSrc}
             alt={title}
+            onError={() => setImgSrc(FALLBACK_IMAGE)}
             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             loading="lazy"
           />
         </Link>
 
         <div className="flex flex-col justify-center min-w-0 flex-1">
+          <div className="mb-1">
+            <CategoryBadge slug={categorySlug} size="xs">{category}</CategoryBadge>
+          </div>
+
           <h4 className="font-serif text-base sm:text-lg text-[#121212] font-medium leading-snug line-clamp-2 mb-2 group-hover:text-[#525252] transition-colors">
             <Link to={articleUrl}>{title}</Link>
           </h4>
 
           <div className="flex items-center gap-2 text-xs text-[#8A8A8A]">
-            <span>{date}</span>
+            <span>{displayDate}</span>
             <span>•</span>
-            <span>{readTime}</span>
+            <span>{displayReadTime}</span>
           </div>
         </div>
       </article>
@@ -120,9 +136,10 @@ export default function BlogCard({
           className="w-full md:w-64 lg:w-72 aspect-16/10 md:aspect-3/2 shrink-0 overflow-hidden rounded-lg bg-[#F0F0ED]"
         >
           <img
-            src={coverImage}
+            src={imgSrc}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            onError={() => setImgSrc(FALLBACK_IMAGE)}
+            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             loading="lazy"
           />
         </Link>
@@ -145,10 +162,10 @@ export default function BlogCard({
           </div>
 
           <div className="flex items-center gap-2 text-xs text-[#8A8A8A]">
-            <span>{date}</span>
+            <span>{displayDate}</span>
             <span>•</span>
-            <span>{readTime}</span>
-            {author && (
+            <span>{displayReadTime}</span>
+            {author?.name && (
               <>
                 <span>•</span>
                 <span>By {author.name}</span>
@@ -160,17 +177,18 @@ export default function BlogCard({
     );
   }
 
-  // 4. Default Vertical Card (Popular Articles grid)
+  // 4. Default Vertical Card (Popular Articles grid / Explore grid)
   return (
     <article className={`group flex flex-col h-full ${className}`}>
       <Link
         to={articleUrl}
-        className="block overflow-hidden rounded-xl mb-4 bg-[#F0F0ED]"
+        className="block overflow-hidden rounded-xl mb-4 bg-[#F0F0ED] aspect-4/3"
       >
         <img
-          src={coverImage}
+          src={imgSrc}
           alt={title}
-          className="w-full aspect-4/3 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          onError={() => setImgSrc(FALLBACK_IMAGE)}
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           loading="lazy"
         />
       </Link>
@@ -185,9 +203,9 @@ export default function BlogCard({
         </h3>
 
         <div className="mt-auto pt-2 flex items-center gap-2 text-xs text-[#8A8A8A]">
-          <span>{date}</span>
+          <span>{displayDate}</span>
           <span>•</span>
-          <span>{readTime}</span>
+          <span>{displayReadTime}</span>
         </div>
       </div>
     </article>
