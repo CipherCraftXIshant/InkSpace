@@ -69,3 +69,37 @@ export async function fetchPostBySlug(slug) {
 
   return await res.json();
 }
+
+async function postAuthRequest(endpoint, payload) {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error || 'Authentication request failed.');
+  }
+
+  return result;
+}
+
+export function registerAccount({ fullName, email, password }) {
+  return postAuthRequest('/api/auth/register', {
+    fullName,
+    email,
+    password,
+  });
+}
+
+export function loginAccount({ email, password }) {
+  return postAuthRequest('/api/auth/login', {
+    email,
+    password,
+  });
+}

@@ -4,7 +4,7 @@ import { Sparkles, AlertCircle, ArrowLeft, PenLine } from 'lucide-react';
 import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
-import { findRegisteredUser } from '../../utils/storage.js';
+import { loginAccount } from '../../services/api.js';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 export default function SignInPage() {
@@ -95,7 +95,7 @@ export default function SignInPage() {
     setTouched({ email: true, password: true });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setGeneralError('');
 
@@ -108,7 +108,25 @@ export default function SignInPage() {
       return;
     }
 
+
     setIsLoading(true);
+
+    try {
+      const result = await loginAccount({
+        email: email.trim(),
+        password,
+      });
+
+      // Save the authenticated user's safe profile in the existing context.
+      login(result.user);
+
+      navigate(redirectPath);
+    } catch (error) {
+      setGeneralError(error.message || 'Login failed.');
+    } finally {
+      setIsLoading(false);
+    }
+
 
     // Simulate safe authentication delay
     setTimeout(() => {
@@ -218,33 +236,30 @@ export default function SignInPage() {
             <button
               type="button"
               onClick={() => handleQuickFill('author')}
-              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
-                demoSelected === 'author'
+              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${demoSelected === 'author'
                   ? 'border-[#121212] bg-[#121212] text-white dark:border-white dark:bg-white dark:text-[#121212]'
                   : 'border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-zinc-400'
-              }`}
+                }`}
             >
               Author
             </button>
             <button
               type="button"
               onClick={() => handleQuickFill('admin')}
-              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
-                demoSelected === 'admin'
+              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${demoSelected === 'admin'
                   ? 'border-[#121212] bg-[#121212] text-white dark:border-white dark:bg-white dark:text-[#121212]'
                   : 'border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-zinc-400'
-              }`}
+                }`}
             >
               Admin
             </button>
             <button
               type="button"
               onClick={() => handleQuickFill('reader')}
-              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
-                demoSelected === 'reader'
+              className={`flex-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${demoSelected === 'reader'
                   ? 'border-[#121212] bg-[#121212] text-white dark:border-white dark:bg-white dark:text-[#121212]'
                   : 'border-[#ECECE8] dark:border-[#27272A] bg-white dark:bg-[#18181B] text-[#4A4A4A] dark:text-[#D4D4D8] hover:border-[#121212] dark:hover:border-zinc-400'
-              }`}
+                }`}
             >
               Reader
             </button>

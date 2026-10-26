@@ -5,6 +5,7 @@ import FormInput from '../../components/common/FormInput.jsx';
 import Button from '../../components/common/Button.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
+import { registerAccount } from '../../services/api.js'; // lakshay
 
 export default function SignUpPage() {
   useDocumentTitle('Create Account');
@@ -137,7 +138,7 @@ export default function SignUpPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setGeneralError('');
 
@@ -163,17 +164,30 @@ export default function SignUpPage() {
       return;
     }
 
+
     setIsLoading(true);
 
-    // Register user and update auth state
-    setTimeout(() => {
-      setIsLoading(false);
-      register({
+    try {
+      const result = await registerAccount({
         fullName: fullName.trim(),
         email: email.trim(),
+        password,
       });
+
+      // Update the existing frontend authentication state.
+      register({
+        fullName: result.user.name,
+        email: result.user.email,
+        avatar: result.user.avatar,
+      });
+
       setIsSuccess(true);
-    }, 550);
+    } catch (error) {
+      setGeneralError(error.message || 'Registration failed.');
+    } finally {
+      setIsLoading(false);
+    }
+
   };
 
   return (
@@ -319,19 +333,16 @@ export default function SignUpPage() {
                     </div>
                     <div className="h-1 w-full bg-[#E5E7EB] dark:bg-zinc-700 rounded-full overflow-hidden flex gap-1">
                       <div
-                        className={`h-full transition-all duration-300 rounded-full ${
-                          passwordStrength.score >= 1 ? passwordStrength.color : 'bg-transparent'
-                        } flex-1`}
+                        className={`h-full transition-all duration-300 rounded-full ${passwordStrength.score >= 1 ? passwordStrength.color : 'bg-transparent'
+                          } flex-1`}
                       />
                       <div
-                        className={`h-full transition-all duration-300 rounded-full ${
-                          passwordStrength.score >= 2 ? passwordStrength.color : 'bg-transparent'
-                        } flex-1`}
+                        className={`h-full transition-all duration-300 rounded-full ${passwordStrength.score >= 2 ? passwordStrength.color : 'bg-transparent'
+                          } flex-1`}
                       />
                       <div
-                        className={`h-full transition-all duration-300 rounded-full ${
-                          passwordStrength.score >= 3 ? passwordStrength.color : 'bg-transparent'
-                        } flex-1`}
+                        className={`h-full transition-all duration-300 rounded-full ${passwordStrength.score >= 3 ? passwordStrength.color : 'bg-transparent'
+                          } flex-1`}
                       />
                     </div>
                   </div>

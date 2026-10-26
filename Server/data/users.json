@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "user-591b44f29cb7acaa94b0e823",
+    "name": "Neon",
+    "email": "test1@example.com",
+    "salt": "2542718a14b18cf75664d0f0c287d239",
+    "passwordHash": "4c65e74c00766ad84c89a1f91424cd06a00c1fb7b491770183d4f2d409dcdab3280310df891d595de3b2bdc66968a2819cb258632b40763d7389495db8ea2c7e",
+    "role": "author",
+    "status": "Active",
+    "joinedDate": "2026-10-26T06:27:57.023Z"
+  }
+]

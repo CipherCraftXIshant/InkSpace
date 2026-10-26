@@ -62,7 +62,7 @@ function EditorContent({ id }) {
   const [excerpt, setExcerpt] = useState(existingPost?.excerpt || '');
   const [content, setContent] = useState(
     existingPost?.content ||
-      `## Introduction\n\nWrite your thoughts here. In InkSpace's editorial studio, you have full markdown formatting support.\n\n> "Simplicity is about subtracting the obvious and adding the meaningful."\n\n### Key Takeaways\n\n- Write with clarity and restraint.\n- Focus on enduring ideas rather than transient buzzwords.\n- Use negative space to let your writing breathe.`
+    `## Introduction\n\nWrite your thoughts here. In InkSpace's editorial studio, you have full markdown formatting support.\n\n> "Simplicity is about subtracting the obvious and adding the meaningful."\n\n### Key Takeaways\n\n- Write with clarity and restraint.\n- Focus on enduring ideas rather than transient buzzwords.\n- Use negative space to let your writing breathe.`
   );
   const [category, setCategory] = useState(existingPost?.category || 'Technology');
   const [coverImage, setCoverImage] = useState(
@@ -210,9 +210,13 @@ function EditorContent({ id }) {
       );
 
       // If newly created, replace URL to edit mode
-      if (!id && saved.id) {
+      // After publishing, return to the dashboard
+      if (targetStatus === 'Published') {
+        navigate('/dashboard');
+      } else if (!id && saved.id) {
+        // Keep newly saved drafts in the editor
         navigate(`/dashboard/editor/${saved.id}`, { replace: true });
-      }
+      } 
 
       setTimeout(() => setToastMessage(''), 4000);
     }, 400);
@@ -507,9 +511,8 @@ function EditorContent({ id }) {
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
             placeholder="An elegant headline for your essay..."
-            className={`w-full font-serif text-xl sm:text-2xl font-medium px-3.5 py-2.5 rounded-lg border bg-white dark:bg-[#121214] text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] outline-hidden focus:border-[#121212] dark:focus:border-white focus:ring-1 focus:ring-[#121212] dark:focus:ring-white transition-colors ${
-              errors.title ? 'border-red-400 dark:border-red-500' : 'border-[#E5E7EB] dark:border-[#27272A]'
-            }`}
+            className={`w-full font-serif text-xl sm:text-2xl font-medium px-3.5 py-2.5 rounded-lg border bg-white dark:bg-[#121214] text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] outline-hidden focus:border-[#121212] dark:focus:border-white focus:ring-1 focus:ring-[#121212] dark:focus:ring-white transition-colors ${errors.title ? 'border-red-400 dark:border-red-500' : 'border-[#E5E7EB] dark:border-[#27272A]'
+              }`}
           />
           {errors.title && (
             <p className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">{errors.title}</p>
@@ -577,9 +580,8 @@ function EditorContent({ id }) {
               setIsDirty(true);
             }}
             placeholder="A compelling 1-2 sentence synopsis featured on story cards and search engines..."
-            className={`w-full text-xs sm:text-sm p-3 rounded-lg border bg-white dark:bg-[#121214] text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] outline-hidden focus:border-[#121212] dark:focus:border-white focus:ring-1 focus:ring-[#121212] dark:focus:ring-white ${
-              errors.excerpt ? 'border-red-400 dark:border-red-500' : 'border-[#E5E7EB] dark:border-[#27272A]'
-            }`}
+            className={`w-full text-xs sm:text-sm p-3 rounded-lg border bg-white dark:bg-[#121214] text-[#121212] dark:text-[#F4F4F6] placeholder:text-[#9CA3AF] dark:placeholder:text-[#71717A] outline-hidden focus:border-[#121212] dark:focus:border-white focus:ring-1 focus:ring-[#121212] dark:focus:ring-white ${errors.excerpt ? 'border-red-400 dark:border-red-500' : 'border-[#E5E7EB] dark:border-[#27272A]'
+              }`}
           />
           {errors.excerpt && (
             <p className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">{errors.excerpt}</p>
@@ -741,7 +743,7 @@ function EditorContent({ id }) {
             </button>
             <button
               type="button"
-              onClick={() => insertMarkdown('[Link Title](', ')') }
+              onClick={() => insertMarkdown('[Link Title](', ')')}
               className="p-1.5 text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white hover:bg-white dark:hover:bg-[#27272A] rounded transition-colors cursor-pointer"
               title="Link ([title](url))"
             >
@@ -754,11 +756,10 @@ function EditorContent({ id }) {
             <button
               type="button"
               onClick={() => setViewMode('write')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium cursor-pointer transition-colors ${
-                viewMode === 'write'
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium cursor-pointer transition-colors ${viewMode === 'write'
                   ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
                   : 'text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white'
-              }`}
+                }`}
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Write</span>
@@ -767,11 +768,10 @@ function EditorContent({ id }) {
             <button
               type="button"
               onClick={() => setViewMode('preview')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium cursor-pointer transition-colors ${
-                viewMode === 'preview'
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium cursor-pointer transition-colors ${viewMode === 'preview'
                   ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
                   : 'text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white'
-              }`}
+                }`}
             >
               <Eye className="w-3.5 h-3.5" />
               <span>Preview</span>
@@ -780,11 +780,10 @@ function EditorContent({ id }) {
             <button
               type="button"
               onClick={() => setViewMode('split')}
-              className={`hidden md:flex items-center gap-1.5 px-3 py-1 rounded-md font-medium cursor-pointer transition-colors ${
-                viewMode === 'split'
+              className={`hidden md:flex items-center gap-1.5 px-3 py-1 rounded-md font-medium cursor-pointer transition-colors ${viewMode === 'split'
                   ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212] shadow-2xs'
                   : 'text-[#525252] dark:text-[#A1A1AA] hover:text-[#121212] dark:hover:text-white'
-              }`}
+                }`}
               title="Split View (Side by Side)"
             >
               <Columns className="w-3.5 h-3.5" />
@@ -795,9 +794,8 @@ function EditorContent({ id }) {
 
         {/* Editor Body */}
         <div
-          className={`grid min-h-[480px] ${
-            viewMode === 'split' ? 'grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#ECECE8] dark:divide-[#27272A]' : 'grid-cols-1'
-          }`}
+          className={`grid min-h-[480px] ${viewMode === 'split' ? 'grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#ECECE8] dark:divide-[#27272A]' : 'grid-cols-1'
+            }`}
         >
           {/* Write Textarea Mode */}
           {(viewMode === 'write' || viewMode === 'split') && (
