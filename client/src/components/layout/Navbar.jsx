@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Search,
   PenLine,
@@ -36,8 +36,11 @@ export default function Navbar() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const location = useLocation();
   const categoriesRef = useRef(null);
   const pagesRef = useRef(null);
+  const categoriesTimeoutRef = useRef(null);
+  const pagesTimeoutRef = useRef(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -47,6 +50,51 @@ export default function Navbar() {
     logout();
     navigate('/');
   };
+
+  const [prevPath, setPrevPath] = useState(location.pathname);
+  if (prevPath !== location.pathname) {
+    setPrevPath(location.pathname);
+    setCategoriesOpen(false);
+    setPagesOpen(false);
+  }
+
+  // Hover handlers for Categories
+  const handleCategoriesEnter = () => {
+    if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+    if (pagesTimeoutRef.current) clearTimeout(pagesTimeoutRef.current);
+    setPagesOpen(false);
+    setCategoriesOpen(true);
+  };
+
+  const handleCategoriesLeave = () => {
+    if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+    categoriesTimeoutRef.current = setTimeout(() => {
+      setCategoriesOpen(false);
+    }, 180);
+  };
+
+  // Hover handlers for Pages
+  const handlePagesEnter = () => {
+    if (pagesTimeoutRef.current) clearTimeout(pagesTimeoutRef.current);
+    if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+    setCategoriesOpen(false);
+    setPagesOpen(true);
+  };
+
+  const handlePagesLeave = () => {
+    if (pagesTimeoutRef.current) clearTimeout(pagesTimeoutRef.current);
+    pagesTimeoutRef.current = setTimeout(() => {
+      setPagesOpen(false);
+    }, 180);
+  };
+
+  // Clean up timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+      if (pagesTimeoutRef.current) clearTimeout(pagesTimeoutRef.current);
+    };
+  }, []);
 
   // Close dropdowns on click outside
   useEffect(() => {
@@ -150,16 +198,21 @@ export default function Navbar() {
               </NavLink>
 
               {/* Categories Dropdown */}
-              <div className="relative" ref={categoriesRef}>
+              <div
+                className="relative py-2"
+                ref={categoriesRef}
+                onMouseEnter={handleCategoriesEnter}
+                onMouseLeave={handleCategoriesLeave}
+              >
                 <button
                   type="button"
                   onClick={() => {
-                    setCategoriesOpen(!categoriesOpen);
+                    setCategoriesOpen((prev) => !prev);
                     setPagesOpen(false);
                   }}
                   aria-expanded={categoriesOpen}
                   aria-haspopup="true"
-                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] dark:hover:text-white cursor-pointer py-2 ${
+                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] dark:hover:text-white cursor-pointer ${
                     categoriesOpen ? 'text-[#121212] dark:text-white' : ''
                   }`}
                 >
@@ -172,7 +225,11 @@ export default function Navbar() {
                 </button>
 
                 {categoriesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div
+                    onMouseEnter={handleCategoriesEnter}
+                    onMouseLeave={handleCategoriesLeave}
+                    className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3"
+                  >
                     <div className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3] dark:text-[#71717A] px-3 py-1.5 border-b border-[#F0F0EC] dark:border-[#27272A] mb-1">
                       Topics
                     </div>
@@ -200,16 +257,21 @@ export default function Navbar() {
               </div>
 
               {/* Pages Dropdown */}
-              <div className="relative" ref={pagesRef}>
+              <div
+                className="relative py-2"
+                ref={pagesRef}
+                onMouseEnter={handlePagesEnter}
+                onMouseLeave={handlePagesLeave}
+              >
                 <button
                   type="button"
                   onClick={() => {
-                    setPagesOpen(!pagesOpen);
+                    setPagesOpen((prev) => !prev);
                     setCategoriesOpen(false);
                   }}
                   aria-expanded={pagesOpen}
                   aria-haspopup="true"
-                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] dark:hover:text-white cursor-pointer py-2 ${
+                  className={`inline-flex items-center gap-1 transition-colors hover:text-[#121212] dark:hover:text-white cursor-pointer ${
                     pagesOpen ? 'text-[#121212] dark:text-white' : ''
                   }`}
                 >
@@ -222,7 +284,11 @@ export default function Navbar() {
                 </button>
 
                 {pagesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-52 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div
+                    onMouseEnter={handlePagesEnter}
+                    onMouseLeave={handlePagesLeave}
+                    className="absolute top-full left-0 mt-1 w-52 bg-white dark:bg-[#18181B] rounded-xl border border-[#ECECE8] dark:border-[#27272A] shadow-xl p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3"
+                  >
                     <div className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3] dark:text-[#71717A] px-3 py-1.5 border-b border-[#F0F0EC] dark:border-[#27272A] mb-1">
                       Public & Portal
                     </div>

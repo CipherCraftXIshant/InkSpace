@@ -1,5 +1,61 @@
 [
   {
+    "id": "post-1792983340035-n0o0f",
+    "title": "Test Article from Student 1792983340033",
+    "slug": "test-article-from-student-1792983340033-1",
+    "subtitle": "",
+    "excerpt": "This is an article written to test the native Node.js HTTP backend foundation.",
+    "content": "This is an article written to test the native Node.js HTTP backend foundation.",
+    "category": "Technology",
+    "categorySlug": "technology",
+    "tags": [
+      "NodeJS",
+      "HTTP",
+      "Backend"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80",
+    "author": {
+      "name": "InkSpace Author",
+      "role": "Author",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+    },
+    "status": "Published",
+    "readingTime": "1 min read",
+    "views": 0,
+    "likes": 0,
+    "createdAt": "2026-10-26T02:55:40.035Z",
+    "updatedAt": "2026-10-26T02:55:40.035Z",
+    "publishedAt": "2026-10-26T02:55:40.035Z"
+  },
+  {
+    "id": "post-1792983340034-u3b94",
+    "title": "Test Article from Student 1792983340033",
+    "slug": "test-article-from-student-1792983340033",
+    "subtitle": "",
+    "excerpt": "This is an article written to test the native Node.js HTTP backend foundation.",
+    "content": "This is an article written to test the native Node.js HTTP backend foundation.",
+    "category": "Technology",
+    "categorySlug": "technology",
+    "tags": [
+      "NodeJS",
+      "HTTP",
+      "Backend"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80",
+    "author": {
+      "name": "InkSpace Author",
+      "role": "Author",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+    },
+    "status": "Published",
+    "readingTime": "1 min read",
+    "views": 0,
+    "likes": 0,
+    "createdAt": "2026-10-26T02:55:40.034Z",
+    "updatedAt": "2026-10-26T02:55:40.034Z",
+    "publishedAt": "2026-10-26T02:55:40.034Z"
+  },
+  {
     "id": "post-1792933655430-1rn30",
     "title": "Test Article from Student 1792933655429",
     "slug": "test-article-from-student-1792933655429-1",
