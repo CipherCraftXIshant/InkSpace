@@ -8,5 +8,25 @@
     "role": "author",
     "status": "Active",
     "joinedDate": "2026-10-26T06:27:57.023Z"
+  },
+  {
+    "id": "user-d0512e3a0e49a6d90ecaf7f8",
+    "name": "Ishant",
+    "email": "test@12gmail.com",
+    "salt": "ee8ee0f955a717e76bb97067a5898340",
+    "passwordHash": "b308e86c2e93cf5fe042f9be66c7094fba9b237674b706c2596e789538c5d73f3b0c216b99ac28f095de97fd832d11b0e92140f584750ef6186f22f1a9268400",
+    "role": "author",
+    "status": "Active",
+    "joinedDate": "2026-10-26T12:06:46.836Z"
+  },
+  {
+    "id": "user-19cbad22741e9d2c3f85ca17",
+    "name": "ishant sharma",
+    "email": "ishant4641@gmail.com",
+    "salt": "17d099acf04a556da8bec22cbd7ebb61",
+    "passwordHash": "2d78dd77c3af6897dbadb601515462638ebd88a8f63306f133c469b1f53c5fd30025b473bc170eea31cea46c22093e2df4b257bed7ccf19010ddfe54635df493",
+    "role": "author",
+    "status": "Active",
+    "joinedDate": "2026-10-26T12:18:26.332Z"
   }
 ]
