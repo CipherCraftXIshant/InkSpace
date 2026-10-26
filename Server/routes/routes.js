@@ -1,4 +1,8 @@
 import { getPosts, savePosts } from '../utils/fileHandler.js';
+import { getUsers, saveUsers } from '../utils/fileHandler.js';
+import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
+const scrypt = promisify(scryptCallback);
 import {
   sendJSON,
   parseRequestBody,
@@ -10,6 +14,135 @@ import {
  * GET /api/health
  * Simple diagnostic endpoint to confirm the server is responsive.
  */
+
+const hashPassword = async (password, salt) => {
+  const derivedKey = await scrypt(password, salt, 64);
+  return derivedKey.toString('hex');
+};
+
+const publicUser = (user) => {
+  const { passwordHash, salt, ...safeUser } = user;
+  return safeUser;
+};
+
+// POST /api/auth/register
+async function handleRegister(req, res) {
+  const body = await parseRequestBody(req);
+
+  const name =
+    typeof body.fullName === 'string' ? body.fullName.trim() : '';
+  const email =
+    typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const password =
+    typeof body.password === 'string' ? body.password : '';
+
+  if (name.length < 2 || name.length > 100) {
+    return sendJSON(res, 400, {
+      success: false,
+      error: 'Name must be between 2 and 100 characters.',
+    });
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return sendJSON(res, 400, {
+      success: false,
+      error: 'Please enter a valid email address.',
+    });
+  }
+
+  if (password.length < 8 || password.length > 128) {
+    return sendJSON(res, 400, {
+      success: false,
+      error: 'Password must be between 8 and 128 characters.',
+    });
+  }
+
+  const users = await getUsers();
+
+  const existingUser = users.find(
+    (user) => user.email.toLowerCase() === email
+  );
+
+  if (existingUser) {
+    return sendJSON(res, 409, {
+      success: false,
+      error: 'An account with this email already exists.',
+    });
+  }
+
+  const salt = randomBytes(16).toString('hex');
+  const passwordHash = await hashPassword(password, salt);
+
+  const newUser = {
+    id: `user-${randomBytes(12).toString('hex')}`,
+    name,
+    email,
+    salt,
+    passwordHash,
+    role: 'author',
+    status: 'Active',
+    joinedDate: new Date().toISOString(),
+  };
+
+  await saveUsers([...users, newUser]);
+
+  return sendJSON(res, 201, {
+    success: true,
+    message: 'Account created successfully.',
+    user: publicUser(newUser),
+  });
+}
+
+// POST /api/auth/login
+async function handleLogin(req, res) {
+  const body = await parseRequestBody(req);
+
+  const email =
+    typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const password =
+    typeof body.password === 'string' ? body.password : '';
+
+  if (!email || !password || password.length > 128) {
+    return sendJSON(res, 400, {
+      success: false,
+      error: 'Email and password are required.',
+    });
+  }
+
+  const users = await getUsers();
+
+  const user = users.find(
+    (item) => item.email.toLowerCase() === email
+  );
+
+  if (!user || !user.salt || !user.passwordHash) {
+    return sendJSON(res, 401, {
+      success: false,
+      error: 'Invalid email or password.',
+    });
+  }
+
+  const submittedHash = await hashPassword(password, user.salt);
+  const expectedHash = Buffer.from(user.passwordHash, 'hex');
+  const actualHash = Buffer.from(submittedHash, 'hex');
+
+  if (
+    expectedHash.length !== actualHash.length ||
+    !timingSafeEqual(expectedHash, actualHash)
+  ) {
+    return sendJSON(res, 401, {
+      success: false,
+      error: 'Invalid email or password.',
+    });
+  }
+
+  return sendJSON(res, 200, {
+    success: true,
+    message: 'Login successful.',
+    user: publicUser(user),
+  });
+}
+
 async function handleHealth(req, res) {
   sendJSON(res, 200, {
     success: true,
@@ -198,10 +331,10 @@ async function handleCreatePost(req, res) {
       typeof body.author === 'object' && body.author?.name
         ? body.author
         : {
-            name: typeof body.author === 'string' && body.author.trim() ? body.author.trim() : 'InkSpace Author',
-            role: 'Author',
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-          },
+          name: typeof body.author === 'string' && body.author.trim() ? body.author.trim() : 'InkSpace Author',
+          role: 'Author',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+        },
     status: postStatus,
     readingTime: body.readingTime || estimatedReadingTime,
     views: 0,
@@ -271,6 +404,15 @@ export async function router(req, res) {
   // 4. POST /api/posts
   if (method === 'POST' && pathname === '/api/posts') {
     return handleCreatePost(req, res);
+  }
+  // POST /api/auth/register
+  if (method === 'POST' && pathname === '/api/auth/register') {
+    return handleRegister(req, res);
+  }
+
+  // POST /api/auth/login
+  if (method === 'POST' && pathname === '/api/auth/login') {
+    return handleLogin(req, res);
   }
 
   // 5. Unknown Route -> 404
