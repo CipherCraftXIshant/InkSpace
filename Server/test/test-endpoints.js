@@ -82,8 +82,12 @@ async function runTests() {
     }
   }
 
-  // 1. Health check
-  console.log('--- Test 1: Health Check (GET /api/health) ---');
+  // Backup original posts to restore after testing
+  const originalPosts = await getPosts();
+
+  try {
+    // 1. Health check
+    console.log('--- Test 1: Health Check (GET /api/health) ---');
   const healthRes = await dispatch('GET', '/api/health');
   assert(healthRes.status === 200, 'Health check returns status 200');
   assert(healthRes.data.success === true, 'Health check returns success: true');
@@ -197,6 +201,10 @@ async function runTests() {
   console.log(`\n=================================================`);
   console.log(`🎉 ALL ${passed}/${total} BACKEND TESTS PASSED SUCCESSFULLY!`);
   console.log(`=================================================\n`);
+  } finally {
+    // Restore clean data state after tests
+    await savePosts(originalPosts);
+  }
 }
 
 runTests().catch((err) => {

@@ -3,9 +3,8 @@ import { router } from './routes/routes.js';
 import { sendJSON } from './utils/httpHelpers.js';
 import { readJSON, POSTS_FILE, USERS_FILE, COMMENTS_FILE } from './utils/fileHandler.js';
 
-// Configuration
-const PORT = process.env.PORT || 4000;
-const HOST = process.env.HOST || '0.0.0.0';
+// Configuration: defaults to 4000, configurable via PORT env variable
+const PORT = Number(process.env.PORT) || 4000;
 
 /**
  * Applies Cross-Origin Resource Sharing (CORS) headers to allow
@@ -64,11 +63,24 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+// Handle server errors (e.g. port already in use)
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Error: Port ${PORT} is already in use by another process.`);
+    console.error(`   To free port ${PORT}, run: lsof -ti:${PORT} | xargs kill -9`);
+    console.error(`   Or run on another port: PORT=4001 node server.js\n`);
+  } else {
+    console.error('Server error:', err.message);
+  }
+  process.exit(1);
+});
+
 // Initialize files and start listening
 try {
   await initializeStorage();
 
-  server.listen(PORT, HOST, () => {
+  // Listen on PORT on all network interfaces (IPv4 and IPv6 dual-stack)
+  server.listen(PORT, () => {
     console.log(`\n=================================================`);
     console.log(`  InkSpace Native Node.js Backend Running!`);
     console.log(`  Local URL:    http://localhost:${PORT}`);

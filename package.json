@@ -1,0 +1,23 @@
+{
+  "name": "inkspace-project",
+  "private": true,
+  "version": "1.0.0",
+  "description": "InkSpace Editorial Publication Platform & Native Node.js Backend",
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "server": "npm --prefix Server run dev",
+    "server:start": "npm --prefix Server start",
+    "client": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "start": "npm --prefix Server start",
+    "test": "npm --prefix Server test"
+  },
+  "keywords": [
+    "inkspace",
+    "react",
+    "nodejs",
+    "blog"
+  ],
+  "license": "MIT"
+}

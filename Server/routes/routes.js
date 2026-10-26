@@ -236,6 +236,21 @@ export async function router(req, res) {
   const pathname = parsedUrl.pathname;
   const method = req.method.toUpperCase();
 
+  // 0. GET / (Root Welcome & Health Status)
+  if (method === 'GET' && (pathname === '/' || pathname === '')) {
+    return sendJSON(res, 200, {
+      success: true,
+      message: 'InkSpace Native Node.js Server is running!',
+      endpoints: {
+        health: '/api/health',
+        posts: '/api/posts',
+        singlePost: '/api/posts/:slug',
+      },
+      clientUrl: 'http://localhost:5173',
+      timestamp: new Date().toISOString(),
+    });
+  }
+
   // 1. GET /api/health
   if (method === 'GET' && pathname === '/api/health') {
     return handleHealth(req, res);
