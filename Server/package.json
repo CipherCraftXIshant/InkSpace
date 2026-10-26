@@ -1,0 +1,20 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Native Node.js HTTP backend for InkSpace",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/test-endpoints.js"
+  },
+  "keywords": [
+    "inkspace",
+    "node",
+    "http",
+    "vanilla-nodejs"
+  ],
+  "author": "",
+  "license": "MIT"
+}

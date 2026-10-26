@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, LayoutGrid, List as ListIcon, RotateCcw, ArrowUpDown } from 'lucide-react';
+import { Search, LayoutGrid, List as ListIcon, RotateCcw, ArrowUpDown, Radio } from 'lucide-react';
 import Container from '../../components/common/Container.jsx';
 import BlogCard from '../../components/blog/BlogCard.jsx';
 import EmptyState from '../../components/common/EmptyState.jsx';
 import { MOCK_ARTICLES, MOCK_CATEGORIES } from '../../data/mockData.js';
+import { fetchPublishedPosts } from '../../services/api.js';
 import useDocumentTitle from '../../hooks/useDocumentTitle.js';
 
 const ITEMS_PER_PAGE = 6;
@@ -19,13 +20,59 @@ export default function ExplorePage() {
   const [viewMode, setViewMode] = useState('list'); // 'list' | 'grid'
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Backend API Integration state with fallback
+  const [backendArticles, setBackendArticles] = useState(null);
+  const [backendPagination, setBackendPagination] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLiveApi, setIsLiveApi] = useState(false);
+
+  // Attempt fetching from the Node.js backend whenever filters or page change
+  useEffect(() => {
+    let isCancelled = false;
+
+    Promise.resolve().then(() => {
+      if (!isCancelled) setIsLoading(true);
+    });
+
+    fetchPublishedPosts({
+      search: searchQuery,
+      category: selectedCategory,
+      page: currentPage,
+      limit: ITEMS_PER_PAGE,
+    })
+      .then((res) => {
+        if (!isCancelled && res?.success && Array.isArray(res.data)) {
+          setBackendArticles(res.data);
+          setBackendPagination(res.pagination);
+          setIsLiveApi(true);
+        }
+      })
+      .catch(() => {
+        // Fallback strategy: backend offline, seamlessly use local mock data
+        if (!isCancelled) {
+          setBackendArticles(null);
+          setBackendPagination(null);
+          setIsLiveApi(false);
+        }
+      })
+      .finally(() => {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [searchQuery, selectedCategory, currentPage]);
+
   const categories = [
     { id: 'all', name: 'All Topics' },
     ...MOCK_CATEGORIES.map((c) => ({ id: c.slug, name: c.name })),
   ];
 
-  // Filter and sort articles against mock data
-  const processedArticles = useMemo(() => {
+  // Fallback mock filtering if backend is unreachable
+  const processedFallbackArticles = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
 
     const filtered = MOCK_ARTICLES.filter((article) => {
@@ -50,19 +97,31 @@ export default function ExplorePage() {
         const viewsB = b.views || 0;
         return viewsB - viewsA;
       }
-      // default: newest
       const timeA = new Date(a.dateTimestamp || a.publishedAt || 0).getTime();
       const timeB = new Date(b.dateTimestamp || b.publishedAt || 0).getTime();
       return timeB - timeA;
     });
   }, [selectedCategory, searchQuery, sortBy]);
 
-  // Pagination calculation
-  const totalPages = Math.ceil(processedArticles.length / ITEMS_PER_PAGE) || 1;
-  const paginatedArticles = useMemo(() => {
+  // Determine active articles list and total pages (Backend vs Local Fallback)
+  const displayedArticles = useMemo(() => {
+    if (backendArticles && isLiveApi) {
+      if (sortBy === 'popular') {
+        return [...backendArticles].sort((a, b) => (b.views || 0) - (a.views || 0));
+      }
+      return backendArticles;
+    }
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return processedArticles.slice(start, start + ITEMS_PER_PAGE);
-  }, [processedArticles, currentPage]);
+    return processedFallbackArticles.slice(start, start + ITEMS_PER_PAGE);
+  }, [backendArticles, isLiveApi, processedFallbackArticles, currentPage, sortBy]);
+
+  const totalCount = isLiveApi && backendPagination
+    ? backendPagination.total
+    : processedFallbackArticles.length;
+
+  const totalPages = isLiveApi && backendPagination
+    ? backendPagination.totalPages
+    : Math.ceil(processedFallbackArticles.length / ITEMS_PER_PAGE) || 1;
 
   const handleCategorySelect = (slug) => {
     setCurrentPage(1);
@@ -101,9 +160,17 @@ export default function ExplorePage() {
         <div className="border-b border-[#ECECE8] dark:border-[#27272A] pb-8 mb-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA] mb-1.5">
-                EDITORIAL CATALOGUE
-              </p>
+              <div className="flex items-center gap-2 mb-1.5">
+                <p className="text-[11px] font-bold tracking-widest uppercase text-[#737373] dark:text-[#A1A1AA]">
+                  EDITORIAL CATALOGUE
+                </p>
+                {isLiveApi && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <Radio className="w-2.5 h-2.5 animate-pulse" />
+                    <span>Node.js Backend Connected</span>
+                  </span>
+                )}
+              </div>
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#121212] dark:text-[#F4F4F6] font-semibold tracking-tight">
                 Explore Articles
               </h1>
@@ -166,9 +233,9 @@ export default function ExplorePage() {
             <p>
               Showing{' '}
               <strong className="text-[#121212] dark:text-[#F4F4F6] font-semibold">
-                {processedArticles.length}
+                {totalCount}
               </strong>{' '}
-              {processedArticles.length === 1 ? 'story' : 'stories'}
+              {totalCount === 1 ? 'story' : 'stories'}
               {selectedCategory !== 'all' && (
                 <span>
                   {' '}in{' '}
@@ -232,11 +299,16 @@ export default function ExplorePage() {
         </div>
 
         {/* Article Results */}
-        {paginatedArticles.length > 0 ? (
+        {isLoading ? (
+          <div className="py-16 text-center text-xs text-[#737373] dark:text-[#A1A1AA]">
+            <div className="w-6 h-6 border-2 border-[#121212] dark:border-white border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <p>Fetching articles...</p>
+          </div>
+        ) : displayedArticles.length > 0 ? (
           <div>
             {viewMode === 'list' ? (
               <div className="divide-y divide-[#ECECE8] dark:divide-[#27272A]">
-                {paginatedArticles.map((article) => (
+                {displayedArticles.map((article) => (
                   <BlogCard
                     key={article.id}
                     article={article}
@@ -246,7 +318,7 @@ export default function ExplorePage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {paginatedArticles.map((article) => (
+                {displayedArticles.map((article) => (
                   <BlogCard
                     key={article.id}
                     article={article}
@@ -302,3 +374,4 @@ export default function ExplorePage() {
     </div>
   );
 }
+
