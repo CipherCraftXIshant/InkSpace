@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AuthorActions from './AuthorActions.jsx';
 import CategoryBadge from '../common/CategoryBadge.jsx';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80';
@@ -178,6 +179,12 @@ export default function BlogCard({
               </>
             )}
           </div>
+          {author?.name && (
+            <AuthorActions
+              authorName={author.name}
+              articleId={article.id}
+            />
+          )}
         </div>
       </article>
     );
@@ -215,6 +222,12 @@ export default function BlogCard({
           <span>•</span>
           <span>{displayReadTime}</span>
         </div>
+        {author?.name && (
+          <AuthorActions
+            authorName={author.name}
+            articleId={article.id}
+          />
+        )}
       </div>
     </article>
   );
